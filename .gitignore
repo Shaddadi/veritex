@@ -6,7 +6,7 @@
 # Node artifact files
 node_modules/
 dist/
-
+tbxmanager/
 # Compiled Java class files
 *.class
 
