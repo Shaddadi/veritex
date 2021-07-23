@@ -10,11 +10,11 @@ class Vzono:
         self.base_vertices = np.dot(W, self.base_vertices) + b
         self.base_vectors = np.dot(W, self.base_vectors)
 
-    def affineMapNegative(self, neurons_neg):
+    def affineMapNegative(self, neurons_neg:np.ndarray):
         self.base_vertices[neurons_neg,:] = 0.0
         self.base_vectors[neurons_neg,:] = 0.0
 
-    def reluLinearRelax(self, neurons_neg_pos):
+    def reluLinearRelax(self, neurons_neg_pos:np.ndarray):
         assert neurons_neg_pos.shape[0] != 0
 
         # compute ubs and lbs of relu neurons

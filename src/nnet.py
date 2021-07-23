@@ -1,114 +1,160 @@
 import numpy as np
-import time
-import os
-import sys
-import psutil
-import pickle
-import multiprocessing
-from functools import partial
-from multiprocessing import get_context
-import torch
 import copy as cp
+from vzono import Vzono
+from itertools import product
 
-class nnetwork:
 
-    def __init__(self, W, b,properties=None):
-        self.W = W
-        self.b = b
-        self.c = 0
-        self.numLayer = len(W)
-        self.properties = properties
+class DNN:
+
+    def __init__(self, W, b):
+        self._W = W
+        self._b = b
+        self._num_layer = len(W)
+        self.unsafe_domains = None
+
+        # configurations for reachability analysis
+        self.config_relu_linear = None
+        self.config_only_verify = None
+        self.config_unsafe_input = None
+        self.config_exact_output = None
 
 
     def backtrack(self, vfl_set):
-        # print('backtrack, here')
+
         matrix_A = self.properties[1][0]
         vector_d = self.properties[1][1]
 
         elements = np.dot(np.dot(matrix_A,vfl_set.M), vfl_set.vertices.T) + np.dot(matrix_A, vfl_set.b) +vector_d
         unsafe_vs = np.all(elements<0, axis=0)
-        unsafe_vs_num = len(np.nonzero(unsafe_vs)[0])
-        unsafe_ratio = unsafe_vs_num / len(vfl_set.vertices)
-        if unsafe_vs_num == 0:
-            return None, None, 0
+        if len(np.nonzero(unsafe_vs)[0]) == 0:
+            return None
 
-        vfls_unsafe = cp.deepcopy(vfl_set)
+        unsafe_vfl = cp.deepcopy(vfl_set)
         for n in range(len(matrix_A)):
             A = matrix_A[[n]]
             d = vector_d[[n]]
-            subvfl0 = vfls_unsafe.single_split(A, d)
+            subvfl0 = unsafe_vfl.single_split(A, d)
             if subvfl0:
-                vfls_unsafe = subvfl0
+                unsafe_vfl = subvfl0
             else:
-                vfls_unsafe = None
+                unsafe_vfl = None
                 break
 
-        if vfls_unsafe:
-            unsafe_data_final = vfls_unsafe.vertices[0]
+        return unsafe_vfl
+
+
+    def verify(self, vfl_set):
+        vertices = np.dot(vfl_set.vertices, vfl_set.M.T) + vfl_set.b.T
+        unsafe = False
+        for ud in self.unsafe_domains:
+            A_unsafe = ud[0]
+            d_unsafe = ud[1]
+            vals = np.dot(A_unsafe, vertices.T) + d_unsafe
+            if np.any(np.all(vals<=0, axis=0)):
+                unsafe = True
+                break
+
+        return unsafe
+
+
+    def collectResults(self, vfl_set):
+        results = []
+        if self.config_only_verify:
+            results.append(self.verify(vfl_set))
         else:
-            unsafe_data_final = None
+            results.append([])
 
-        return unsafe_data_final, vfls_unsafe, unsafe_ratio
+        if self.config_exact_output:
+            results.append(vfl_set)
+        else:
+            results.append([])
+
+        if self.config_unsafe_input:
+            results.append([self.backtrack(vfl_set), vfl_set])
+        else:
+            results.append([])
+
+        return results
 
 
-    # nn output of input starting from mth layer
-    def layerOutput(self, inputPoly, layer=0, over_app=False):
-        # print('Layer: %d\n'%m)
+    def reach(self, vfl_set, start_layer=0):
         output_data = []
-        if layer==self.numLayer:
-            data_unsafe, vfls_unsafe, ratio_unsafe = self.backtrack(inputPoly)
-            return [[data_unsafe, vfls_unsafe, inputPoly]]
+        if start_layer==self._num_layer:
+            return [self.collectResults(vfl_set)]
 
-        if over_app and layer<self.numLayer-1:
-            over_app_poly = cp.deepcopy(inputPoly)
-            over_app_poly = self.layerOutputOverApp(over_app_poly, layer)
-            safe = self.check_safety_over_app(over_app_poly)
-            if safe:
-                return []
+        if self.config_relu_linear and start_layer<self._num_layer-1:
+            over_app_set = self.reachOverApp(vfl_set, start_layer)
+            safe = self.verifyVzono(over_app_set)
+            if safe: return []
 
-        inputSets = self.singleLayerOutput(inputPoly, layer)
-        for apoly in inputSets:
-            output_data.extend(self.layerOutput(apoly, layer=layer+1, over_app=over_app))
+        input_sets = self.singleLayerOutput(vfl_set, start_layer)
+        for aset in input_sets:
+            output_data.extend(self.reach(aset, start_layer=start_layer+1))
 
         return output_data
 
-    def layerOutputOverApp(self, apoly, layer):
-        apoly.compute_real_vertices()
 
-        for layerID in range(layer, self.numLayer):
-            apoly = self.singleLayerOverApproximation(apoly, layerID)
+    def reachOverApp(self, vfl_set, layer_id):
+        base_vertices = np.dot(vfl_set.M, vfl_set.vertices.T) + vfl_set.b
+        base_vectors = np.zeros((base_vertices.shape[0], 1))
+        vzono_set = Vzono(base_vertices, base_vectors)
 
-        return apoly
+        for n in range(layer_id, self._num_layer):
+            vzono_set = self.singleLayerOverApp(vzono_set, n)
+
+        return vzono_set
 
 
-    def check_safety_over_app(self, apoly):
-        matrix_A = self.properties[1][0]
-        vector_d = self.properties[1][1]
+    def verifyVzono(self, vzono_set):
         safe = True
-        for n in range(len(matrix_A)):
-            A = matrix_A[[n]]
-            d = vector_d[[n]]
-            base_vertices = np.dot(A, apoly.base_vertices) + d
-            base_vectors = np.dot(A, apoly.base_vectors)
-            vals = base_vertices - np.sum(np.abs(base_vectors))
-            if np.any(vals <= 0):
-                return False
+        for ud in self.unsafe_domains:
+            A_unsafe = ud[0]
+            d_unsafe = ud[1]
+            if len(A_unsafe)==1:
+                base_vertices = np.dot(A_unsafe, vzono_set.base_vertices) + d_unsafe
+                base_vectors = np.dot(A_unsafe, vzono_set.base_vectors)
+                vals = base_vertices - np.sum(np.abs(base_vectors),axis=1)
+                if np.any(vals<=0):
+                    safe = False
+                    return safe
+            else:
+                ubs = np.max(vzono_set.base_vertices,axis=1) + np.sum(np.abs(vzono_set.base_vectors),axis=1)
+                lbs = np.min(vzono_set.base_vertices,axis=1) - np.sum(np.abs(vzono_set.base_vectors),axis=1)
+                lss = [[lbs[i], ubs[i]] for i in range(len(ubs))]
+                vertices = np.array(list(product(*lss)))
+                vals = np.dot(A_unsafe, vertices.T) + d_unsafe
+                if np.any(np.all(vals<=0, axis=0)):
+                    safe = False
 
         return safe
 
+        # matrix_A = self.properties[1][0]
+        # vector_d = self.properties[1][1]
+        # safe = True
+        # for n in range(len(matrix_A)):
+        #     A = matrix_A[[n]]
+        #     d = vector_d[[n]]
+        #     base_vertices = np.dot(A, vzono_set.base_vertices) + d
+        #     base_vectors = np.dot(A, vzono_set.base_vectors)
+        #     vals = base_vertices - np.sum(np.abs(base_vectors))
+        #     if np.any(vals <= 0):
+        #         return False
+        #
+        # return safe
+
 
     def outputPoint(self, inputPoint):
-        for i in range(self.numLayer):
+        for i in range(self._num_layer):
             inputPoint = self.singleLayerPointOutput(inputPoint, i)
 
         return inputPoint
 
 
-    def singleLayerPointOutput(self, inputPoint, layerID):
-        W = self.W[layerID]
-        b = self.b[layerID]
+    def singleLayerPointOutput(self, inputPoint, layer_id):
+        W = self._W[layer_id]
+        b = self._b[layer_id]
         layerPoint = np.dot(W, inputPoint.transpose())+b
-        if layerID == self.numLayer-1:
+        if layer_id == self._num_layer-1:
             return layerPoint.transpose()
         else:
             layerPoint[layerPoint<0] = 0
@@ -116,20 +162,20 @@ class nnetwork:
 
 
     def outputPointBeforeReLU(self, inputPoint):
-        for i in range(self.numLayer-1):
+        for i in range(self._num_layer-1):
             PointBeforeReLU = self.singleLayerPointOutputBeforeRelU(inputPoint, i)
 
             inputPoint = cp.copy(PointBeforeReLU)
             inputPoint[PointBeforeReLU < 0] = 0
 
-        outPoint = self.singleLayerPointOutputBeforeRelU(inputPoint, self.numLayer-1)
+        outPoint = self.singleLayerPointOutputBeforeRelU(inputPoint, self._num_layer-1)
 
         return outPoint
 
 
-    def singleLayerPointOutputBeforeRelU(self, inputPoint, layerID):
-        W = self.W[layerID]
-        b = self.b[layerID]
+    def singleLayerPointOutputBeforeRelU(self, inputPoint, layer_id):
+        W = self._W[layer_id]
+        b = self._b[layer_id]
         PointBeforeReLU = np.dot(W, inputPoint.transpose())+b
 
         PointBeforeReLU_bool = PointBeforeReLU>=0.00001
@@ -138,40 +184,40 @@ class nnetwork:
         return PointBeforeReLU.transpose()
 
 
-    def singleLayerOutput(self, inputPoly, layerID):
-        # print("layer", layerID)
-        W = self.W[layerID]
-        b = self.b[layerID]
-        inputPoly.linearTrans(W, b)
+    def singleLayerOutput(self, vfl_set, layer_id):
+        # print("layer", layer_id)
+        W = self._W[layer_id]
+        b = self._b[layer_id]
+        vfl_set.affineMap(W, b)
 
         # partition graph sets according to properties of the relu function
-        if layerID == self.numLayer-1:
-            return [inputPoly]
+        if layer_id == self._num_layer-1:
+            return [vfl_set]
 
-        splited_polys = []
-        splited_polys.extend(self.relu_layer(inputPoly, np.array([]), flag=False))
+        splited_sets = []
+        splited_sets.extend(self.reluLayer(vfl_set, np.array([]), flag=False))
 
-        return splited_polys
+        return splited_sets
 
 
-    def singleLayerOverApproximation(self, apoly, layerID):
-        W = self.W[layerID]
-        b = self.b[layerID]
-        apoly.base_vertices = np.dot(W, apoly.base_vertices) + b
-        apoly.base_vectors = np.dot(W, apoly.base_vectors)
+    def singleLayerOverApp(self, vzono_set, layer_id):
+        W = self._W[layer_id]
+        b = self._b[layer_id]
+        vzono_set.base_vertices = np.dot(W, vzono_set.base_vertices) + b
+        vzono_set.base_vectors = np.dot(W, vzono_set.base_vectors)
 
-        if layerID == self.numLayer-1:
-            return apoly
+        if layer_id == self._num_layer-1:
+            return vzono_set
 
-        over_app_poly = self.relu_layer_over_app(apoly)
+        over_app_set = self.reluLayerLinearRelax(vzono_set)
 
-        return over_app_poly
+        return over_app_set
 
 
     # partition one input polytope with a hyberplane
-    def splitPoly(self, inputPoly, idx):
+    def reluSplit(self, vfl_set, idx):
         outputPolySets = []
-        sub0, sub1= inputPoly.single_split_relu(idx)
+        sub0, sub1= vfl_set.reluSplit(idx)
         if sub0:
             outputPolySets.append(sub0)
         if sub1:
@@ -180,42 +226,42 @@ class nnetwork:
         return outputPolySets
 
 
-    def relu_layer(self, im_fl, neurons, flag=True):
+    def reluLayer(self, vfl_set, neurons, flag=True):
         if (neurons.shape[0] == 0) and flag:
-            return [im_fl]
+            return [vfl_set]
 
-        new_neurons, new_neurons_neg = self.get_valid_neurons(im_fl, neurons)
+        new_neurons, new_neurons_neg = self.get_valid_neurons(vfl_set, neurons)
 
-        im_fl.map_negative_poly(new_neurons_neg)
+        vfl_set.affineMapNegative(new_neurons_neg)
 
         if new_neurons.shape[0] == 0:
-            return [im_fl]
+            return [vfl_set]
 
-        fls = self.splitPoly(im_fl, new_neurons[0])
+        vfl_sets = self.reluSplit(vfl_set, new_neurons[0])
         new_neurons = new_neurons[1:]
 
-        all_fls = []
-        for afl in fls:
-            all_fls.extend(self.relu_layer(afl, new_neurons))
+        all_sets = []
+        for aset in vfl_sets:
+            all_sets.extend(self.reluLayer(aset, new_neurons))
 
-        return all_fls
+        return all_sets
 
 
-    def relu_layer_over_app(self, im_fl):
-        neurons_neg_pos, neurons_neg = self.get_valid_neurons_for_over_app(im_fl)
-        im_fl.base_vertices[neurons_neg,:] = 0
-        im_fl.base_vectors[neurons_neg,:] = 0
+    def reluLayerLinearRelax(self, vzono_set):
+        neurons_neg_pos, neurons_neg = self.get_valid_neurons_for_over_app(vzono_set)
+        vzono_set.base_vertices[neurons_neg,:] = 0
+        vzono_set.base_vectors[neurons_neg,:] = 0
 
         if neurons_neg_pos.shape[0] == 0:
-            return im_fl
+            return vzono_set
 
-        base_vectices = im_fl.base_vertices[neurons_neg_pos,:]
-        vals = np.sum(np.abs(im_fl.base_vectors[neurons_neg_pos,:]), axis=1, keepdims=True)
+        base_vectices = vzono_set.base_vertices[neurons_neg_pos,:]
+        vals = np.sum(np.abs(vzono_set.base_vectors[neurons_neg_pos,:]), axis=1, keepdims=True)
         ubs = np.max(base_vectices,axis=1, keepdims=True) + vals
         lbs = np.min(base_vectices, axis=1, keepdims=True) - vals
-        M = np.eye(im_fl.base_vertices.shape[0])
-        b = np.zeros((im_fl.base_vertices.shape[0], 1))
-        base_vectors_relax = np.zeros((im_fl.base_vertices.shape[0],len(neurons_neg_pos)))
+        M = np.eye(vzono_set.base_vertices.shape[0])
+        b = np.zeros((vzono_set.base_vertices.shape[0], 1))
+        base_vectors_relax = np.zeros((vzono_set.base_vertices.shape[0],len(neurons_neg_pos)))
 
         A = ubs / (ubs - lbs)
         epsilons = -lbs*A/2
@@ -223,17 +269,17 @@ class nnetwork:
         b[neurons_neg_pos] = epsilons
         base_vectors_relax[neurons_neg_pos, range(len(ubs))] = epsilons[:,0]
 
-        new_base_vertices = np.dot(M,im_fl.base_vertices) + b
-        new_base_vectors = np.concatenate((np.dot(M, im_fl.base_vectors), base_vectors_relax), axis=1)
-        im_fl.base_vertices = new_base_vertices
-        im_fl.base_vectors = new_base_vectors
+        new_base_vertices = np.dot(M,vzono_set.base_vertices) + b
+        new_base_vectors = np.concatenate((np.dot(M, vzono_set.base_vectors), base_vectors_relax), axis=1)
+        vzono_set.base_vertices = new_base_vertices
+        vzono_set.base_vectors = new_base_vectors
 
-        return im_fl
+        return vzono_set
 
 
-    def get_valid_neurons(self, afl, neurons):
+    def get_valid_neurons(self, vfl_set, neurons):
         if neurons.shape[0] ==0:
-            vertices = np.dot(afl.vertices, afl.M.T) + afl.b.T
+            vertices = np.dot(vfl_set.vertices, vfl_set.M.T) + vfl_set.b.T
             flag_neg = vertices<=0
             temp_neg = np.all(flag_neg, 0)
             valid_neurons_neg = np.asarray(np.nonzero(temp_neg)).T[:,0]
@@ -242,7 +288,7 @@ class nnetwork:
             valid_neurons_neg_pos = np.asarray(np.nonzero(neurons_sum==False)).T[:,0]
             return valid_neurons_neg_pos, valid_neurons_neg
 
-        elements = np.dot(afl.vertices,afl.M[neurons,:].T)+afl.b[neurons,:].T
+        elements = np.dot(vfl_set.vertices,vfl_set.M[neurons,:].T)+vfl_set.b[neurons,:].T
         flag_neg = (elements <= 0)
         temp_neg = np.all(flag_neg, 0)
         temp_pos = np.all(elements>=0, 0)
@@ -255,11 +301,11 @@ class nnetwork:
         return valid_neurons_neg_pos, valid_neurons_neg
 
 
-    def get_valid_neurons_for_over_app(self, afl):
-        vals = np.sum(np.abs(afl.base_vectors), axis=1, keepdims=True)
-        temp_neg = np.all((afl.base_vertices+vals) <= 0, 1)
+    def get_valid_neurons_for_over_app(self, vfl_set):
+        vals = np.sum(np.abs(vfl_set.base_vectors), axis=1, keepdims=True)
+        temp_neg = np.all((vfl_set.base_vertices+vals) <= 0, 1)
         valid_neurons_neg = np.asarray(np.nonzero(temp_neg)).T[:, 0]
-        temp_pos = np.all((afl.base_vertices-vals) >= 0, 1)
+        temp_pos = np.all((vfl_set.base_vertices-vals) >= 0, 1)
         neurons_sum = temp_neg + temp_pos
         valid_neurons_neg_pos = np.asarray(np.nonzero(neurons_sum == False)).T[:, 0]
 

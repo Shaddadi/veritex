@@ -4,51 +4,26 @@ import numpy as np
 import collections as cln
 
 class FacetVertex:
-    def __init__(self, fmatrix, vertices, dim, M, b):
+    def __init__(self, fmatrix:np.ndarray, vertices:np.ndarray, dim: int, M:np.ndarray, b:np.ndarray):
         self.fmatrix = fmatrix
         self.vertices = vertices
         self.dim = dim
         self.M = M
         self.b = b
-        self.base_vertices = None
-        self.base_vectors = None
 
 
-    def compute_real_vertices(self):
-        self.base_vertices = np.dot(self.M, self.vertices.T) + self.b
-        self.base_vectors = np.zeros((self.base_vertices.shape[0], 1))
-
-
-    def to_cuda(self):
-        self.is_cuda = True
-        self.vertices = self.vertices.cuda()
-        self.vertices_init = self.vertices_init.cuda()
-
-
-    # linear Transformation
-    def affineMap(self, M, b):
-        if M.shape[1] != self.M.shape[0]:
-            print("dimension is inconsistant")
-            sys.exit(1)
-
+    def affineMap(self, M:np.ndarray, b:np.ndarray):
         self.M = np.dot(M, self.M)
         self.b = np.dot(M, self.b) + b
 
-        # # update dim
-        # if M.shape[0] < self.dim:
-        #     self.dim = M.shape[0]
-        # set some dim to zero for Relu function
 
-    def map_negative_poly(self, n):
-        if self.dim == 0:
-            return self
-
+    def affineMapNegative(self, n:int):
         self.M[n, :] = 0
         self.b[n, :] = 0
-        return self
 
-    def single_split_relu(self, idx):
-        elements = np.matmul(self.vertices, self.M[idx,:].T)+self.b[idx,:].T
+
+    def reluSplit(self, neuron_pos_neg:np.ndarray):
+        elements = np.matmul(self.vertices, self.M[neuron_pos_neg,:].T)+self.b[neuron_pos_neg,:].T
         if np.any(elements==0.0):
             sys.exit('Hyperplane intersect with vertices!')
 
@@ -73,7 +48,6 @@ class FacetVertex:
         elements0 = elements[less_bool]
         elements1 = elements[more_bool]
 
-        # t0 = time.time()
         edges = np.dot(vs_facets0.astype(np.float32), vs_facets1.T.astype(np.float32))
         edges_indx = np.array(np.nonzero(edges == self.dim - 1))
         if len(edges_indx[0])+len(edges_indx[1]) == 0:
@@ -94,7 +68,7 @@ class FacetVertex:
         new_vertices0 = np.concatenate((vertices0, new_vs))
         subset0 = FacetVertex(sub_vs_facets0, new_vertices0, self.dim, cp.copy(self.M), cp.copy(self.b))
         if flg == 1:
-            subset0.map_negative_poly(idx)
+            subset0.affineMapNegative(neuron_pos_neg)
 
         new_vs_facets1 = np.concatenate((vs_facets1, new_vs_facets))
         sub_vs_facets1 = new_vs_facets1[:, np.any(vs_facets1, 0)]
@@ -104,12 +78,12 @@ class FacetVertex:
         new_vertices1 = np.concatenate((vertices1, new_vs))
         subset1 = FacetVertex(sub_vs_facets1, new_vertices1, self.dim, cp.copy(self.M), cp.copy(self.b))
         if flg == -1:
-            subset1.map_negative_poly(idx)
+            subset1.affineMapNegative(neuron_pos_neg)
         
         return subset0, subset1
 
 
-    def single_split(self, A, d):
+    def reluSplitHyperplane(self, A:np.ndarray, d:np.ndarray):
         A_new = np.dot(A,self.M)
         d_new = np.dot(A, self.b) +d
         elements = np.dot(A_new, self.vertices.T) + d_new
