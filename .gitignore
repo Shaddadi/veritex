@@ -4,9 +4,8 @@
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 # Node artifact files
-node_modules/
-dist/
-
+examples/ACASXu/.idea/
+tbxmanager/
 # Compiled Java class files
 *.class
 
