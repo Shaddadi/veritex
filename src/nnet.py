@@ -2,6 +2,8 @@ import numpy as np
 import copy as cp
 from vzono import Vzono
 from itertools import product
+from scipy.optimize import linprog
+
 
 
 class DNN:
@@ -108,26 +110,46 @@ class DNN:
     def verifyVzono(self, vzono_set):
         safe = True
         for ud in self.unsafe_domains:
-            A_unsafe = ud[0]
-            d_unsafe = ud[1]
-            if len(A_unsafe)==1:
-                base_vertices = np.dot(A_unsafe, vzono_set.base_vertices) + d_unsafe
-                base_vectors = np.dot(A_unsafe, vzono_set.base_vectors)
+            As_unsafe = ud[0]
+            ds_unsafe = ud[1]
+            for n in range(len(matrix_A)):
+                A = As_unsafe[[n]]
+                d = ds_unsafe[[n]]
+                base_vertices = np.dot(A, vzono_set.base_vertices) + d
+                base_vectors = np.dot(A, vzono_set.base_vectors)
                 vals = base_vertices - np.sum(np.abs(base_vectors),axis=1)
                 if np.any(vals<=0):
                     safe = False
                     return safe
-            else:
-                ubs = np.max(vzono_set.base_vertices,axis=1) + np.sum(np.abs(vzono_set.base_vectors),axis=1)
-                lbs = np.min(vzono_set.base_vertices,axis=1) - np.sum(np.abs(vzono_set.base_vectors),axis=1)
-                lss = [[lbs[i], ubs[i]] for i in range(len(ubs))]
-                vertices = np.array(list(product(*lss)))
-                vals = np.dot(A_unsafe, vertices.T) + d_unsafe
-                if np.any(np.all(vals<=0, axis=0)):
-                    safe = False
 
         return safe
 
+        # safe = True
+        # for ud in self.unsafe_domains:
+        #     A_unsafe = ud[0]
+        #     d_unsafe = ud[1]
+        #     if len(A_unsafe)==1:
+        #         base_vertices = np.dot(A_unsafe, vzono_set.base_vertices) + d_unsafe
+        #         base_vectors = np.dot(A_unsafe, vzono_set.base_vectors)
+        #         vals = base_vertices - np.sum(np.abs(base_vectors),axis=1)
+        #         if np.any(vals<=0):
+        #             safe = False
+        #             return safe
+        #     else:
+        #         ubs = np.max(vzono_set.base_vertices,axis=1) + np.sum(np.abs(vzono_set.base_vectors),axis=1)
+        #         lbs = np.min(vzono_set.base_vertices,axis=1) - np.sum(np.abs(vzono_set.base_vectors),axis=1)
+        #         dim = vzono_set.base_vertices.shape[0]
+        #         bounds = tuple([(lbs[n], ubs[n]) for n in range(len(ubs))])
+        #         try:
+        #             rel = linprog(np.zeros(dim), A_ub=A_unsafe, b_ub=d_unsafe,bounds=bounds,method='interior-point')
+        #             if rel['success']:
+        #                 safe = False
+        #                 return safe
+        #         except:
+        #             safe = False
+        #             return safe
+        #
+        # return safe
         # matrix_A = self.properties[1][0]
         # vector_d = self.properties[1][1]
         # safe = True

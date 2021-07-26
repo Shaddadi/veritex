@@ -51,7 +51,7 @@ if __name__ == "__main__":
     unsafe_domains = [[A_unsafe,d_unsafe]]
     property2 = Property(input_domain, unsafe_domains)
 
-    properties = [property1, property2]
+    properties = [property2]
     dnn0 = DNN(W, b)
     meth = Methods(dnn0, properties)
     meth.verify(relu_linear=True)
