@@ -1,6 +1,7 @@
 from nnet import DNN
 import multiprocessing
 from functools import partial
+import copy as cp
 import numpy as np
 import time
 
@@ -20,19 +21,15 @@ class Methods:
 
         assert self.properties is not None
         for n, p in enumerate(self.properties):
-            t0 = time.time()
-            initial_input = p.input_set
+            initial_input = cp.deepcopy(p.input_set)
             self.dnn.unsafe_domains = p.unsafe_domains
 
             input_sets = self.dnn.singleLayerOutput(initial_input, 0)
             output_results = []
             output_results.extend(pool.imap(partial(self.dnn.reach, start_layer=1), input_sets))
             verification = [item[0] for sublist in output_results for item in sublist]
-            p_result = np.any(np.array(verification))
-            print('Safety property: ', n+1)
-            print('Unsafe: ', p_result)
-            print('Running time(sec): %.2f' % (time.time()-t0))
-            print('Number of sets: ', len(verification))
+            return verification
+  
 
 
 

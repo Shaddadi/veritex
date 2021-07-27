@@ -21,28 +21,32 @@ class DNN:
         self.config_exact_output = None
 
 
-    def backtrack(self, vfl_set):
+    def backtrack(self, vfl_set, verify=False):
 
-        matrix_A = self.properties[1][0]
-        vector_d = self.properties[1][1]
+        vfls = []
+        for i in range(len(self.unsafe_domains)):
+            As_unsafe = self.unsafe_domains[i][0]
+            ds_unsafe = self.unsafe_domains[i][1]
+            elements = np.dot(np.dot(As_unsafe,vfl_set.M), vfl_set.vertices.T) + np.dot(As_unsafe, vfl_set.b) +ds_unsafe
+            if np.any(np.all(elements>0, axis=1)): # reachable set does not satisfy at least one linear constraint
+                return None
+            if np.any(np.all(elements<=0, axis=0)) and verify: # at least one vertex locates in unsafe domain
+                return 0
 
-        elements = np.dot(np.dot(matrix_A,vfl_set.M), vfl_set.vertices.T) + np.dot(matrix_A, vfl_set.b) +vector_d
-        unsafe_vs = np.all(elements<0, axis=0)
-        if len(np.nonzero(unsafe_vs)[0]) == 0:
-            return None
+            unsafe_vfl = cp.deepcopy(vfl_set)
+            for j in range(len(As_unsafe)):
+                A = As_unsafe[[j]]
+                d = ds_unsafe[[j]]
+                subvfl0 = unsafe_vfl.reluSplitHyperplane(A, d)
+                if subvfl0:
+                    unsafe_vfl = subvfl0
+                else:
+                    unsafe_vfl = None
+                    return unsafe_vfl
 
-        unsafe_vfl = cp.deepcopy(vfl_set)
-        for n in range(len(matrix_A)):
-            A = matrix_A[[n]]
-            d = vector_d[[n]]
-            subvfl0 = unsafe_vfl.single_split(A, d)
-            if subvfl0:
-                unsafe_vfl = subvfl0
-            else:
-                unsafe_vfl = None
-                break
+            vfls.append(unsafe_vfl)
 
-        return unsafe_vfl
+        return vfls
 
 
     def verify(self, vfl_set):
@@ -51,10 +55,16 @@ class DNN:
         for ud in self.unsafe_domains:
             A_unsafe = ud[0]
             d_unsafe = ud[1]
-            vals = np.dot(A_unsafe, vertices.T) + d_unsafe
-            if np.any(np.all(vals<=0, axis=0)):
-                unsafe = True
-                break
+            if len(A_unsafe) == 1:
+                vals = np.dot(A_unsafe, vertices.T) + d_unsafe
+                if np.any(np.all(vals<=0, axis=0)):
+                    unsafe = True
+                    break
+            else:
+                unsafe_vfl = self.backtrack(vfl_set, verify=True)
+                if unsafe_vfl is not None:
+                    unsafe = True
+                    break
 
         return unsafe
 
@@ -112,7 +122,7 @@ class DNN:
         for ud in self.unsafe_domains:
             As_unsafe = ud[0]
             ds_unsafe = ud[1]
-            for n in range(len(matrix_A)):
+            for n in range(len(As_unsafe)):
                 A = As_unsafe[[n]]
                 d = ds_unsafe[[n]]
                 base_vertices = np.dot(A, vzono_set.base_vertices) + d
