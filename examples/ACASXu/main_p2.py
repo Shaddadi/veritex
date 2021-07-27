@@ -29,7 +29,6 @@ if __name__ == "__main__":
             print('Safety property 2 on Network: N'+str(i)+str(j))
             print('Unsafe: ', p_result)
             print('Running time(sec): %.2f' % (time.time() - t0))
-            print('Number of sets: ', len(verification))
             print('\n')
             all_times.append(time.time() - t0)
             all_results.append(p_result)
