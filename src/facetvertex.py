@@ -13,11 +13,9 @@ class FacetVertex:
 
 
     def affineMap(self, M:np.ndarray, b:np.ndarray):
-        try:
-            self.M = np.dot(M, self.M)
-            self.b = np.dot(M, self.b) + b
-        except:
-            xx = 1
+        self.M = np.dot(M, self.M)
+        self.b = np.dot(M, self.b) + b
+
 
 
     def affineMapNegative(self, n:int):

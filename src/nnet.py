@@ -3,6 +3,9 @@ import copy as cp
 from vzono import Vzono
 from itertools import product
 from scipy.optimize import linprog
+from collections import deque
+import multiprocessing
+
 
 
 
@@ -222,6 +225,13 @@ class DNN:
         b = self._b[layer_id]
         vfl_set.affineMap(W, b)
 
+        q = deque()
+        q.append(vfl_set)
+
+        queue = multiprocessing.Queue()
+        queue.put(vfl_set)
+        queue.put(vfl_set)
+        xx = queue.get()
         # partition graph sets according to properties of the relu function
         if layer_id == self._num_layer-1:
             return [vfl_set]
@@ -270,6 +280,8 @@ class DNN:
             return [vfl_set]
 
         vfl_sets = self.reluSplit(vfl_set, new_neurons[0])
+        if len(new_neurons) == 1:
+            xx = 1
         new_neurons = new_neurons[1:]
 
         all_sets = []
