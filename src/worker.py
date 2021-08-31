@@ -52,7 +52,7 @@ class Worker:
         # print('Worker '+str(self.worker_id)+' works: ', len(self.private_deque))
 
         # normal computation, depth-first computation
-        while not self.shared_state.work_done.is_set():
+        while True:
             while self.private_deque:
                 # print('Worker ' + str(self.worker_id) + ' normal computation')
                 tuple_state = self.private_deque.pop()
@@ -62,7 +62,7 @@ class Worker:
                     self.shared_state.workers_stole_status[self.worker_id] = 1
                     with self.shared_state.num_valid_busy_workers.get_lock():
                         self.shared_state.num_valid_busy_workers.value -= 1
-                        print('Worker '+str(self.worker_id)+ ' Stole here 1')
+                        # print('Worker '+str(self.worker_id)+ ' Stole here 1')
 
                     self.steal_from_this_worker()
 
@@ -72,14 +72,17 @@ class Worker:
             if self.shared_state.workers_stole_status[self.worker_id] == 0:
                 with self.shared_state.num_valid_busy_workers.get_lock():
                     self.shared_state.num_valid_busy_workers.value -= 1
-                    print('Worker '+str(self.worker_id)+' Stole here 2')
+                    # print('Worker '+str(self.worker_id)+' Stole here 2')
 
-            print('Worker '+str(self.worker_id)+' after being stole, num_valid_busy_workers: ', self.shared_state.num_valid_busy_workers.value)
+            # print('Worker '+str(self.worker_id)+' after being stole, num_valid_busy_workers: ', self.shared_state.num_valid_busy_workers.value)
             if self.shared_state.num_valid_busy_workers.value == 0:
                 self.shared_state.work_steal_ready.clear()
                 self.shared_state.work_assign_ready.set()
 
             self.shared_state.get_idle_worker(self.worker_id)
+            if self.shared_state.work_done.is_set():
+                break
+
             self.shared_state.work_assign_ready.wait()
             self.asssign_to_this_worker()
 
@@ -102,7 +105,7 @@ class Worker:
                 with self.shared_state.stole_works.get_lock():
                     self.shared_state.stole_works.value += 1
 
-        print('Stole Worker '+str(self.worker_id) + ' works: ', num_stealed_works)
+        # print('Stole Worker '+str(self.worker_id) + ' works: ', num_stealed_works)
 
         self.shared_state.got_from_one_worker(self.worker_id)
 
@@ -122,7 +125,7 @@ class Worker:
                 if self.shared_state.shared_queue_len.value == 0:
                     break
 
-        print('Assigned Worker ' + str(self.worker_id) + ' works: ', num+1)
+        # print('Assigned Worker ' + str(self.worker_id) + ' works: ', num+1)
 
         self.shared_state.assigned_one_worker(self.worker_id)
 
