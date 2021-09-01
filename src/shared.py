@@ -16,12 +16,17 @@ class SharedState: # todo: make it freezable
 
         self.stole_works = mp.Value('i', 0)
         self.assigned_works = mp.Value('i', 0)
+        self.num_empty_assign = mp.Value('i', 0)
 
         self.work_steal_ready = mp.Event()
         self.work_assign_ready = mp.Event()
+        self.work_assign_done = mp.Event()
         self.steal_assign_ready = mp.Event()
-        self.steal_assign_ready.set()
+        # self.steal_assign_ready.set()
         self.work_done = mp.Event()
+
+        self.initial_steal_assign = mp.Event()
+        self.initial_completed_workers = mp.Value('i', 0)
 
         self.work_steal_rate = mp.Value('f', 0.0) # initial
         self.num_current_idle_workers = mp.Value('i', 0) # initial
@@ -50,7 +55,7 @@ class SharedState: # todo: make it freezable
             self.shared_queue_len.value -= 1
 
 
-    def got_from_one_worker(self, work_id):
+    # def got_from_one_worker(self, work_id):
         # with self.num_stealed_workers.get_lock():
         #     self.num_stealed_workers.value += 1
 
@@ -65,10 +70,11 @@ class SharedState: # todo: make it freezable
         # assert self.num_stealed_workers.value <= self.num_workers - self.num_current_idle_workers.value
         # if self.num_stealed_workers.value == self.num_workers - self.num_current_idle_workers.value: # complete stealing
 
-        assert self.num_valid_busy_workers.value >= 0
-        if self.num_valid_busy_workers.value == 0:
-            self.work_steal_ready.clear()
-            self.work_assign_ready.set()
+        # assert self.num_valid_busy_workers.value >= 0
+        # if self.num_valid_busy_workers.value == 0:
+        #     self.shared_state.workers_stole_status[self.worker_id] = 0
+        #     self.work_steal_ready.clear()
+        #     self.work_assign_ready.set()
 
 
 
@@ -76,30 +82,14 @@ class SharedState: # todo: make it freezable
         with self.num_assigned_workers.get_lock():
             self.num_assigned_workers.value +=1
 
-        # self.workers_busy_status[work_id] = 1
-        with self.num_valid_busy_workers.get_lock():
-            self.num_valid_busy_workers.value += 1
+        # # self.workers_busy_status[work_id] = 1
+        # with self.num_valid_busy_workers.get_lock():
+        #     self.num_valid_busy_workers.value += 1
 
         with self.num_current_idle_workers.get_lock():
             self.num_current_idle_workers.value -= 1
 
-        # print('Worker '+str(work_id)+' num_workers_need_assigned: ', self.num_workers_need_assigned.value)
-        # print('Worker '+str(work_id)+' num_assigned_workers: ', self.num_assigned_workers.value)
-        assert self.num_assigned_workers.value <= self.num_workers_need_assigned.value
-        if self.num_assigned_workers.value == self.num_workers_need_assigned.value: # complete assigning
-            assert self.stole_works.value == self.assigned_works.value
-            print()
-            # print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-            with self.num_valid_busy_workers.get_lock():
-                self.num_valid_busy_workers.value = self.num_workers - self.num_current_idle_workers.value
 
-            # print('num_workers: ', self.num_workers)
-            # print('num_current_idle_workers: ', self.num_current_idle_workers.value)
-            # print('num_valid_busy_workers: ', self.num_valid_busy_workers.value)
-            # print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
-            self.work_assign_ready.clear()
-            self.reset_after_assgin()
-            self.steal_assign_ready.set()
 
 
     def get_idle_worker(self, worker_id):
@@ -107,30 +97,14 @@ class SharedState: # todo: make it freezable
         # print('Worker '+str(worker_id)+' num_valid_busy_workers: ', self.num_valid_busy_workers.value)
         if self.initial_comput.value==1:
             # self.workers_status[worker_id] = 1
-            with self.num_workers_need_assigned.get_lock():
-                self.num_workers_need_assigned.value += 1
             assert self.num_current_idle_workers.value <= self.num_workers
-            assert self.steal_assign_ready.is_set()
+            # assert self.steal_assign_ready.is_set()
+            self.steal_assign_ready.wait()
         else:
 
-            # print('Worker ' + str(worker_id) + ' is waiting for steal_assign_ready')
+            print('Worker ' + str(worker_id) + ' is waiting for steal_assign_ready')
             self.steal_assign_ready.wait()
-            # print('Worker ' + str(worker_id) + ' passed steal_assign_ready')
-
-            with self.num_workers_need_assigned.get_lock():
-                self.num_workers_need_assigned.value += 1
-
-            if self.num_workers_need_assigned.value == self.num_workers:  # work completed
-                print('Work is done!')
-                self.work_done.set()
-                return
-
-            if self.num_workers_need_assigned.value >= idle_workers: # steal work from other workers
-                # print('Start stealing')
-                # assert self.steal_assign_ready
-                self.steal_assign_ready.clear()
-                self.compute_steal_rate()
-                self.work_steal_ready.set()
+            print('Worker ' + str(worker_id) + ' passed steal_assign_ready')
 
 
 
@@ -174,8 +148,8 @@ class SharedState: # todo: make it freezable
         with self.num_workers_need_assigned.get_lock():
             self.num_workers_need_assigned.value = 0
 
-        for n in range(self.num_workers):
-            self.workers_stole_status[n] = 0
+        # for n in range(self.num_workers):
+        #     self.workers_stole_status[n] = 0
             # self.workers_busy_status[n] = 1
 
 
