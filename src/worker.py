@@ -50,8 +50,10 @@ class Worker:
 
                 self.shared_state.steal_assign_ready.set()
                 print('This is Worker '+str(self.worker_id))
-                with self.shared_state.num_valid_busy_workers.get_lock():
-                    self.shared_state.num_valid_busy_workers.value -= 1
+                # with self.shared_state.num_valid_busy_workers.get_lock():
+                #     self.shared_state.num_valid_busy_workers.value -= 1
+
+                self.shared_state.workers_valid_status[self.worker_id] = 0
 
                 random.shuffle(self.private_deque)
                 self.shared_state.compute_steal_rate()
@@ -70,33 +72,24 @@ class Worker:
                 tuple_state = self.private_deque.pop()
                 self.state_spawn_depth_first(tuple_state)
 
-                if self.shared_state.work_steal_ready.is_set() and self.shared_state.workers_stole_status[self.worker_id] == 0:
-                    self.shared_state.workers_stole_status[self.worker_id] = 1
-                    with self.shared_state.num_valid_busy_workers.get_lock():
-                        self.shared_state.num_valid_busy_workers.value -= 1
-                        print('Worker '+str(self.worker_id)+ ' Stole here I')
+                if self.shared_state.work_steal_ready.is_set() and self.shared_state.workers_valid_status[self.worker_id] == 1:
+                    self.shared_state.workers_valid_status[self.worker_id] = 0
+                    print('Worker '+str(self.worker_id)+ ' Stole here I')
 
                     self.steal_from_this_worker()
 
             # private deques are empty and assign
-            with self.shared_state.num_current_idle_workers.get_lock():
-                self.shared_state.num_current_idle_workers.value += 1
+            self.shared_state.workers_idle_status[self.worker_id] = 1
+            self.shared_state.workers_valid_status[self.worker_id] = 0
 
-            print('Worker ' + str(self.worker_id) + ' workers_stole_status: ', self.shared_state.workers_stole_status[self.worker_id])
-            # print('Worker ' + str(self.worker_id) + ' after Stole here I, num_valid_busy_workers: ',self.shared_state.num_valid_busy_workers.value)
-            if self.shared_state.workers_stole_status[self.worker_id] == 0:
-                # self.shared_state.workers_stole_status[self.worker_id] = 1
-                with self.shared_state.num_valid_busy_workers.get_lock():
-                    self.shared_state.num_valid_busy_workers.value -= 1
-                    print('Worker '+str(self.worker_id)+' Stole here II')
-
-            print('Worker '+str(self.worker_id)+' after Stole here II, num_valid_busy_workers: ', self.shared_state.num_valid_busy_workers.value)
+            print('Worker '+str(self.worker_id)+' after Stole here II, num_valid_busy_workers: ', sum(self.shared_state.workers_valid_status))
             # assert self.shared_state.num_valid_busy_workers.value < self.shared_state.num_workers
-            if self.shared_state.work_steal_ready.is_set() and self.shared_state.num_valid_busy_workers.value == 0:
+            if self.shared_state.work_steal_ready.is_set() and sum(self.shared_state.workers_valid_status) == 0:
                 self.shared_state.work_steal_ready.clear()
                 self.shared_state.work_assign_ready.set()
 
-            self.shared_state.get_idle_worker(self.worker_id)
+            # self.shared_state.get_idle_worker(self.worker_id)
+            self.shared_state.steal_assign_ready.wait()
 
             if self.shared_state.work_done.is_set():  # work completed
                 print('Work is done!')
@@ -107,7 +100,7 @@ class Worker:
 
             # print('Worker '+str(self.worker_id)+' num_workers_need_assigned: ', self.shared_state.num_workers_need_assigned.value)
             # print('Worker '+str(self.worker_id)+' num_current_idle_workers: ', self.shared_state.num_current_idle_workers.value)
-            if self.shared_state.num_workers_need_assigned.value == self.shared_state.num_current_idle_workers.value:  # steal work from other workers
+            if self.shared_state.num_workers_need_assigned.value == sum(self.shared_state.workers_idle_status):  # steal work from other workers
                 print('Start stealing in Worker '+ str(self.worker_id))
 
                 # assert self.steal_assign_ready
@@ -146,23 +139,21 @@ class Worker:
         # print('Stole Worker '+str(self.worker_id) + ' works: ', num_stealed_works)
 
         # self.shared_state.got_from_one_worker(self.worker_id)
-        assert self.shared_state.num_valid_busy_workers.value >= 0
-        if self.shared_state.num_valid_busy_workers.value == 0:
+        if sum(self.shared_state.workers_valid_status) == 0:
             self.shared_state.work_steal_ready.clear()
-            for indx in range(len(self.shared_state.workers_stole_status)):
-                self.shared_state.workers_stole_status[indx] = 0
             self.shared_state.work_assign_ready.set()
 
 
     def asssign_to_this_worker(self):
         num_work_assigned = np.ceil(self.shared_state.shared_queue_len.value / self.shared_state.num_workers_need_assigned.value).astype(np.int64)
 
-        if num_work_assigned == 0:
+        if num_work_assigned == 0 or self.shared_state.shared_queue_len == 0:
             num = -1
             with self.shared_state.num_empty_assign.get_lock():
                 self.shared_state.num_empty_assign.value += 1
         else:
             for num in range(num_work_assigned): # actual number of works should be smaller than num_work_assigned
+                # try:
                 one_work = self.shared_state.shared_queue.get()
                 self.private_deque.append(one_work)
 
@@ -172,6 +163,8 @@ class Worker:
                     self.shared_state.shared_queue_len.value -= 1
                     if self.shared_state.shared_queue_len.value == 0:
                         break
+                # except:
+                #     print('Worker '+str(self.worker_id) +' has errors in assigning')
 
         # print('Assigned Worker ' + str(self.worker_id) + ' works: ', num+1)
 
@@ -179,12 +172,8 @@ class Worker:
         with self.shared_state.num_assigned_workers.get_lock():
             self.shared_state.num_assigned_workers.value += 1
 
-        # # self.workers_busy_status[work_id] = 1
-        # with self.num_valid_busy_workers.get_lock():
-        #     self.num_valid_busy_workers.value += 1
-
-        with self.shared_state.num_current_idle_workers.get_lock():
-            self.shared_state.num_current_idle_workers.value -= 1
+        self.shared_state.workers_idle_status[self.worker_id] = 0
+        self.shared_state.workers_valid_status[self.worker_id] = 1
 
         print('Worker '+str(self.worker_id)+' num_workers_need_assigned: ', self.shared_state.num_workers_need_assigned.value)
         print('Worker '+str(self.worker_id)+' num_assigned_workers: ', self.shared_state.num_assigned_workers.value)
@@ -194,24 +183,12 @@ class Worker:
 
             if self.shared_state.num_empty_assign.value == self.shared_state.num_assigned_workers.value:
                 self.shared_state.work_done.set()
-                # print()
                 print('work is done >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-            with self.shared_state.num_valid_busy_workers.get_lock():
-                self.shared_state.num_valid_busy_workers.value = self.shared_state.num_workers - self.shared_state.num_current_idle_workers.value
 
-            print('Assignment is done, num_valid_busy_workers: ', self.shared_state.num_valid_busy_workers.value)
-
-            # print('num_workers: ', self.num_workers)
-            # print('num_current_idle_workers: ', self.num_current_idle_workers.value)
-            # print('num_valid_busy_workers: ', self.num_valid_busy_workers.value)
-            # print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+            print('Assignment is done, num_valid_busy_workers: ', sum(self.shared_state.workers_valid_status))
             self.shared_state.work_assign_ready.clear()
             self.shared_state.reset_after_assgin()
             self.shared_state.steal_assign_ready.set()
-
-            xxx = [xx for xx in self.shared_state.workers_stole_status]
-            print('Assignment is done, workers_stole_status', xxx)
-
             self.shared_state.work_assign_done.set()
 
         else:

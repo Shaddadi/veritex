@@ -29,7 +29,7 @@ if __name__ == "__main__":
         vfl_input = cp.deepcopy(p.input_set)
         dnn0.unsafe_domains = p.unsafe_domains
 
-        num_processors = 10
+        num_processors = 20
         processes = []
         shared_state = SharedState([vfl_input], num_processors, dnn0._num_layer)
         one_worker = Worker(dnn0)
