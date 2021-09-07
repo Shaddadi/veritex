@@ -7,6 +7,7 @@ from acasxu_properties import *
 import multiprocessing as mp
 from worker import Worker
 from shared import SharedState
+import multiprocessing
 import time
 
 
@@ -31,7 +32,8 @@ if __name__ == "__main__":
         vfl_input = cp.deepcopy(p.input_set)
         dnn0.unsafe_domains = p.unsafe_domains
 
-        num_processors = 20
+        num_processors = multiprocessing.cpu_count()
+        print('num_processors: ', num_processors)
         processes = []
         shared_state = SharedState([vfl_input], num_processors, dnn0._num_layer)
         one_worker = Worker(dnn0)
