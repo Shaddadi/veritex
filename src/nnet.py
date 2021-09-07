@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import copy as cp
 from vzono import Vzono
@@ -5,6 +7,7 @@ from itertools import product
 from scipy.optimize import linprog
 from collections import deque
 import multiprocessing
+import os
 
 
 
@@ -62,11 +65,13 @@ class DNN:
                 vals = np.dot(A_unsafe, vertices.T) + d_unsafe
                 if np.any(np.all(vals<=0, axis=0)):
                     unsafe = True
+                    os.system('pkill -9 python')
                     break
             else:
                 unsafe_vfl = self.backtrack(vfl_set, verify=True)
                 if unsafe_vfl is not None:
                     unsafe = True
+                    os.system('pkill -9 python')
                     break
 
         return unsafe
@@ -80,7 +85,7 @@ class DNN:
             results.append([])
 
         if self.config_exact_output:
-            results.append(vfl_set)
+            results.append([])
         else:
             results.append([])
 
@@ -225,13 +230,13 @@ class DNN:
         b = self._b[layer_id]
         vfl_set.affineMap(W, b)
 
-        q = deque()
-        q.append(vfl_set)
-
-        queue = multiprocessing.Queue()
-        queue.put(vfl_set)
-        queue.put(vfl_set)
-        xx = queue.get()
+        # q = deque()
+        # q.append(vfl_set)
+        #
+        # queue = multiprocessing.Queue()
+        # queue.put(vfl_set)
+        # queue.put(vfl_set)
+        # xx = queue.get()
         # partition graph sets according to properties of the relu function
         if layer_id == self._num_layer-1:
             return [vfl_set]

@@ -46,17 +46,17 @@ class Worker:
             tuple_state = self.private_deque.popleft()
             self.state_spawn_breath_first(tuple_state)
 
-            if len(self.private_deque) >= 5000:
+            if len(self.private_deque) >= 10000 or tuple_state[1]==2 :
 
                 self.shared_state.steal_assign_ready.set()
-                print('This is Worker '+str(self.worker_id))
+                # #print('This is Worker '+str(self.worker_id))
                 # with self.shared_state.num_valid_busy_workers.get_lock():
                 #     self.shared_state.num_valid_busy_workers.value -= 1
 
                 self.shared_state.workers_valid_status[self.worker_id] = 0
-
                 random.shuffle(self.private_deque)
-                self.shared_state.compute_steal_rate()
+                # self.shared_state.compute_steal_rate()
+                self.shared_state.work_steal_ready.wait()
                 self.steal_from_this_worker()
                 # self.shared_state.work_assign_ready.wait()
                 with self.shared_state.initial_comput.get_lock(): # disable it forever
@@ -68,134 +68,237 @@ class Worker:
         # normal computation, depth-first computation
         while not self.shared_state.work_done.is_set():
             while self.private_deque:
-                # print('Worker ' + str(self.worker_id) + ' normal computation')
+
                 tuple_state = self.private_deque.pop()
                 self.state_spawn_depth_first(tuple_state)
+                if self.shared_state.work_done.is_set():
+                    self.shared_state.work_assign_ready.set()
+                    break
+                if self.shared_state.work_steal_ready.is_set():
+                    # print('Worker ' + str(self.worker_id) + ' before workers_valid_status[self.worker_id] == 1')
+                    if self.shared_state.workers_valid_status[self.worker_id] == 1 and self.shared_state.work_steal_ready.is_set():
+                        # #print('Worker ' + str(self.worker_id) + ' after workers_valid_status[self.worker_id] == 1')
+                        # #print('Worker ' + str(self.worker_id) + ' steal_ready flag: ',
+                        #       self.shared_state.work_steal_ready.is_set())
+                        # #print('Worker ' + str(self.worker_id) + ' steal_assign_ready flag: ',
+                        #       self.shared_state.steal_assign_ready.is_set())
+                        # #print('Worker ' + str(self.worker_id) + ' will be stolen')
 
-                if self.shared_state.work_steal_ready.is_set() and self.shared_state.workers_valid_status[self.worker_id] == 1:
-                    self.shared_state.workers_valid_status[self.worker_id] = 0
-                    print('Worker '+str(self.worker_id)+ ' Stole here I')
+                        self.steal_from_this_worker()
 
-                    self.steal_from_this_worker()
+                    # #print('Worker ' + str(self.worker_id) + ' skiped workers_valid_status[self.worker_id] == 1')
 
             # private deques are empty and assign
+            #print('Worker ' + str(self.worker_id) + ' becomes idle')
+
             self.shared_state.workers_idle_status[self.worker_id] = 1
+            #>>>>>>>>>>>>>>>>>>>>>>>>>>lock>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+            self.shared_state.lock.acquire()
+            # #print('Worker ' + str(self.worker_id) +' lock.acquire() II')
             self.shared_state.workers_valid_status[self.worker_id] = 0
 
-            print('Worker '+str(self.worker_id)+' after Stole here II, num_valid_busy_workers: ', sum(self.shared_state.workers_valid_status))
             # assert self.shared_state.num_valid_busy_workers.value < self.shared_state.num_workers
+            # #print('Worker ' + str(self.worker_id) + 'sum(self.shared_state.workers_valid_status) II: ',
+            #       sum(self.shared_state.workers_valid_status))
             if self.shared_state.work_steal_ready.is_set() and sum(self.shared_state.workers_valid_status) == 0:
                 self.shared_state.work_steal_ready.clear()
+                # #print('Worker ' + str(self.worker_id) + 'waiting for shared_queue_len usage II')
+                with self.shared_state.works_to_assign_per_worker.get_lock():
+                    self.shared_state.works_to_assign_per_worker.value = \
+                        np.ceil(self.shared_state.shared_queue_len.value / self.shared_state.num_workers_need_assigned.value).astype(np.int64)
+                # #print('works_to_assign_per_worker: ',self.shared_state.works_to_assign_per_worker.value)
+                # #print('Worker ' + str(self.worker_id) + ' passed shared_queue_len usage II')
                 self.shared_state.work_assign_ready.set()
 
-            # self.shared_state.get_idle_worker(self.worker_id)
-            self.shared_state.steal_assign_ready.wait()
+            # #print('Worker ' + str(self.worker_id) + ' lock.release II')
+            self.shared_state.lock.release()
+            #<<<<<<<<<<<<<<<<<<<<<<<<<<lock<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<#
 
-            if self.shared_state.work_done.is_set():  # work completed
-                print('Work is done!')
-                break
+            # self.shared_state.get_idle_worker(self.worker_id)
+            # print('Worker ' + str(self.worker_id) + ' is waiting for steal_assign_ready')
+            self.shared_state.steal_assign_ready.wait()
+            # print('Worker ' + str(self.worker_id) + ' passed steal_assign_ready')
+
+            # if self.shared_state.work_done.is_set() or sum(self.shared_state.workers_idle_status)==self.shared_state.num_workers:  # work completed
+            #     # assert self.steal_assign_ready
+            #     self.shared_state.steal_assign_ready.clear()
+            #     #print('shared_state.steal_assign_ready.clear()')
+            #     self.shared_state.compute_steal_rate()
+            #     # #print('Worker ' + str(self.worker_id) + ' work_steal_rate', self.shared_state.work_steal_rate.value)
+            #     with self.shared_state.num_empty_assign.get_lock():
+            #         self.shared_state.num_empty_assign.value = 0
+            #
+            #     self.shared_state.work_steal_ready.clear()
+            #     #print('Worker ' + str(self.worker_id) + 'waiting for shared_queue_len usage II')
+            #     with self.shared_state.works_to_assign_per_worker.get_lock():
+            #         self.shared_state.works_to_assign_per_worker.value = 0
+            #     # #print('works_to_assign_per_worker: ',self.shared_state.works_to_assign_per_worker.value)
+            #     #print('Worker ' + str(self.worker_id) + ' passed shared_queue_len usage II')
+            #     self.shared_state.work_assign_ready.set()
+            #     break
 
             with self.shared_state.num_workers_need_assigned.get_lock():
                 self.shared_state.num_workers_need_assigned.value += 1
 
-            # print('Worker '+str(self.worker_id)+' num_workers_need_assigned: ', self.shared_state.num_workers_need_assigned.value)
-            # print('Worker '+str(self.worker_id)+' num_current_idle_workers: ', self.shared_state.num_current_idle_workers.value)
-            if self.shared_state.num_workers_need_assigned.value == sum(self.shared_state.workers_idle_status):  # steal work from other workers
-                print('Start stealing in Worker '+ str(self.worker_id))
+                # print('Worker '+str(self.worker_id)+' num_workers_need_assigned: ', self.shared_state.num_workers_need_assigned.value)
+                # print('Worker '+str(self.worker_id)+' num_current_idle_workers: ', sum(self.shared_state.workers_idle_status))
+                if self.shared_state.num_workers_need_assigned.value == sum(self.shared_state.workers_idle_status):  # steal work from other workers
 
-                # assert self.steal_assign_ready
-                self.shared_state.work_assign_done.clear()
-                self.shared_state.steal_assign_ready.clear()
-                self.shared_state.compute_steal_rate()
-                with self.shared_state.num_empty_assign.get_lock():
-                    self.shared_state.num_empty_assign.value = 0
-                self.shared_state.work_steal_ready.set()
+                    # assert self.steal_assign_ready
+                    self.shared_state.steal_assign_ready.clear()
+                    #print('shared_state.steal_assign_ready.clear()')
+                    self.shared_state.compute_steal_rate()
+                    # #print('Worker ' + str(self.worker_id) + ' work_steal_rate', self.shared_state.work_steal_rate.value)
+                    with self.shared_state.num_empty_assign.get_lock():
+                        self.shared_state.num_empty_assign.value = 0
 
-            print('Worker '+str(self.worker_id)+ ' is waiting for work_assign_ready')
+                    self.shared_state.work_steal_ready.set()
+                    if sum(self.shared_state.workers_idle_status) == self.shared_state.num_workers:
+                        self.shared_state.work_done.set()
+
+                    self.shared_state.all_idle_ready.set()
+
+
+            self.shared_state.all_idle_ready.wait()
+            if self.shared_state.work_done.is_set():
+                self.shared_state.steal_assign_ready.set()
+                break
+            # print('Worker ' + str(self.worker_id) + ' is waiting for work_assign_ready')
             self.shared_state.work_assign_ready.wait()
-            print('Worker ' + str(self.worker_id) + '  passed work_assign_ready')
+            if self.shared_state.work_assign_done.is_set():
+                self.shared_state.work_assign_done.clear()
+            # print('Worker ' + str(self.worker_id) + ' passed work_assign_ready')
             self.shared_state.work_steal_ready.clear()
+            if self.shared_state.work_done.is_set():
+                self.shared_state.steal_assign_ready.set()
+                break
             self.asssign_to_this_worker()
 
-        print('Processor '+str(self.worker_id)+' Output: ', len(self.output_sets))
-        print('Processor '+str(self.worker_id)+' is done!')
+        # print('Processor '+str(self.worker_id)+' Output: ', len(self.output_sets))
+        # print('Processor '+str(self.worker_id)+' is done!')
 
 
 
     def steal_from_this_worker(self):
         steal_rate = self.shared_state.work_steal_rate.value
+
+        try:
+            assert steal_rate != 0
+        except:
+            print('Worker ' + str(self.worker_id) + ' idle workers: ', [xx for xx in self.shared_state.workers_idle_status])
+            print('Worker ' + str(self.worker_id) + ' steal_ready flag: ', self.shared_state.work_steal_ready.is_set())
+            print('Worker ' + str(self.worker_id) + ' steal_assign_ready flag: ', self.shared_state.steal_assign_ready.is_set())
+            print('Worker ' + str(self.worker_id) + ' steal_rate == 0 *****************************************************')
+
         assert steal_rate != 0
 
         num_stealed_works = 0
-        if len(self.private_deque)>=10:
+        # # #print('Worker '+str(self.worker_id) + ' works: ', len(self.private_deque))
+        if len(self.private_deque)>=3:
             num_stealed_works = np.floor(len(self.private_deque) * steal_rate).astype(np.int64)
+            if num_stealed_works == 0:
+                num_stealed_works = 1
             self.shared_state.increase_queue_len(num_stealed_works)
             for n in range(num_stealed_works):
-                stealed_work = self.private_deque.pop()
+                stealed_work = self.private_deque.popleft() # states ahead
                 self.shared_state.shared_queue.put(stealed_work)
                 with self.shared_state.stole_works.get_lock():
                     self.shared_state.stole_works.value += 1
 
-        # print('Stole Worker '+str(self.worker_id) + ' works: ', num_stealed_works)
+        #print('Stole Worker '+str(self.worker_id) + ' works: ', num_stealed_works)
 
         # self.shared_state.got_from_one_worker(self.worker_id)
+        #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+        self.shared_state.lock.acquire()
+        # #print('Worker ' + str(self.worker_id) + ' lock.acquire() I')
+        self.shared_state.workers_valid_status[self.worker_id] = 0
+        # #print('Worker ' + str(self.worker_id) + 'sum(self.shared_state.workers_valid_status) I: ', sum(self.shared_state.workers_valid_status))
         if sum(self.shared_state.workers_valid_status) == 0:
             self.shared_state.work_steal_ready.clear()
+            # #print('Worker ' + str(self.worker_id) + 'waiting for shared_queue_len usage I')
+            with self.shared_state.works_to_assign_per_worker.get_lock():
+                self.shared_state.works_to_assign_per_worker.value = np.ceil(
+                    self.shared_state.shared_queue_len.value / self.shared_state.num_workers_need_assigned.value).astype(
+                    np.int64)
+                # #print('works_to_assign_per_worker: ', self.shared_state.works_to_assign_per_worker.value)
+            # #print('Worker ' + str(self.worker_id) + ' passed shared_queue_len usage I')
             self.shared_state.work_assign_ready.set()
+
+        # #print('Worker ' + str(self.worker_id) + ' lock.release() I')
+        self.shared_state.lock.release()
+        #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<#
 
 
     def asssign_to_this_worker(self):
-        num_work_assigned = np.ceil(self.shared_state.shared_queue_len.value / self.shared_state.num_workers_need_assigned.value).astype(np.int64)
-
-        if num_work_assigned == 0 or self.shared_state.shared_queue_len == 0:
-            num = -1
+        # # #print('Worker ' + str(self.worker_id) + ' shared_queue_len: ', self.shared_state.shared_queue_len.value)
+        # # #print('Worker ' + str(self.worker_id) + ' num_work_assigned: ', num_work_assigned)
+        if self.shared_state.works_to_assign_per_worker.value == 0 or self.shared_state.shared_queue_len == 0:
             with self.shared_state.num_empty_assign.get_lock():
                 self.shared_state.num_empty_assign.value += 1
         else:
-            for num in range(num_work_assigned): # actual number of works should be smaller than num_work_assigned
-                # try:
-                one_work = self.shared_state.shared_queue.get()
-                self.private_deque.append(one_work)
-
-                with self.shared_state.assigned_works.get_lock():
-                    self.shared_state.assigned_works.value += 1
-                with self.shared_state.shared_queue_len.get_lock():
-                    self.shared_state.shared_queue_len.value -= 1
+            with self.shared_state.shared_queue_len.get_lock():
+                for num in range(self.shared_state.works_to_assign_per_worker.value): # actual number of works should be smaller than num_work_assigned
                     if self.shared_state.shared_queue_len.value == 0:
+                        # # #print('shared_queue_len becomes 0')
                         break
-                # except:
-                #     print('Worker '+str(self.worker_id) +' has errors in assigning')
+                    one_work = self.shared_state.shared_queue.get()
+                    self.private_deque.append(one_work)
+                    with self.shared_state.assigned_works.get_lock():
+                        self.shared_state.assigned_works.value += 1
 
-        # print('Assigned Worker ' + str(self.worker_id) + ' works: ', num+1)
+                    self.shared_state.shared_queue_len.value -= 1
+
+            # # #print('Worker ' + str(self.worker_id) + ' num_work_to_assign: ', self.shared_state.works_to_assign_per_worker.value)
+            # # #print('Worker ' + str(self.worker_id) + ' num_work_assigned: ', num + 1)
+
+
+
+        # # #print('Assigned Worker ' + str(self.worker_id) + ' works: ', num+1)
 
         # self.shared_state.assigned_one_worker(self.worker_id)
+        self.shared_state.workers_idle_status[self.worker_id] = 0
         with self.shared_state.num_assigned_workers.get_lock():
             self.shared_state.num_assigned_workers.value += 1
 
-        self.shared_state.workers_idle_status[self.worker_id] = 0
-        self.shared_state.workers_valid_status[self.worker_id] = 1
+            #print('Worker ' + str(self.worker_id) + ' num_assigned_workers: ',  self.shared_state.num_assigned_workers.value)
+            #print('Worker ' + str(self.worker_id) + ' num_workers_need_assigned: ', self.shared_state.num_workers_need_assigned.value)
+            assert self.shared_state.num_assigned_workers.value <= self.shared_state.num_workers_need_assigned.value
+            if self.shared_state.num_assigned_workers.value == self.shared_state.num_workers_need_assigned.value:  # complete assigning
 
-        print('Worker '+str(self.worker_id)+' num_workers_need_assigned: ', self.shared_state.num_workers_need_assigned.value)
-        print('Worker '+str(self.worker_id)+' num_assigned_workers: ', self.shared_state.num_assigned_workers.value)
-        assert self.shared_state.num_assigned_workers.value <= self.shared_state.num_workers_need_assigned.value
-        if self.shared_state.num_assigned_workers.value == self.shared_state.num_workers_need_assigned.value:  # complete assigning
-            assert self.shared_state.stole_works.value == self.shared_state.assigned_works.value
+                try:
+                    assert self.shared_state.stole_works.value == self.shared_state.assigned_works.value
+                except:
+                    print('stole_works: ', self.shared_state.stole_works.value )
+                    print('assigned_works', self.shared_state.assigned_works.value)
+                    print('shared_queue_len', self.shared_state.shared_queue_len.value)
+                    print('num_workers_need_assigned', self.shared_state.num_workers_need_assigned.value)
+                    print('works_to_assign_per_worker', self.shared_state.works_to_assign_per_worker.value)
 
-            if self.shared_state.num_empty_assign.value == self.shared_state.num_assigned_workers.value:
-                self.shared_state.work_done.set()
-                print('work is done >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+                assert self.shared_state.stole_works.value == self.shared_state.assigned_works.value
 
-            print('Assignment is done, num_valid_busy_workers: ', sum(self.shared_state.workers_valid_status))
-            self.shared_state.work_assign_ready.clear()
-            self.shared_state.reset_after_assgin()
-            self.shared_state.steal_assign_ready.set()
-            self.shared_state.work_assign_done.set()
 
-        else:
-            print('Worker ' + str(self.worker_id) + ' is waiting for work_assign_done')
-            self.shared_state.work_assign_done.wait()
-            print('Worker ' + str(self.worker_id) + ' passed work_assign_done')
+                if self.shared_state.num_empty_assign.value == self.shared_state.num_assigned_workers.value:
+                    self.shared_state.work_done.set()
+                    #print('work is done >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
+                with self.shared_state.workers_idle_status.get_lock():
+                    for n, ele in enumerate(self.shared_state.workers_idle_status):
+                        if ele == 0: # not idle
+                            self.shared_state.workers_valid_status[n] = 1
+                        else:
+                            self.shared_state.workers_valid_status[n] = 0
+
+                #print('Assignment is done, num_valid_busy_workers: ', sum(self.shared_state.workers_valid_status))
+                self.shared_state.work_assign_ready.clear()
+                self.shared_state.reset_after_assgin(self.worker_id)
+                self.shared_state.steal_assign_ready.set()
+                self.shared_state.all_idle_ready.clear()
+                self.shared_state.work_assign_done.set()
+
+
+        # print('Worker ' + str(self.worker_id) + ' is waiting for work_assign_done')
+        self.shared_state.work_assign_done.wait()
+        # print('Worker ' + str(self.worker_id) + ' passed work_assign_done')
 
 
 
@@ -203,7 +306,11 @@ class Worker:
         next_tuple_states = self.dnn.compute_state(tuple_state)
         if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
             assert len(next_tuple_states) == 1
-            self.output_sets.append(next_tuple_states)
+            # self.output_sets.append(next_tuple_states)
+            unsafe = self.dnn.verify(next_tuple_states[0][0])
+            if unsafe:
+                self.shared_state.work_done.set()
+                # print('unsafe')
             return
 
         if len(next_tuple_states) == 2:
@@ -218,7 +325,12 @@ class Worker:
 
         if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
             assert len(next_tuple_states) == 1
-            self.output_sets.append(next_tuple_states)
+            # self.output_sets.append(next_tuple_states)
+            # self.shared_state.outputs.put(next_tuple_states)
+            unsafe = self.dnn.verify(next_tuple_states[0][0])
+            if unsafe:
+                self.shared_state.work_done.set()
+                # print('unsafe')
             return
 
         for one_state in next_tuple_states:

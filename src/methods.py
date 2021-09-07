@@ -41,5 +41,19 @@ class Methods:
         self.dnn.config_unsafe_input = unsafe_input
         self.dnn.config_exact_output = exact_output
 
+        cpus = multiprocessing.cpu_count()
+        pool = multiprocessing.Pool(cpus)
+
+        assert self.properties is not None
+        for n, p in enumerate(self.properties):
+            initial_input = cp.deepcopy(p.input_set)
+            self.dnn.unsafe_domains = p.unsafe_domains
+
+            input_sets = self.dnn.singleLayerOutput(initial_input, 0)
+            output_results = []
+            output_results.extend(pool.imap(partial(self.dnn.reach, start_layer=1), input_sets))
+            output_results = [item[1] for sublist in output_results for item in sublist]
+            return output_results
+
 
 

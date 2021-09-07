@@ -23,6 +23,54 @@ class DNN:
         self.config_exact_output = None
 
 
+    def backtrack(self, vfl_set, verify=False):
+
+        vfls = []
+        for i in range(len(self.unsafe_domains)):
+            As_unsafe = self.unsafe_domains[i][0]
+            ds_unsafe = self.unsafe_domains[i][1]
+            elements = np.dot(np.dot(As_unsafe,vfl_set.M), vfl_set.vertices.T) + np.dot(As_unsafe, vfl_set.b) +ds_unsafe
+            if np.any(np.all(elements>0, axis=1)): # reachable set does not satisfy at least one linear constraint
+                return None
+            if np.any(np.all(elements<=0, axis=0)) and verify: # at least one vertex locates in unsafe domain
+                return 0
+
+            unsafe_vfl = cp.deepcopy(vfl_set)
+            for j in range(len(As_unsafe)):
+                A = As_unsafe[[j]]
+                d = ds_unsafe[[j]]
+                subvfl0 = unsafe_vfl.reluSplitHyperplane(A, d)
+                if subvfl0:
+                    unsafe_vfl = subvfl0
+                else:
+                    unsafe_vfl = None
+                    return unsafe_vfl
+
+            vfls.append(unsafe_vfl)
+
+        return vfls
+
+
+    def verify(self, vfl_set):
+        vertices = np.dot(vfl_set.vertices, vfl_set.M.T) + vfl_set.b.T
+        unsafe = False
+        for ud in self.unsafe_domains:
+            A_unsafe = ud[0]
+            d_unsafe = ud[1]
+            if len(A_unsafe) == 1:
+                vals = np.dot(A_unsafe, vertices.T) + d_unsafe
+                if np.any(np.all(vals<=0, axis=0)):
+                    unsafe = True
+                    break
+            else:
+                unsafe_vfl = self.backtrack(vfl_set, verify=True)
+                if unsafe_vfl is not None:
+                    unsafe = True
+                    break
+
+        return unsafe
+
+
     def compute_state(self, tuple_state):
         vfl_set, layer, neurons = tuple_state # (vfl, layer, neurons)
 
