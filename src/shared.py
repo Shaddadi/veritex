@@ -4,14 +4,14 @@ import numpy as np
 idle_workers = 1
 
 class SharedState: # todo: make it freezable
-    def __init__(self, vfl_inputs, num_workers, net_layers):
+    def __init__(self, vfl_inputs, num_workers):
 
         self.num_workers = num_workers
-        self.net_layers = net_layers
         self.shared_queue = mp.Manager().Queue()
         self.shared_queue_len = mp.Value('i', 0)
 
         self.outputs = mp.Manager().Queue()
+        self.outputs_len = mp.Value('i', 0)
 
         self.initial_steal_assign = mp.Event()
         self.initial_completed_workers = mp.Value('i', 0)
@@ -32,7 +32,6 @@ class SharedState: # todo: make it freezable
         self.work_done = mp.Event()
 
         self.lock = mp.Lock()
-        self.lock2 = mp.Lock()
 
         self.work_steal_rate = mp.Value('f', 0.0) # initial
         self.num_workers_need_assigned = mp.Value('i', 0) # initial

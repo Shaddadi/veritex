@@ -15,17 +15,17 @@ if __name__ == "__main__":
 
     # for i in range(1,6):
     #     for j in range(1,10):
-    i, j = 1, 9
+    i, j = 3,3
     nn_path = "nnet-mat-files/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.mat"
     filemat = loadmat(nn_path)
     W = filemat['W'][0]
     b = filemat['b'][0]
 
     t0 = time.time()
-    properties = [property7]
+    properties = [property9]
     dnn0 = DNN(W, b)
     meth = Methods(dnn0, properties)
-    verification = meth.verify(relu_linear=True)
+    verification = meth.verify(relu_linear=False)
     p_result = np.any(np.array(verification))
     print('Safety property 1 on Network: N'+str(i)+str(j))
     print('Unsafe: ', p_result)

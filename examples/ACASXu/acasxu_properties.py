@@ -131,7 +131,7 @@ property7 = Property(input_domain, unsafe_domains)
 
 
 # property 8
-lbs8 = [0, -3.141592, -0.1, 600, 600]
+lbs8 = [100, -3.141592, -0.1, 600, 600]
 ubs8 =[60760, -0.75 * 3.141592, 0.1, 1200, 1200]
 for n in range(5):
     lbs8[n] = (lbs8[n] - means[n]) / ranges[n]

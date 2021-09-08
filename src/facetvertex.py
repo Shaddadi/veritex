@@ -89,12 +89,13 @@ class FacetVertex:
         d_new = np.dot(A, self.b) +d
         elements = np.dot(A_new, self.vertices.T) + d_new
         elements = elements[0]
+        xx = np.dot(self.M, self.vertices.T) + self.b
         if np.all(elements >= 0):
             return None
         if np.all(elements <= 0):
             return self
-        if np.any(elements == 0.0):
-            sys.exit('Hyperplane intersect with vertices!')
+        # if np.any(elements == 0.0):
+        #     sys.exit('Hyperplane intersect with vertices!')
 
         positive_bool = (elements > 0)
         negative_bool = np.invert(positive_bool)
