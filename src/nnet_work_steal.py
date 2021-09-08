@@ -156,7 +156,7 @@ class DNN:
                     unsafe = True
                     break
             else:
-                unsafe_vfl = self.backtrack(vfl_set, verify=True)
+                unsafe_vfl = self.backtrack(cp.deepcopy(vfl_set), verify=True)
                 if unsafe_vfl is not None:
                     unsafe = True
                     break

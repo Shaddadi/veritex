@@ -47,7 +47,7 @@ class Worker:
             tuple_state = self.private_deque.popleft()
             self.state_spawn_breath_first(tuple_state)
 
-            if len(self.private_deque) >= 5000 or tuple_state[1]==2 :
+            if len(self.private_deque) >= 2000 or tuple_state[1]==1 :
                 # self.private_deque = deque(itertools.islice(self.private_deque, 150, 200))
                 self.shared_state.steal_assign_ready.set()
                 # #print('This is Worker '+str(self.worker_id))
@@ -55,7 +55,7 @@ class Worker:
                 #     self.shared_state.num_valid_busy_workers.value -= 1
 
                 self.shared_state.workers_valid_status[self.worker_id] = 0
-                # random.shuffle(self.private_deque)
+                random.shuffle(self.private_deque)
                 # self.shared_state.compute_steal_rate()
                 self.shared_state.work_steal_ready.wait()
                 self.steal_from_this_worker()
@@ -279,7 +279,6 @@ class Worker:
                 if unsafe:
                     self.shared_state.outputs.put(unsafe)
                     self.shared_state.work_done.set()
-                return
             elif self.dnn.config_unsafe_input:
                 unsafety = self.dnn.backtrack(next_tuple_states[0][0])
                 with self.shared_state.outputs_len.get_lock():
@@ -290,6 +289,8 @@ class Worker:
                         return
             elif self.dnn.config_exact_output:
                 self.shared_state.outputs.put(next_tuple_states[0][0])
+
+            return
 
         if self.dnn.config_relu_linear:
             temp_list = []
@@ -313,27 +314,38 @@ class Worker:
     def state_spawn_breath_first(self, tuple_state):
         next_tuple_states = self.dnn.compute_state(tuple_state)
 
-        if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
-            assert len(next_tuple_states) == 1
-            if self.dnn.config_verify:
-                unsafe = self.dnn.verify(next_tuple_states[0][0])
-                if unsafe:
-                    self.shared_state.outputs.put(unsafe)
-                    self.shared_state.work_done.set()
-                return
-            elif self.dnn.config_unsafe_input:
-                unsafety = self.dnn.backtrack(next_tuple_states[0][0])
-                with self.shared_state.outputs_len.get_lock():
-                    self.shared_state.outputs_len.value += 1
-                    self.shared_state.outputs.put(unsafety)
-                    if self.shared_state.outputs_len.value >= self.dnn.outputs_len:
-                        self.shared_state.work_done.set()
-                        return
-            elif self.dnn.config_exact_output:
-                self.shared_state.outputs.put(next_tuple_states[0][0])
+        if next_tuple_states[0][1] == 1 or len(self.private_deque) >= 2000: # reach to the next layer
+            for one_state in next_tuple_states:
+                self.private_deque.append(one_state)
+            return
 
         for one_state in next_tuple_states:
-            self.private_deque.append(one_state)
+            self.private_deque.appendleft(one_state)
+
+        self.state_spawn_breath_first(self.private_deque.popleft())
+
+        # if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
+        #     assert len(next_tuple_states) == 1
+        #     if self.dnn.config_verify:
+        #         unsafe = self.dnn.verify(next_tuple_states[0][0])
+        #         if unsafe:
+        #             self.shared_state.outputs.put(unsafe)
+        #             self.shared_state.work_done.set()
+        #         return
+        #     elif self.dnn.config_unsafe_input:
+        #         unsafety = self.dnn.backtrack(next_tuple_states[0][0])
+        #         with self.shared_state.outputs_len.get_lock():
+        #             self.shared_state.outputs_len.value += 1
+        #             self.shared_state.outputs.put(unsafety)
+        #             if self.shared_state.outputs_len.value >= self.dnn.outputs_len:
+        #                 self.shared_state.work_done.set()
+        #                 return
+        #     elif self.dnn.config_exact_output:
+        #         self.shared_state.outputs.put(next_tuple_states[0][0])
+
+
+
+
 
 
 
