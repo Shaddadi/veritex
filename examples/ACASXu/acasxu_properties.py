@@ -131,7 +131,7 @@ property7 = Property(input_domain, unsafe_domains)
 
 
 # property 8
-lbs8 = [100, -3.141592, -0.1, 600, 600]
+lbs8 = [0, -3.141592, -0.1, 600, 600]
 ubs8 =[60760, -0.75 * 3.141592, 0.1, 1200, 1200]
 for n in range(5):
     lbs8[n] = (lbs8[n] - means[n]) / ranges[n]
@@ -157,6 +157,8 @@ input_domain = [lbs8, ubs8]
 #         A_unsafe = np.concatenate((arry0[ii], arry1[jj]),axis=0)
 #         d_unsafe = np.array([[0.0],[0.0]])
 #         unsafe_domains.append([A_unsafe, d_unsafe])
+#
+# property8 = Property(input_domain, unsafe_domains)
 
 # the following is from vnn-comp 2021
 arry0 = [np.array([[-1.0, 0, 1.0, 0, 0]]),

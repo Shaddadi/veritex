@@ -26,18 +26,16 @@ class DNN:
         assert not(self.config_exact_output and self.config_relu_linear)
 
 
-    def backtrack(self, vfl_set, verify=False):
+    def backtrack(self, vfl_set, verify=False, unsafe_domain=None):
 
-        vfls = []
-        for i in range(len(self.unsafe_domains)):
-            As_unsafe = self.unsafe_domains[i][0]
-            ds_unsafe = self.unsafe_domains[i][1]
-            elements = np.dot(np.dot(As_unsafe,vfl_set.M), vfl_set.vertices.T) + np.dot(As_unsafe, vfl_set.b) +ds_unsafe
-            if np.any(np.all(elements>0, axis=1)): # reachable set does not satisfy at least one linear constraint
-                return None
-            if np.any(np.all(elements<=0, axis=0)) and verify: # at least one vertex locates in unsafe domain
-                return 0
-
+        if verify:
+            As_unsafe = unsafe_domain[0]
+            ds_unsafe = unsafe_domain[1]
+            elements = np.dot(np.dot(As_unsafe, vfl_set.M), vfl_set.vertices.T) + np.dot(As_unsafe, vfl_set.b) + ds_unsafe
+            if np.any(np.all(elements >= 0, axis=1)):  # reachable set does not satisfy at least one linear constraint
+                return False
+            if np.any(np.all(elements <= 0, axis=0)):  # at least one vertex locates in unsafe domain
+                return True
             unsafe_vfl = cp.deepcopy(vfl_set)
             for j in range(len(As_unsafe)):
                 A = As_unsafe[[j]]
@@ -46,12 +44,33 @@ class DNN:
                 if subvfl0:
                     unsafe_vfl = subvfl0
                 else:
-                    unsafe_vfl = None
-                    return unsafe_vfl
+                    return False # vfl_set does not contain any unsafe elements
+            return True # unsafe_vfl is not none and contains unsafe elements
+        else:
+            vfls = []
+            for i in range(len(self.unsafe_domains)):
+                As_unsafe = self.unsafe_domains[i][0]
+                ds_unsafe = self.unsafe_domains[i][1]
+                elements = np.dot(np.dot(As_unsafe,vfl_set.M), vfl_set.vertices.T) + np.dot(As_unsafe, vfl_set.b) +ds_unsafe
+                if np.any(np.all(elements>0, axis=1)): # reachable set does not satisfy at least one linear constraint
+                    return None
+                if np.any(np.all(elements<=0, axis=0)) and verify: # at least one vertex locates in unsafe domain
+                    return 0
 
-            vfls.append(unsafe_vfl)
+                unsafe_vfl = cp.deepcopy(vfl_set)
+                for j in range(len(As_unsafe)):
+                    A = As_unsafe[[j]]
+                    d = ds_unsafe[[j]]
+                    subvfl0 = unsafe_vfl.reluSplitHyperplane(A, d)
+                    if subvfl0:
+                        unsafe_vfl = subvfl0
+                    else:
+                        unsafe_vfl = None
+                        return unsafe_vfl
 
-        return vfls
+                vfls.append(unsafe_vfl)
+
+            return vfls
 
 
     def reluLayerLinearRelax(self, vzono_set):
@@ -156,9 +175,8 @@ class DNN:
                     unsafe = True
                     break
             else:
-                unsafe_vfl = self.backtrack(vfl_set, verify=True)
-                if unsafe_vfl is not None:
-                    unsafe = True
+                unsafe = self.backtrack(vfl_set, verify=True, unsafe_domain=ud)
+                if unsafe:
                     break
 
         return unsafe
@@ -203,10 +221,10 @@ class DNN:
     def relu_split(self, vfl_set, idx):
         outputPolySets = []
         sub_pos, sub_neg= vfl_set.reluSplit(idx)
-        if sub_pos:
-            outputPolySets.append(sub_pos)
         if sub_neg:
             outputPolySets.append(sub_neg)
+        if sub_pos:
+            outputPolySets.append(sub_pos)
 
         return outputPolySets
 

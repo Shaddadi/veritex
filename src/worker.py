@@ -14,7 +14,8 @@ class Worker:
         self.output_sets = []
         self.worker_id = None
         self.shared_state = None
-        self.inital_num = 480
+        self.inital_num = 1000
+        self.inital_layer = 1
 
 
     def inital_assgin(self):
@@ -49,8 +50,8 @@ class Worker:
             tuple_state = self.private_deque.popleft()
             self.state_spawn_breath_first(tuple_state)
 
-            if len(self.private_deque) >= self.inital_num or tuple_state[1]==2:
-                # self.private_deque = deque(itertools.islice(self.private_deque, 168, 171))
+            if len(self.private_deque) >= self.inital_num or tuple_state[1]==self.inital_layer:
+                # self.private_deque = deque(itertools.islice(self.private_deque, 900, 1000))
                 self.shared_state.steal_assign_ready.set()
                 # #print('This is Worker '+str(self.worker_id))
                 # with self.shared_state.num_valid_busy_workers.get_lock():
@@ -74,8 +75,8 @@ class Worker:
 
                 tuple_state = self.private_deque.popleft()
                 self.state_spawn_depth_first(tuple_state)
-                if time.time() -t0 >= 120:
-                    self.shared_state.work_done.set()
+                # if time.time() -t0 >= 60:
+                #     self.shared_state.work_done.set()
                 if self.shared_state.work_done.is_set():
                     self.shared_state.work_assign_ready.set()
                     break
@@ -251,7 +252,7 @@ class Worker:
 
                 if self.shared_state.num_empty_assign.value == self.shared_state.num_assigned_workers.value:
                     self.shared_state.work_done.set()
-                    #print('work is done >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+                    print('work is done >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
                 with self.shared_state.workers_idle_status.get_lock():
                     for n, ele in enumerate(self.shared_state.workers_idle_status):
@@ -318,7 +319,7 @@ class Worker:
     def state_spawn_breath_first(self, tuple_state):
         next_tuple_states = self.dnn.compute_state(tuple_state)
 
-        # if next_tuple_states[0][1] == 1 or len(self.private_deque) >= self.inital_num: # reach to the next layer
+        # if next_tuple_states[0][1] == self.inital_layer or len(self.private_deque) >= self.inital_num: # reach to the next layer
         #     for one_state in next_tuple_states:
         #         self.private_deque.append(one_state)
         #     return
