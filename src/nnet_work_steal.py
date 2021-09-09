@@ -145,18 +145,18 @@ class DNN:
 
 
     def verify(self, vfl_set):
-        vertices = np.dot(vfl_set.vertices, vfl_set.M.T) + vfl_set.b.T
         unsafe = False
         for ud in self.unsafe_domains:
             A_unsafe = ud[0]
             d_unsafe = ud[1]
             if len(A_unsafe) == 1:
+                vertices = np.dot(vfl_set.vertices, vfl_set.M.T) + vfl_set.b.T
                 vals = np.dot(A_unsafe, vertices.T) + d_unsafe
                 if np.any(np.all(vals<=0, axis=0)):
                     unsafe = True
                     break
             else:
-                unsafe_vfl = self.backtrack(cp.deepcopy(vfl_set), verify=True)
+                unsafe_vfl = self.backtrack(vfl_set, verify=True)
                 if unsafe_vfl is not None:
                     unsafe = True
                     break
