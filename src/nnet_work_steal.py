@@ -221,10 +221,11 @@ class DNN:
     def relu_split(self, vfl_set, idx):
         outputPolySets = []
         sub_pos, sub_neg= vfl_set.reluSplit(idx)
-        if sub_neg:
-            outputPolySets.append(sub_neg)
         if sub_pos:
             outputPolySets.append(sub_pos)
+        if sub_neg:
+            outputPolySets.append(sub_neg)
+
 
         return outputPolySets
 

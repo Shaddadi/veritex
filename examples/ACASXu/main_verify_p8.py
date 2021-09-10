@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
             dnn0 = DNN(W, b)
             dnn0.config_verify = True
-            # dnn0.config_relu_linear = True
+            dnn0.config_relu_linear = True
 
 
             t0 = time.time()
