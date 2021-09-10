@@ -15,7 +15,7 @@ class Worker:
         self.worker_id = None
         self.shared_state = None
         self.inital_num = 1000 #480
-        self.inital_layer = 1
+        self.inital_layer = 2
 
 
     def inital_assgin(self):
@@ -319,36 +319,36 @@ class Worker:
     def state_spawn_breath_first(self, tuple_state):
         next_tuple_states = self.dnn.compute_state(tuple_state)
 
-        if next_tuple_states[0][1] == self.inital_layer or len(self.private_deque) >= self.inital_num: # reach to the next layer
-            for one_state in next_tuple_states:
-                self.private_deque.append(one_state)
-            return
-
-        for one_state in next_tuple_states:
-            self.private_deque.appendleft(one_state)
-
-        self.state_spawn_breath_first(self.private_deque.popleft())
-
-        # if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
-        #     assert len(next_tuple_states) == 1
-        #     if self.dnn.config_verify:
-        #         unsafe = self.dnn.verify(next_tuple_states[0][0])
-        #         if unsafe:
-        #             self.shared_state.outputs.put(unsafe)
-        #             self.shared_state.work_done.set()
-        #         return
-        #     elif self.dnn.config_unsafe_input:
-        #         unsafety = self.dnn.backtrack(next_tuple_states[0][0])
-        #         with self.shared_state.outputs_len.get_lock():
-        #             self.shared_state.outputs_len.value += 1
-        #             self.shared_state.outputs.put(unsafety)
-        #             if self.shared_state.outputs_len.value >= self.dnn.outputs_len:
-        #                 self.shared_state.work_done.set()
-        #                 return
-        #     elif self.dnn.config_exact_output:
-        #         self.shared_state.outputs.put(next_tuple_states[0][0])
+        # if next_tuple_states[0][1] == self.inital_layer or len(self.private_deque) >= self.inital_num: # reach to the next layer
+        #     for one_state in next_tuple_states:
+        #         self.private_deque.append(one_state)
+        #     return
         #
         # for one_state in next_tuple_states:
-        #     self.private_deque.append(one_state)
+        #     self.private_deque.appendleft(one_state)
+        #
+        # self.state_spawn_breath_first(self.private_deque.popleft())
+
+        if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
+            assert len(next_tuple_states) == 1
+            if self.dnn.config_verify:
+                unsafe = self.dnn.verify(next_tuple_states[0][0])
+                if unsafe:
+                    self.shared_state.outputs.put(unsafe)
+                    self.shared_state.work_done.set()
+                return
+            elif self.dnn.config_unsafe_input:
+                unsafety = self.dnn.backtrack(next_tuple_states[0][0])
+                with self.shared_state.outputs_len.get_lock():
+                    self.shared_state.outputs_len.value += 1
+                    self.shared_state.outputs.put(unsafety)
+                    if self.shared_state.outputs_len.value >= self.dnn.outputs_len:
+                        self.shared_state.work_done.set()
+                        return
+            elif self.dnn.config_exact_output:
+                self.shared_state.outputs.put(next_tuple_states[0][0])
+
+        for one_state in next_tuple_states:
+            self.private_deque.append(one_state)
 
 
