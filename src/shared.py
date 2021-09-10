@@ -26,7 +26,7 @@ class SharedState: # todo: make it freezable
 
         self.work_steal_ready = mp.Event()
         self.work_assign_ready = mp.Event()
-        self.work_assign_done = mp.Event()
+        # self.work_assign_done = mp.Event()
         self.all_idle_ready = mp.Event()
         self.steal_assign_ready = mp.Event()
         self.work_done = mp.Event()

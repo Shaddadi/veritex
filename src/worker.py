@@ -142,8 +142,9 @@ class Worker:
                 break
             # print('Worker ' + str(self.worker_id) + ' is waiting for work_assign_ready')
             self.shared_state.work_assign_ready.wait()
-            if self.shared_state.work_assign_done.is_set():
-                self.shared_state.work_assign_done.clear()
+            # if self.shared_state.work_assign_done.is_set():
+                # print('shared_state.work_assign_done.clear()')
+                # self.shared_state.work_assign_done.clear()
             # print('Worker ' + str(self.worker_id) + ' passed work_assign_ready')
             self.shared_state.work_steal_ready.clear()
             if self.shared_state.work_done.is_set():
@@ -266,11 +267,11 @@ class Worker:
                 self.shared_state.reset_after_assgin(self.worker_id)
                 self.shared_state.steal_assign_ready.set()
                 self.shared_state.all_idle_ready.clear()
-                self.shared_state.work_assign_done.set()
+                # self.shared_state.work_assign_done.set()
 
 
         # print('Worker ' + str(self.worker_id) + ' is waiting for work_assign_done')
-        self.shared_state.work_assign_done.wait()
+        # self.shared_state.work_assign_done.wait()
         # print('Worker ' + str(self.worker_id) + ' passed work_assign_done')
 
 

@@ -22,8 +22,9 @@ if __name__ == "__main__":
     for n, prop in enumerate(properties):
         for i in range(1,6):
             for j in range(1,10):
-                # while True:
-                # i, j = 3, 3
+    # while True:
+    #     prop = property2
+    #     i, j = 1, 4
                 nn_path = "nnet-mat-files/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.mat"
                 filemat = loadmat(nn_path)
                 W = filemat['W'][0]
@@ -59,8 +60,8 @@ if __name__ == "__main__":
                 all_times.append(time.time()-t0)
                 all_results.append(unsafe)
 
-    with open('verification_p1_p4.pkl', 'wb') as f:
-        pickle.dump([all_times, all_results], f)
+    # with open('verification_p1_p4.pkl', 'wb') as f:
+    #     pickle.dump([all_times, all_results], f)
 
 
 
