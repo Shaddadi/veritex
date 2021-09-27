@@ -1,4 +1,4 @@
-from nnet import DNN
+from nnet import FFNN
 import multiprocessing
 from functools import partial
 import copy as cp
@@ -6,7 +6,7 @@ import numpy as np
 import time
 
 class Methods:
-    def __init__(self, dnn:DNN, properties: list):
+    def __init__(self, dnn:FFNN, properties: list):
         self.dnn = dnn
         self.properties = properties
 

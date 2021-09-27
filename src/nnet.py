@@ -256,7 +256,7 @@ class DNN:
         if layer_id == self._num_layer-1:
             return vzono_set
 
-        over_app_set = self.reluLayerLinearRelax(vzono_set)
+        over_app_set = self.reluLayerLinearRelaxVzono(vzono_set)
 
         return over_app_set
 
@@ -296,7 +296,7 @@ class DNN:
         return all_sets
 
 
-    def reluLayerLinearRelax(self, vzono_set):
+    def reluLayerLinearRelaxVzono(self, vzono_set):
         neurons_neg_pos, neurons_neg = self.get_valid_neurons_for_over_app(vzono_set)
         vzono_set.base_vertices[neurons_neg,:] = 0
         vzono_set.base_vectors[neurons_neg,:] = 0

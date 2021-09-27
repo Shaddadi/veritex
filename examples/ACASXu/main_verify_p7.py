@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '../../src')
 import copy as cp
 from scipy.io import loadmat
-from nnet_work_steal import DNN
+from ffnn_work_steal import FFNN
 from acasxu_properties import *
 import multiprocessing as mp
 from worker import Worker
@@ -27,7 +27,7 @@ if __name__ == "__main__":
         W = filemat['W'][0]
         b = filemat['b'][0]
 
-        dnn0 = DNN(W, b)
+        dnn0 = FFNN(W, b)
         dnn0.config_verify = True
         # dnn0.config_relu_linear = True
 

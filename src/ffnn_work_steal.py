@@ -8,7 +8,7 @@ import multiprocessing
 
 
 
-class DNN:
+class FFNN:
 
     def __init__(self, W, b):
         self._W = W

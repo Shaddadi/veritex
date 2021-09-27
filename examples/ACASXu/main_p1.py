@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '../../src')
 
 from scipy.io import loadmat
-from nnet import DNN
+from nnet import FFNN
 from methods import Methods
 from acasxu_properties import *
 import time
