@@ -26,17 +26,26 @@ if __name__ == "__main__":
     model_type = 'CIFAR'
     if model_type == 'CIFAR':
         modelpath = './cifar2020/nets/cifar10_2_255.onnx'
-        imagepath = './cifar2020/specs/cifar10/cifar10_spec_idx_0_eps_0.00784_n1.vnnlib'
+        imagepath = './cifar2020/specs/cifar10/cifar10_spec_idx_2_eps_0.00784_n1.vnnlib'
         pytorch_model, is_channel_last = load_model_onnx(modelpath, input_shape=(3,32,32))
         check_model(modelpath, pytorch_model)
 
         vnnlib = read_vnnlib_simple(imagepath , 3072, 10)
+        label = np.argmax(vnnlib[0][1][0][0])
         x_range = torch.tensor(vnnlib[0][0])
         vnnlib_shape = (1, 3, 32, 32)
         image_lbs = x_range[:, 0].reshape(vnnlib_shape)
         image_ubs = x_range[:, 1].reshape(vnnlib_shape)
+        # image_ubs = image_ubs - (image_ubs-image_lbs)/2
+
+        # xx = (image_lbs+image_ubs)/2
+        # mmax = torch.max(xx)
+        # mmin = torch.min(xx)
 
         set_vzono = Vzono(image_lbs, image_ubs)
+        net_cnn = CNN(pytorch_model)
+
+        result = net_cnn.reach_over_appr(set_vzono, label)
         xx = 1
 
 

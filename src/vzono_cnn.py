@@ -19,7 +19,7 @@ class Vzono:
                     base_vectors[dim0, dim1, dim2, dim3] = vectors[0, dim1, dim2, dim3]
                     dim0 += 1
 
-        base_vectors = base_vectors.to_sparse()
+        # base_vectors = base_vectors.to_sparse()
         return base_vectors
 
 
