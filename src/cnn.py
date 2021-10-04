@@ -24,14 +24,33 @@ class CNN:
 
     def reach_over_appr_parallel(self, inputs):
         inputs_list = [inputs]
+        last_out_lbub = []
         for _ in range(1000):
             collt = []
-            for item in inputs_list:
-                result = self.reach_over_appr(item)
+            last_lbub_temp = [] # for test
+            for index, item in enumerate(inputs_list):
+                result, lbub = self.reach_over_appr(item)
+                self.collect_layer_flag = False
+                if last_out_lbub:
+                    last_lbub = last_out_lbub[index//2]
+                    last_lb = last_lbub[0]
+                    last_ub = last_lbub[1]
+                    curr_lb = lbub[0]
+                    curr_ub = lbub[1]
+                    diff_lb = curr_lb - last_lb
+                    diff_ub = last_ub - curr_ub
+                    assert torch.all(diff_lb>=0)
+                    assert torch.all(diff_ub>=0)
+                    assert torch.sum(diff_lb) > 0
+                    assert torch.sum(diff_ub) > 0
+
+
                 if not result: #unknown
                     collt.append(item)
+                    last_lbub_temp.append(lbub)
             if collt:
                 inputs_list = self.split_input(collt, num=1)
+                last_out_lbub = cp.deepcopy(last_lbub_temp)
             else:
                 break
 
@@ -78,13 +97,14 @@ class CNN:
         vals = torch.sum(torch.abs(vzono_set.base_vectors), dim=0)
         ubs = vzono_set.base_vertices + vals
         lbs = vzono_set.base_vertices - vals
-        print('ubs - lbs: ', ubs-lbs)
-        print()
+        # print('ubs - lbs: ', ubs-lbs)
+        # print()
 
         if len(torch.nonzero(ubs >= lbs[self.image_label])) >= 2:
-            return False # unknown
+            return False, [lbs, ubs] # unknown
         else:
-            return True # safe
+            print('Safe subset!')
+            return True, [lbs, ubs] # safe
 
 
     def compute_impact_dim(self, dim, w, layer): # impactful dim in the preceding layer, conv2d
@@ -132,13 +152,14 @@ class CNN:
             if items:
                 break
         dim = items[0].pop(0)
-        lb_split = items[1][0].pop(0)
-        ub_split = items[2][0].pop(0)
+        lb_split = items[1].pop(0)
+        ub_split = items[2].pop(0)
         weight = 1.0
         input_dim, w = self.compute_impact_dim(dim, weight, layer)
         assert lb_split < 0 and ub_split > 0
 
         ratio = -lb_split/(-lb_split+ub_split)
+        # print('ratio: ', ratio)
 
         new_inputs = []
         for inputs in inputs_list:
@@ -215,7 +236,11 @@ class CNN:
         epsilons = -lbs * M / 2
 
         if self.collect_layer_flag:
-            self.relus_over[self._layer] = [torch.nonzero(neurons_neg_pos).tolist(), lbs.tolist(), ubs.tolist()]
+            _, indices = torch.sort(-ubs*lbs, descending=True, dim=1)
+            neurons_list = torch.nonzero(neurons_neg_pos)[indices].tolist()[0]
+            lbs_list = lbs[0,:][indices].tolist()[0]
+            ubs_list = ubs[0,:][indices].tolist()[0]
+            self.relus_over[self._layer] = [neurons_list, lbs_list, ubs_list]
 
         vzono_set.base_vertices[:, neurons_neg_pos] = vzono_set.base_vertices[:, neurons_neg_pos] * M + epsilons
         vzono_set.base_vectors[:, neurons_neg_pos] = vzono_set.base_vectors[:, neurons_neg_pos] * M

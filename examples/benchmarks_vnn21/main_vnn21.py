@@ -43,17 +43,20 @@ if __name__ == "__main__":
         check_model(modelpath, pytorch_model)
         inputs = load_cifar_image(imagepath)
 
-        net_cnn = CNN(pytorch_model, is_cuda=True)
-        torch.multiprocessing.set_start_method('spawn',force=True)
-        # t0 = time.time()
-        result = net_cnn.reach_over_appr(inputs)
-        if not result: # unknown
-            all_inputs = net_cnn.split_input([inputs], num=5)
-
-        num_core = 5
-        pool = torch.multiprocessing.Pool(num_core)
-        results = pool.map(net_cnn.reach_over_appr_parallel, all_inputs)
-        xx = 1
+        t0 = time.time()
+        net_cnn = CNN(pytorch_model, is_cuda=False)
+        xx = net_cnn.reach_over_appr_parallel(inputs)
+        print('Time: ', time.time() - t0)
+        # torch.multiprocessing.set_start_method('spawn',force=True)
+        # # t0 = time.time()
+        # result = net_cnn.reach_over_appr(inputs)
+        # if not result: # unknown
+        #     all_inputs = net_cnn.split_input([inputs], num=5)
+        #
+        # num_core = 5
+        # pool = torch.multiprocessing.Pool(num_core)
+        # results = pool.map(net_cnn.reach_over_appr_parallel, all_inputs)
+        # xx = 1
 
 
 
