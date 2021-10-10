@@ -5,7 +5,7 @@ import gzip
 import torch
 from torch import nn
 import onnx2pytorch
-
+import spconv
 
 def load_onnx(path):
     if path.endswith('.gz'):
