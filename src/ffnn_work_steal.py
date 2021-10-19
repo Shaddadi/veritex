@@ -10,20 +10,25 @@ import multiprocessing
 
 class FFNN:
 
-    def __init__(self, W, b):
+    def __init__(self, W, b, verify=False, relu_linear=False, unsafe_inputs=False, exact_output=False, outputs_len=np.infty):
         self._W = W
         self._b = b
         self._num_layer = len(W)
         self.unsafe_domains = None
 
         # configurations for reachability analysis
-        self.outputs_len = np.infty
-        self.config_verify = False
-        self.config_relu_linear = False
-        self.config_unsafe_input = False
-        self.config_exact_output = False
+        self.outputs_len = outputs_len
+        self.config_verify = verify
+        self.config_relu_linear = relu_linear
+        self.config_unsafe_input = unsafe_inputs
+        self.config_exact_output = exact_output
 
+        # relu linearization does not support computation of unsafe input domains and exact output domains
         assert not(self.config_exact_output and self.config_relu_linear)
+        assert not (self.config_unsafe_input and self.config_relu_linear)
+
+        # output length should be set to infinity when computing the exact output reachable domains
+        assert self.config_exact_output and (self.outputs_len==np.infty)
 
 
     def backtrack(self, vfl_set, verify=False, unsafe_domain=None):
@@ -65,10 +70,11 @@ class FFNN:
                     if subvfl0:
                         unsafe_vfl = subvfl0
                     else:
-                        unsafe_vfl = None
-                        return unsafe_vfl
+                        unsafe_vfl = []
+                        break
 
-                vfls.append(unsafe_vfl)
+                if unsafe_vfl:
+                    vfls.append(unsafe_vfl)
 
             return vfls
 
@@ -112,7 +118,6 @@ class FFNN:
         valid_neurons_neg_pos = np.asarray(np.nonzero(neurons_sum == False)).T[:, 0]
 
         return valid_neurons_neg_pos, valid_neurons_neg
-
 
 
     def singleLayerOverApp(self, vzono_set, layer_id):

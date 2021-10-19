@@ -3,11 +3,11 @@ import multiprocessing as mp
 import numpy as np
 idle_workers = 1
 
-class SharedState: # todo: make it freezable
+class SharedState: #
     def __init__(self, vfl_inputs, num_workers):
 
         self.num_workers = num_workers
-        self.shared_queue = mp.Manager().Queue()
+        self.shared_queue = mp.Queue()
         self.shared_queue_len = mp.Value('i', 0)
 
         self.outputs = mp.Manager().Queue()
@@ -18,7 +18,7 @@ class SharedState: # todo: make it freezable
         self.initialize_shared_queue(vfl_inputs)
         self.initial_comput = mp.Value('i', 1) # for initial computation
 
-        self.stole_works = mp.Value('i', 0)
+        self.stolen_works = mp.Value('i', 0)
         self.assigned_works = mp.Value('i', 0)
         self.num_empty_assign = mp.Value('i', 0)
         self.works_to_assign_per_worker = mp.Value('i', 0)
@@ -70,13 +70,7 @@ class SharedState: # todo: make it freezable
             assert not self.work_assign_ready.is_set()
             assert self.shared_queue_len.value == 0
 
-        # should be empty
-        while True:
-            try:
-                _ = self.shared_queue.get_nowait()
-                print('Should be None!')
-            except:
-                break
+        assert self.shared_queue.empty()
 
         with self.work_steal_rate.get_lock():
             self.work_steal_rate.value = 0.0
@@ -84,15 +78,14 @@ class SharedState: # todo: make it freezable
         with self.num_assigned_workers.get_lock():
             self.num_assigned_workers.value = 0
 
-        with self.stole_works.get_lock():
-            self.stole_works.value = 0
+        with self.stolen_works.get_lock():
+            self.stolen_works.value = 0
 
         with self.assigned_works.get_lock():
             self.assigned_works.value = 0
 
         with self.num_workers_need_assigned.get_lock():
             self.num_workers_need_assigned.value = 0
-            # print('Worker '+str(worker_id)+' num_workers_need_assigned is reset to 0')
 
 
 

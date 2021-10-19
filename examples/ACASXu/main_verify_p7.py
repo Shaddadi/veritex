@@ -27,9 +27,7 @@ if __name__ == "__main__":
         W = filemat['W'][0]
         b = filemat['b'][0]
 
-        dnn0 = FFNN(W, b)
-        dnn0.config_verify = True
-        # dnn0.config_relu_linear = True
+        dnn0 = FFNN(W, b, verify=True)
 
         t0 = time.time()
         unsafe = False
