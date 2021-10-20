@@ -137,7 +137,7 @@ class Worker:
                     self.shared_state.all_idle_ready.set()
 
             self.shared_state.all_idle_ready.wait()
-            if self.shared_state.work_done.is_set():
+            if self.shared_state.work_done.is_set() or self.shared_state.steal_disabled.is_set():
                 self.shared_state.steal_assign_ready.set()
                 break
             # print('Worker ' + str(self.worker_id) + ' is waiting for work_assign_ready')
@@ -147,7 +147,7 @@ class Worker:
                 # self.shared_state.work_assign_done.clear()
             # print('Worker ' + str(self.worker_id) + ' passed work_assign_ready')
             self.shared_state.work_steal_ready.clear()
-            if self.shared_state.work_done.is_set():
+            if self.shared_state.work_done.is_set() or self.shared_state.steal_disabled.is_set():
                 self.shared_state.steal_assign_ready.set()
                 break
             self.asssign_to_this_worker()
@@ -171,8 +171,7 @@ class Worker:
         assert steal_rate != 0
 
         num_stealed_works = 0
-        # # #print('Worker '+str(self.worker_id) + ' works: ', len(self.private_deque))
-        if len(self.private_deque)>=20:
+        if len(self.private_deque)>=3:
             num_stealed_works = np.floor(len(self.private_deque) * steal_rate).astype(np.int64)
             if num_stealed_works == 0:
                 num_stealed_works = 1
@@ -182,8 +181,6 @@ class Worker:
                 self.shared_state.shared_queue.put(stealed_work)
                 with self.shared_state.stolen_works.get_lock():
                     self.shared_state.stolen_works.value += 1
-
-        #print('Stole Worker '+str(self.worker_id) + ' works: ', num_stealed_works)
 
         # self.shared_state.got_from_one_worker(self.worker_id)
         #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
@@ -225,8 +222,6 @@ class Worker:
             # # #print('Worker ' + str(self.worker_id) + ' num_work_to_assign: ', self.shared_state.works_to_assign_per_worker.value)
             # # #print('Worker ' + str(self.worker_id) + ' num_work_assigned: ', num + 1)
 
-
-
         # # #print('Assigned Worker ' + str(self.worker_id) + ' works: ', num+1)
 
         # self.shared_state.assigned_one_worker(self.worker_id)
@@ -250,12 +245,9 @@ class Worker:
 
                 assert self.shared_state.stolen_works.value == self.shared_state.assigned_works.value
 
-
                 if self.shared_state.num_empty_assign.value == self.shared_state.num_assigned_workers.value:
-                    self.shared_state.work_done.set()
-                    print('work is done >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+                    self.shared_state.steal_disabled.set()
 
-                print('assigned once!')
                 with self.shared_state.workers_idle_status.get_lock():
                     for n, ele in enumerate(self.shared_state.workers_idle_status):
                         if ele == 0: # not idle
@@ -281,25 +273,28 @@ class Worker:
             if unsafe:
                 self.shared_state.outputs.put(unsafe)
                 self.shared_state.work_done.set()
-        else:
-            if self.dnn.config_unsafe_input and (not self.dnn.config_exact_output):
-                unsafe_inputs = self.dnn.backtrack(tuple_state)
-                with self.shared_state.outputs_len.get_lock():
-                    self.shared_state.outputs_len.value += 1
-                    if unsafe_inputs:
-                        self.shared_state.outputs.put(unsafe_inputs)
-                    if self.shared_state.outputs_len.value >= self.dnn.outputs_len:
-                        self.shared_state.work_done.set()
-            elif (not self.dnn.config_unsafe_input) and self.dnn.config_exact_output:
+
+        elif self.dnn.config_unsafe_input and (not self.dnn.config_exact_output):
+            unsafe_inputs = self.dnn.backtrack(tuple_state)
+            with self.shared_state.outputs_len.get_lock():
+                self.shared_state.outputs_len.value += 1
+                if unsafe_inputs:
+                    self.shared_state.outputs.put(unsafe_inputs)
+                if self.shared_state.outputs_len.value >= self.dnn.outputs_len:
+                    self.shared_state.work_done.set()
+
+        elif (not self.dnn.config_unsafe_input) and self.dnn.config_exact_output:
+            with self.shared_state.outputs_len.get_lock():
+                self.shared_state.outputs_len.value += 1
                 self.shared_state.outputs.put(tuple_state)
 
-            elif self.dnn.config_unsafe_input and self.dnn.config_exact_output:
-                unsafe_inputs = self.dnn.backtrack(tuple_state)
-                with self.shared_state.outputs_len.get_lock():
-                    self.shared_state.outputs_len.value += 1
-                    self.shared_state.outputs.put([unsafe_inputs, tuple_state])
-            else:
-                raise ValueError('Reachability configuration error!')
+        elif self.dnn.config_unsafe_input and self.dnn.config_exact_output:
+            unsafe_inputs = self.dnn.backtrack(tuple_state)
+            with self.shared_state.outputs_len.get_lock():
+                self.shared_state.outputs_len.value += 1
+                self.shared_state.outputs.put([unsafe_inputs, tuple_state])
+        else:
+            raise ValueError('Reachability configuration error!')
 
 
 

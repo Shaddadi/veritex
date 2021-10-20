@@ -44,6 +44,16 @@ class CNN:
             self.verify_depth_first(sub, layer_data=layer_data_new, split_dims=split_dims)
 
 
+    def verify_depth_first2(self, inputs):
+        result = self.reach_over_appr(inputs)
+        if result:
+            return
+
+        subsets, split_dims = self.split_input([inputs], num=1)
+        for sub in subsets:
+            self.verify_depth_first2(sub)
+
+
 
     def reach_over_appr_post(self, inputs, layer_data, split_dim):
         image_lbs = inputs[0]
@@ -131,18 +141,18 @@ class CNN:
             if type_name == 'SparseConv2d' or type_name =='Conv2d':
                 t0 = time.time()
                 vzono_set = self.conv2d(vzono_set)
-                print('Conv2d time: ', time.time() - t0)
+                # print('Conv2d time: ', time.time() - t0)
             elif type_name == 'ReLU':
                 t0 = time.time()
                 if not flatten_post:
                     vzono_set = self.relu_over_appr(vzono_set)
                 else: # fully connected layers
                     vzono_set = self.relu_over_appr2(vzono_set)
-                print('ReLU time: ', time.time() - t0)
+                # print('ReLU time: ', time.time() - t0)
             elif type_name == 'Linear':
                 t0 = time.time()
                 vzono_set = self.linear(vzono_set)
-                print('Linear time: ', time.time() - t0)
+                # print('Linear time: ', time.time() - t0)
             elif type_name == 'Flatten':
                 vzono_set = self.flatten(vzono_set)
                 flatten_post = True
@@ -153,9 +163,9 @@ class CNN:
 
         # return self.verify_vzono(vzono_set)
         result, _ = self.verify_vzono(vzono_set)
-        layer_data_dict = {'layer_old_inputs': self.layer_old_inputs, 'layer_neurons': self.layer_neurons, 'layer_vectors_sum': self.layer_vectors_sum}
-        return result, layer_data_dict
-        # return vzono_set
+        # layer_data_dict = {'layer_old_inputs': self.layer_old_inputs, 'layer_neurons': self.layer_neurons, 'layer_vectors_sum': self.layer_vectors_sum}
+        # return result, layer_data_dict
+        return result
 
 
     def verify_vzono(self, vzono_set):
@@ -181,6 +191,7 @@ class CNN:
             values.append(val[0])
 
         min_val, id = torch.min(torch.tensor(values),dim=0)
+        print('min_val :', min_val)
 
         _, impact_inputs = torch.sort(torch.abs(vzono_set.base_vectors[:self.input_shape[1]*self.input_shape[2]*self.input_shape[3],id[0]]), descending=True, dim=0)
         self.impact_inputs = impact_inputs.tolist()
@@ -424,6 +435,7 @@ class CNN:
         # self.layer_old_inputs[self._layer] = cp.deepcopy(vzono_set.base_vertices)
 
         vzono_set.base_vertices[:, neurons_neg_pos] = vzono_set.base_vertices[:, neurons_neg_pos] * M + epsilons
+        xx = vzono_set.base_vectors[:, neurons_neg_pos] * M
         vzono_set.base_vectors[:, neurons_neg_pos] = vzono_set.base_vectors[:, neurons_neg_pos] * M
 
         neurons_neg_pos_index = torch.nonzero(neurons_neg_pos)

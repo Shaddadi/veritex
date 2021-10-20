@@ -58,8 +58,8 @@ if __name__ == "__main__":
                 all_times.append(time.time()-t0)
                 all_results.append(unsafe)
 
-    with open('verification_p1_p4.pkl', 'wb') as f:
-        pickle.dump([all_times, all_results], f)
+    # with open('verification_p1_p4.pkl', 'wb') as f:
+    #     pickle.dump([all_times, all_results], f)
 
 
 

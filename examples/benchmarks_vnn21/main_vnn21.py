@@ -45,7 +45,7 @@ if __name__ == "__main__":
         check_model(modelpath, pytorch_model)
         inputs = load_cifar_image(imagepath)
 
-        sparse = True
+        sparse = False
         if sparse:
             for index, layer in enumerate(pytorch_model):
                 if isinstance(layer, torch.nn.Conv2d):
@@ -64,9 +64,10 @@ if __name__ == "__main__":
         # xx = net_cnn.reach_over_appr_parallel(inputs)
         # print('Time: ', time.time() - t0)
         # result = net_cnn.verify_depth_first(inputs)
+        result = net_cnn.verify_depth_first2(inputs)
         # xx = 1
         # torch.multiprocessing.set_start_method('spawn',force=True)
-        result, _ = net_cnn.reach_over_appr(inputs, sparse=sparse)
+        # result, _ = net_cnn.reach_over_appr(inputs, sparse=sparse)
         # if not result: # unknown
         #     all_inputs = net_cnn.split_input([inputs], num=4)
         #     # for one_input in all_inputs:

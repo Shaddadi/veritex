@@ -28,7 +28,8 @@ class FFNN:
         assert not (self.config_unsafe_input and self.config_relu_linear)
 
         # output length should be set to infinity when computing the exact output reachable domains
-        assert self.config_exact_output and (self.outputs_len==np.infty)
+        if self.config_exact_output:
+            assert self.config_exact_output and (self.outputs_len==np.infty)
 
 
     def backtrack(self, vfl_set, verify=False, unsafe_domain=None):

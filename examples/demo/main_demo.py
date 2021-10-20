@@ -12,14 +12,14 @@ from sfproperty import Property
 
 
 if __name__ == "__main__":
-    num_processors = 2 # mp.cpu_count()
+    num_processors = mp.cpu_count()
     print('num_processors: ', num_processors)
     nn_path = "nets/NeuralNetwork7_3.mat"
     filemat = loadmat(nn_path)
     W = filemat['W'][0]
     b = filemat['b'][0]
 
-    dnn0 = FFNN(W, b, unsafe_inputs=True, exact_output=True)
+    dnn0 = FFNN(W, b, unsafe_inputs=False, exact_output=True)
 
     all_unsafe_domain = []
     all_out_sets = []
@@ -55,9 +55,8 @@ if __name__ == "__main__":
         while not shared_state.outputs.empty():
             results.append(shared_state.outputs.get())
 
-        print('results len: ', len(results))
-        print('shared_outputs len: ', shared_state.outputs_len.value)
-        print('')
+        print('Time: ', time.time() - t0)
+
     #     out_sets = []
     #     for item in output_sets:
     #         out_vertices = np.dot(item.vertices, item.M.T) + item.b.T

@@ -62,6 +62,7 @@ if __name__ == "__main__":
     lbs, ubs = torch.tensor([[-1,-1]]), torch.tensor([[1,1]])
     inputs = [lbs, ubs, None, None]
     net_cnn = CNN(pytorch_model, is_cuda=False)
+    net_cnn.flatten_post = True
     vzono_set = net_cnn.reach_over_appr(inputs, test=True)
 
     vertices = generate_vertices(vzono_set)
