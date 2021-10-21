@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '../../src')
 import copy as cp
 from scipy.io import loadmat
-from ffnn_work_steal import FFNN
+from ffnn import FFNN
 from acasxu_properties import *
 import multiprocessing as mp
 from worker import Worker

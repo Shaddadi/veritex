@@ -89,7 +89,6 @@ class FacetVertex:
         d_new = np.dot(A, self.b) +d
         elements = np.dot(A_new, self.vertices.T) + d_new
         elements = elements[0]
-        xx = np.dot(self.M, self.vertices.T) + self.b
         if np.all(elements >= 0):
             return None
         if np.all(elements <= 0):
@@ -127,6 +126,14 @@ class FacetVertex:
         sub_vs_facets0 = np.concatenate((sub_vs_facets0, vs_facets_hp), axis=1)
         new_vertices0 = np.concatenate((vertices0, new_vs))
         subset0 = FacetVertex(sub_vs_facets0, new_vertices0, self.dim, cp.copy(self.M), cp.copy(self.b))
+
+        # new_vs_facets1 = np.concatenate((vs_facets1, new_vs_facets))
+        # sub_vs_facets1 = new_vs_facets1[:, np.any(vs_facets1, 0)]
+        # vs_facets_hp = np.zeros((len(sub_vs_facets1), 1), dtype=bool)
+        # vs_facets_hp[-len(new_vs):,0] = True # add hyperplane
+        # sub_vs_facets1 = np.concatenate((sub_vs_facets1, vs_facets_hp), axis=1)
+        # new_vertices1 = np.concatenate((vertices1, new_vs))
+        # subset1 = FacetVertex(sub_vs_facets1, new_vertices1, self.dim, cp.copy(self.M), cp.copy(self.b))
 
         return subset0
 

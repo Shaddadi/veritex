@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '../../src')
 import copy as cp
 from scipy.io import loadmat, savemat
-from ffnn_work_steal import FFNN
+from ffnn import FFNN
 import multiprocessing as mp
 from worker import Worker
 from shared import SharedState
@@ -19,13 +19,14 @@ if __name__ == "__main__":
     W = filemat['W'][0]
     b = filemat['b'][0]
 
-    dnn0 = FFNN(W, b, unsafe_inputs=False, exact_output=True)
+    dnn0 = FFNN(W, b, unsafe_inputs=True, exact_output=True)
 
     all_unsafe_domain = []
     all_out_sets = []
     all_unsafe_sets = []
     all_time = []
     for n in range(55):
+        print('Instance: ', n)
         lbs = [-1, -1, -1]
         ubs = [1, 1, 1]
         input_domain = [lbs, ubs]
@@ -55,23 +56,30 @@ if __name__ == "__main__":
         while not shared_state.outputs.empty():
             results.append(shared_state.outputs.get())
 
-        print('Time: ', time.time() - t0)
 
-    #     out_sets = []
-    #     for item in output_sets:
-    #         out_vertices = np.dot(item.vertices, item.M.T) + item.b.T
-    #         out_sets.append(out_vertices)
-    #
-    #     all_out_sets.append(out_sets)
-    #
-    #     unsafe_inputs = []
-    #     for item in unsafe_sets:
-    #         unsafe_inputs.append(item.vertices)
-    #
-    #     all_unsafe_sets.append(unsafe_inputs)
-    #
-    #     unsafe_domain_vs = np.array([[y1_lbs,-15], [y1_lbs, 25], [y1_ubs,-15], [y1_ubs, 25]])
-    #     all_unsafe_domain.append(unsafe_domain_vs)
-    #
-    # savemat('inputs_outputs_sets.mat', {'all_out_sets':all_out_sets, 'all_unsafe_sets':all_unsafe_sets, 'all_unsafe_domain': all_unsafe_domain, 'all_time': all_time})
-    #
+        # print('output length: ', len(results))
+
+        output_sets = [item[1] for item in results]
+        unsafe_sets = []
+        for item in results:
+            if item[0]:
+                unsafe_sets.extend(item[0])
+
+        out_sets = []
+        for item in output_sets:
+            out_vertices = np.dot(item.vertices, item.M.T) + item.b.T
+            out_sets.append(out_vertices)
+
+        all_out_sets.append(out_sets)
+
+        unsafe_inputs = []
+        for item in unsafe_sets:
+            unsafe_inputs.append(item.vertices)
+
+        all_unsafe_sets.append(unsafe_inputs)
+
+        unsafe_domain_vs = np.array([[y1_lbs,-15], [y1_lbs, 25], [y1_ubs,-15], [y1_ubs, 25]])
+        all_unsafe_domain.append(unsafe_domain_vs)
+
+    savemat('inputs_outputs_sets.mat', {'all_out_sets':all_out_sets, 'all_unsafe_sets':all_unsafe_sets, 'all_unsafe_domain': all_unsafe_domain, 'all_time': all_time})
+
