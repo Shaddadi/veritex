@@ -15,14 +15,13 @@ class REPAIR:
 
     def __init__(self, torch_model, properties, data=None):
         self.properties = properties
+        self.torch_model = torch_model
+        self.ffnn = FFNN(torch_model, repair=True)
+
         if data is not None:
             self.data = data
         else:
             self.data = self.generate_data()
-
-        self.torch_model = torch_model
-        self.ffnn = FFNN(torch_model, repair=True)
-
 
 
     def compute_unsafety(self):
@@ -46,14 +45,14 @@ class REPAIR:
             while not shared_state.outputs.empty():
                 unsafe_data.append(shared_state.outputs.get())
 
-            all_unsafe_data.append(all_unsafe_data)
+            all_unsafe_data.append(unsafe_data)
 
         return all_unsafe_data
 
 
     def generate_data(self, num=100000):  # for training and test
-        lbs = self.properties.input_ranges[0]
-        ubs = self.properties.input_ranges[1]
+        lbs = self.properties[0].input_ranges[0]
+        ubs = self.properties[0].input_ranges[1]
 
         train_x = torch.tensor([np.random.uniform(lbs[i], ubs[i], num).tolist() for i in range(len(lbs))]).T
         train_y = self.torch_model(train_x)
@@ -74,28 +73,32 @@ class REPAIR:
         data_x = data[0]
         data_y = data[1]
         for p in self.properties:
-            lb, ub = p[0][0], p[0][1]
-            M, vec = p[1][0], p[1][1]
-            bools = torch.ones(len(data_x), dtype=torch.bool)
-            if torch.cuda.is_available():
-                bools = bools.cuda()
+            lb, ub = p.lbs, p.ubs
+            for ufd in p.unsafe_domains:
+                M, vec = ufd[0], ufd[1]
+                bools = torch.ones(len(data_x), dtype=torch.bool)
+                if torch.cuda.is_available():
+                    bools = bools.cuda()
 
-            for n in range(len(lb)):
-                lbx, ubx = lb[n], ub[n]
-                x = data_x[:, n]
-                bools = (x > lbx) & (x < ubx) & bools
+                for n in range(len(lb)):
+                    lbx, ubx = lb[n], ub[n]
+                    x = data_x[:, n]
+                    bools = (x > lbx) & (x < ubx) & bools
 
-            if len(x) == 0:
-                break
+                if not torch.any(bools):
+                    continue
 
-            outs = torch.dot(M, x.T) + vec
-            out_bools = torch.all(outs, dim=0)
-            safe_indx = torch.nonzero(~out_bools)
-            if torch.cuda.is_available():
-                safe_indx = safe_indx.cuda()
+                outs = torch.mm(M, data_y.T) + vec
+                out_bools = torch.all(outs<=0, dim=0) & bools
+                if not torch.any(out_bools):
+                    continue
 
-            data_x = data_x[safe_indx]
-            data_y = data_y[safe_indx]
+                safe_indx = torch.nonzero(~out_bools)[:,0]
+                if torch.cuda.is_available():
+                    safe_indx = safe_indx.cuda()
+
+                data_x = data_x[safe_indx]
+                data_y = data_y[safe_indx]
 
         return [data_x, data_y]
 

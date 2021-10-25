@@ -27,10 +27,6 @@ class FFNN:
         assert not(self.config_exact_output and self.config_relu_linear)
         assert not (self.config_unsafe_input and self.config_relu_linear)
 
-        # output length should be set to infinity when computing the exact output reachable domains
-        if self.config_exact_output:
-            assert self.config_exact_output and (self.outputs_len==np.infty)
-
 
     def extract_weights(self):
         self._W = []

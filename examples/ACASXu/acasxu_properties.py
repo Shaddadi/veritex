@@ -1,14 +1,14 @@
 import sys
 sys.path.insert(0, '../../src')
-
+import torch
 from scipy.io import loadmat
 import numpy as np
 from sfproperty import Property
 
 
-ranges = np.array([6.02610000e+04, 6.28318531e+00, 6.28318531e+00, 1.10000000e+03,
+ranges = torch.tensor([6.02610000e+04, 6.28318531e+00, 6.28318531e+00, 1.10000000e+03,
  1.20000000e+03, 3.73949920e+02])
-means = np.array([1.97910910e+04, 0.00000000e+00, 0.00000000e+00, 6.50000000e+02,
+means = torch.tensor([1.97910910e+04, 0.00000000e+00, 0.00000000e+00, 6.50000000e+02,
  6.00000000e+02, 7.51888402e+00])
 
 #  [Clear-of-Conflict, weak left, weak right, strong left, strong right]
@@ -30,8 +30,8 @@ for n in range(5):
     ubs1[n] = (ubs1[n] - means[n]) / ranges[n]
 
 input_domain = [lbs1, ubs1]
-A_unsafe = np.array([[-1,0,0,0,0]])
-d_unsafe = np.array([3.9911])
+A_unsafe = torch.tensor([[-1.0,0,0,0,0]])
+d_unsafe = torch.tensor([3.9911])
 unsafe_domains = [[A_unsafe,d_unsafe]]
 property1 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
@@ -42,8 +42,8 @@ for n in range(5):
     lbs2[n] = (lbs2[n] - means[n]) / ranges[n]
     ubs2[n] = (ubs2[n] - means[n]) / ranges[n]
 input_domain = [lbs2, ubs2]
-A_unsafe = np.array([[-1.0, 1.0, 0, 0, 0], [-1, 0, 1, 0, 0], [-1, 0, 0, 1, 0], [-1, 0, 0, 0, 1]])
-d_unsafe = np.array([[0.0], [0.0], [0.0], [0.0]])
+A_unsafe = torch.tensor([[-1.0, 1.0, 0, 0, 0], [-1, 0, 1, 0, 0], [-1, 0, 0, 1, 0], [-1, 0, 0, 0, 1]])
+d_unsafe = torch.tensor([[0.0], [0.0], [0.0], [0.0]])
 unsafe_domains = [[A_unsafe,d_unsafe]]
 property2 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
@@ -54,8 +54,8 @@ for n in range(5):
     lbs3[n] = (lbs3[n] - means[n]) / ranges[n]
     ubs3[n] = (ubs3[n] - means[n]) / ranges[n]
 input_domain = [lbs3, ubs3]
-A_unsafe = np.array([[1.0, -1, 0, 0, 0], [1, 0, -1, 0, 0], [1, 0, 0, -1, 0], [1, 0, 0, 0, -1]])
-d_unsafe = np.array([[0.0], [0.0], [0.0], [0.0]])
+A_unsafe = torch.tensor([[1.0, -1, 0, 0, 0], [1, 0, -1, 0, 0], [1, 0, 0, -1, 0], [1, 0, 0, 0, -1]])
+d_unsafe = torch.tensor([[0.0], [0.0], [0.0], [0.0]])
 unsafe_domains = [[A_unsafe,d_unsafe]]
 property3 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
@@ -66,8 +66,8 @@ for n in range(5):
     lbs4[n] = (lbs4[n] - means[n]) / ranges[n]
     ubs4[n] = (ubs4[n] - means[n]) / ranges[n]
 input_domain = [lbs4, ubs4]
-A_unsafe = np.array([[1.0, -1, 0, 0, 0], [1, 0, -1, 0, 0], [1, 0, 0, -1, 0], [1, 0, 0, 0, -1]])
-d_unsafe = np.array([[0.0], [0.0], [0.0], [0.0]])
+A_unsafe = torch.tensor([[1.0, -1, 0, 0, 0], [1, 0, -1, 0, 0], [1, 0, 0, -1, 0], [1, 0, 0, 0, -1]])
+d_unsafe = torch.tensor([[0.0], [0.0], [0.0], [0.0]])
 unsafe_domains = [[A_unsafe,d_unsafe]]
 property4 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
@@ -80,8 +80,8 @@ for n in range(5):
 input_domain = [lbs4, ubs4]
 unsafe_domains = []
 for nn in [0,1,2,3]:
-    A_unsafe = np.array([[0, 0, 0, 0, -1.0], ])
-    d_unsafe = np.array([[0.0]])
+    A_unsafe = torch.tensor([[0, 0, 0, 0, -1.0], ])
+    d_unsafe = torch.tensor([[0.0]])
     A_unsafe[0,nn] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
@@ -97,8 +97,8 @@ for n in range(5):
 input_domain = [lbs6, ubs6]
 unsafe_domains = []
 for nn in [1,2,3,4]:
-    A_unsafe = np.array([[-1.0, 0, 0, 0, 0], ])
-    d_unsafe = np.array([[0.0]])
+    A_unsafe = torch.tensor([[-1.0, 0, 0, 0, 0], ])
+    d_unsafe = torch.tensor([[0.0]])
     A_unsafe[0,nn] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
@@ -114,8 +114,8 @@ for n in range(5):
 input_domain = [lbs6, ubs6]
 unsafe_domains = []
 for nn in [1,2,3,4]:
-    A_unsafe = np.array([[-1.0, 0, 0, 0, 0], ])
-    d_unsafe = np.array([[0.0]])
+    A_unsafe = torch.tensor([[-1.0, 0, 0, 0, 0], ])
+    d_unsafe = torch.tensor([[0.0]])
     A_unsafe[0,nn] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
@@ -129,10 +129,10 @@ for n in range(5):
     lbs7[n] = (lbs7[n] - means[n]) / ranges[n]
     ubs7[n] = (ubs7[n] - means[n]) / ranges[n]
 input_domain = [lbs7, ubs7]
-A_unsafe0 = np.array([[-1.0, 0, 0, 1.0, 0], [0, -1.0, 0, 1.0, 0], [0, 0, -1.0, 1.0, 0], [0, 0, 0, 1.0, -1.0]])
-d_unsafe0 = np.array([[0.0], [0.0],[0.0],[0.0]])
-A_unsafe1 = np.array([[-1.0, 0, 0, 0, 1.0], [0, -1.0, 0, 0, 1.0], [0, 0, -1.0, 0, 1.0], [0, 0, 0, -1.0, 1.0]])
-d_unsafe1 = np.array([[0.0], [0.0],[0.0],[0.0]])
+A_unsafe0 = torch.tensor([[-1.0, 0, 0, 1.0, 0], [0, -1.0, 0, 1.0, 0], [0, 0, -1.0, 1.0, 0], [0, 0, 0, 1.0, -1.0]])
+d_unsafe0 = torch.tensor([[0.0], [0.0],[0.0],[0.0]])
+A_unsafe1 = torch.tensor([[-1.0, 0, 0, 0, 1.0], [0, -1.0, 0, 0, 1.0], [0, 0, -1.0, 0, 1.0], [0, 0, 0, -1.0, 1.0]])
+d_unsafe1 = torch.tensor([[0.0], [0.0],[0.0],[0.0]])
 unsafe_domains=[[A_unsafe0, d_unsafe0], [A_unsafe1, d_unsafe1]]
 
 property7 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
@@ -146,15 +146,15 @@ for n in range(5):
     ubs8[n] = (ubs8[n] - means[n]) / ranges[n]
 input_domain = [lbs8, ubs8]
 # # x0>x1, x0>x2, x0>x3, x0>x4
-# arry0 = [np.array([[-1.0, 1.0, 0, 0, 0]]),
-#          np.array([[-1.0, 0, 1.0, 0, 0]]),
-#          np.array([[-1.0, 0, 0, 1.0, 0]]),
-#          np.array([[-1.0, 0, 0, 0, 1.0]]),]
+# arry0 = [torch.tensor([[-1.0, 1.0, 0, 0, 0]]),
+#          torch.tensor([[-1.0, 0, 1.0, 0, 0]]),
+#          torch.tensor([[-1.0, 0, 0, 1.0, 0]]),
+#          torch.tensor([[-1.0, 0, 0, 0, 1.0]]),]
 # # x1>x0, x1>x2, x1>x3, x1>x4
-# arry1 = [np.array([[1.0, -1.0, 0, 0, 0]]),
-#          np.array([[0, -1.0, 1.0, 0, 0]]),
-#          np.array([[0, -1.0, 0, 1.0, 0]]),
-#          np.array([[0, -1.0, 0, 0, 1.0]]),
+# arry1 = [torch.tensor([[1.0, -1.0, 0, 0, 0]]),
+#          torch.tensor([[0, -1.0, 1.0, 0, 0]]),
+#          torch.tensor([[0, -1.0, 0, 1.0, 0]]),
+#          torch.tensor([[0, -1.0, 0, 0, 1.0]]),
 #          ]
 #
 # unsafe_domains = []
@@ -163,22 +163,22 @@ input_domain = [lbs8, ubs8]
 #         if ii == 0 and jj ==0:
 #             continue
 #         A_unsafe = np.concatenate((arry0[ii], arry1[jj]),axis=0)
-#         d_unsafe = np.array([[0.0],[0.0]])
+#         d_unsafe = torch.tensor([[0.0],[0.0]])
 #         unsafe_domains.append([A_unsafe, d_unsafe])
 #
 # property8 = Property(input_domain, unsafe_domains)
 
 # the following is from vnn-comp 2021
-arry0 = [np.array([[-1.0, 0, 1.0, 0, 0]]),
-         np.array([[-1.0, 0, 0, 1.0, 0]]),
-         np.array([[-1.0, 0, 0, 0, 1.0]]),]
-arry1 = [np.array([[0, -1.0, 1.0, 0, 0]]),
-         np.array([[0, -1.0, 0, 1.0, 0]]),
-         np.array([[0, -1.0, 0, 0, 1.0]]),]
+arry0 = [torch.tensor([[-1.0, 0, 1.0, 0, 0]]),
+         torch.tensor([[-1.0, 0, 0, 1.0, 0]]),
+         torch.tensor([[-1.0, 0, 0, 0, 1.0]]),]
+arry1 = [torch.tensor([[0, -1.0, 1.0, 0, 0]]),
+         torch.tensor([[0, -1.0, 0, 1.0, 0]]),
+         torch.tensor([[0, -1.0, 0, 0, 1.0]]),]
 unsafe_domains = []
 for ii in range(3):
     A_unsafe = np.concatenate((arry0[ii], arry1[ii]),axis=0)
-    d_unsafe = np.array([[0.0],[0.0]])
+    d_unsafe = torch.tensor([[0.0],[0.0]])
     unsafe_domains.append([A_unsafe, d_unsafe])
 property8 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
@@ -192,8 +192,8 @@ for n in range(5):
 input_domain = [lbs9, ubs9]
 unsafe_domains = []
 for nn in [0,1,2,4]:
-    A_unsafe = np.array([[0, 0, 0, -1.0, 0], ])
-    d_unsafe = np.array([[0.0]])
+    A_unsafe = torch.tensor([[0, 0, 0, -1.0, 0], ])
+    d_unsafe = torch.tensor([[0.0]])
     A_unsafe[0,nn] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
@@ -209,8 +209,8 @@ for n in range(5):
 input_domain = [lbs10, ubs10]
 unsafe_domains = []
 for nn in [1,2,3,4]:
-    A_unsafe = np.array([[-1.0, 0, 0, 0, 0], ])
-    d_unsafe = np.array([[0.0]])
+    A_unsafe = torch.tensor([[-1.0, 0, 0, 0, 0], ])
+    d_unsafe = torch.tensor([[0.0]])
     A_unsafe[0,nn] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 

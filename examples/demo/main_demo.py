@@ -2,6 +2,7 @@ import sys
 sys.path.insert(0, '../../src')
 import copy as cp
 from scipy.io import loadmat, savemat
+import torch
 from ffnn import FFNN
 import multiprocessing as mp
 from worker import Worker
@@ -14,12 +15,8 @@ from sfproperty import Property
 if __name__ == "__main__":
     num_processors = mp.cpu_count()
     print('num_processors: ', num_processors)
-    nn_path = "nets/NeuralNetwork7_3.mat"
-    filemat = loadmat(nn_path)
-    W = filemat['W'][0]
-    b = filemat['b'][0]
-
-    dnn0 = FFNN(W, b, unsafe_inputs=True, exact_output=True)
+    model = torch.load('nets/demo_model.pt')
+    dnn0 = FFNN(model, unsafe_inputs=True, exact_output=True)
 
     all_unsafe_domain = []
     all_out_sets = []
@@ -58,7 +55,6 @@ if __name__ == "__main__":
 
 
         # print('output length: ', len(results))
-
         output_sets = [item[1] for item in results]
         unsafe_sets = []
         for item in results:
