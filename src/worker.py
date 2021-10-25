@@ -8,12 +8,13 @@ import itertools
 
 idle_workers = 1
 class Worker:
-    def __init__(self, dnn):
+    def __init__(self, dnn, output_len=np.infty):
         self.dnn = dnn
         self.private_deque = deque()
         self.output_sets = []
         self.worker_id = None
         self.shared_state = None
+        self.output_len = output_len
         self.inital_num = 1000 #480
         self.inital_layer = 2
 
@@ -269,11 +270,13 @@ class Worker:
 
     def collect_results(self, vfl):
         if self.dnn.config_repair:
-            unsafe_inputs = self.dnn.backtrack(vfl)
-            if unsafe_inputs is not None:
+            unsafe_input_set = self.dnn.backtrack(vfl)
+            if unsafe_input_set is not None:
                 with self.shared_state.outputs_len.get_lock():
+                    unsafe_input = unsafe_input_set.vertices[0]
+                    unsafe_output = np.dot(unsafe_input_set.vertices[0], vfl.M.T) + vfl.b.T
                     self.shared_state.outputs_len.value += 1
-                    self.shared_state.outputs.put(unsafe_inputs)
+                    self.shared_state.outputs.put([unsafe_input, unsafe_output])
 
         elif self.dnn.config_verify:
             unsafe = self.dnn.verify(vfl)
@@ -287,7 +290,7 @@ class Worker:
                 self.shared_state.outputs_len.value += 1
                 if unsafe_inputs:
                     self.shared_state.outputs.put(unsafe_inputs)
-                if self.shared_state.outputs_len.value >= self.dnn.outputs_len:
+                if self.shared_state.outputs_len.value >= self.output_len:
                     self.shared_state.work_done.set()
 
         elif (not self.dnn.config_unsafe_input) and self.dnn.config_exact_output:

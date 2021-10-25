@@ -6,13 +6,21 @@ import numpy as np
 from sfproperty import Property
 
 
-i, j = 1, 1 # any network is ok
-nn_path = "nnet-mat-files/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.mat"
-filemat = loadmat(nn_path)
-ranges = filemat['range_for_scaling'][0]
-means = filemat['means_for_scaling'][0]
+ranges = np.array([6.02610000e+04, 6.28318531e+00, 6.28318531e+00, 1.10000000e+03,
+ 1.20000000e+03, 3.73949920e+02])
+means = np.array([1.97910910e+04, 0.00000000e+00, 0.00000000e+00, 6.50000000e+02,
+ 6.00000000e+02, 7.51888402e+00])
 
 #  [Clear-of-Conflict, weak left, weak right, strong left, strong right]
+
+lbs_input = [0.0, -3.141593, -3.141593, 100.0, 0.0]
+ubs_input = [60760.0, 3.141593, 3.141593, 1200.0, 1200.0]
+input_ranges = [lbs_input, ubs_input]
+
+
+for n in range(5):
+    lbs_input[n] = (lbs_input[n] - means[n]) / ranges[n]
+    ubs_input[n] = (ubs_input[n] - means[n]) / ranges[n]
 
 # property 1
 lbs1 = [55947.691, -3.141592, -3.141592, 1145, 0]
@@ -25,7 +33,7 @@ input_domain = [lbs1, ubs1]
 A_unsafe = np.array([[-1,0,0,0,0]])
 d_unsafe = np.array([3.9911])
 unsafe_domains = [[A_unsafe,d_unsafe]]
-property1 = Property(input_domain, unsafe_domains)
+property1 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
 # property 2
 lbs2 = [55947.691, -3.141592, -3.141592, 1145, 0]
@@ -37,7 +45,7 @@ input_domain = [lbs2, ubs2]
 A_unsafe = np.array([[-1.0, 1.0, 0, 0, 0], [-1, 0, 1, 0, 0], [-1, 0, 0, 1, 0], [-1, 0, 0, 0, 1]])
 d_unsafe = np.array([[0.0], [0.0], [0.0], [0.0]])
 unsafe_domains = [[A_unsafe,d_unsafe]]
-property2 = Property(input_domain, unsafe_domains)
+property2 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
 # property 3
 lbs3 = [1500, -0.06, 3.1, 980, 960]
@@ -49,7 +57,7 @@ input_domain = [lbs3, ubs3]
 A_unsafe = np.array([[1.0, -1, 0, 0, 0], [1, 0, -1, 0, 0], [1, 0, 0, -1, 0], [1, 0, 0, 0, -1]])
 d_unsafe = np.array([[0.0], [0.0], [0.0], [0.0]])
 unsafe_domains = [[A_unsafe,d_unsafe]]
-property3 = Property(input_domain, unsafe_domains)
+property3 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
 # property 4
 lbs4 = [1500, -0.06, 0, 1000, 700]
@@ -61,7 +69,7 @@ input_domain = [lbs4, ubs4]
 A_unsafe = np.array([[1.0, -1, 0, 0, 0], [1, 0, -1, 0, 0], [1, 0, 0, -1, 0], [1, 0, 0, 0, -1]])
 d_unsafe = np.array([[0.0], [0.0], [0.0], [0.0]])
 unsafe_domains = [[A_unsafe,d_unsafe]]
-property4 = Property(input_domain, unsafe_domains)
+property4 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
 # property 5
 lbs5 = [250, 0.2, -3.141592, 100, 0]
@@ -77,7 +85,7 @@ for nn in [0,1,2,3]:
     A_unsafe[0,nn] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
-property5 = Property(input_domain, unsafe_domains)
+property5 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
 
 # property 6.1
@@ -94,7 +102,7 @@ for nn in [1,2,3,4]:
     A_unsafe[0,nn] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
-property6_1 = Property(input_domain, unsafe_domains)
+property6_1 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
 
 # property 6.2
@@ -111,7 +119,7 @@ for nn in [1,2,3,4]:
     A_unsafe[0,nn] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
-property6_2 = Property(input_domain, unsafe_domains)
+property6_2 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
 
 # property 7
@@ -127,7 +135,7 @@ A_unsafe1 = np.array([[-1.0, 0, 0, 0, 1.0], [0, -1.0, 0, 0, 1.0], [0, 0, -1.0, 0
 d_unsafe1 = np.array([[0.0], [0.0],[0.0],[0.0]])
 unsafe_domains=[[A_unsafe0, d_unsafe0], [A_unsafe1, d_unsafe1]]
 
-property7 = Property(input_domain, unsafe_domains)
+property7 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
 
 # property 8
@@ -172,7 +180,7 @@ for ii in range(3):
     A_unsafe = np.concatenate((arry0[ii], arry1[ii]),axis=0)
     d_unsafe = np.array([[0.0],[0.0]])
     unsafe_domains.append([A_unsafe, d_unsafe])
-property8 = Property(input_domain, unsafe_domains)
+property8 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
 
 # property 9
@@ -189,7 +197,7 @@ for nn in [0,1,2,4]:
     A_unsafe[0,nn] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
-property9 = Property(input_domain, unsafe_domains)
+property9 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
 
 # property 10
@@ -206,4 +214,4 @@ for nn in [1,2,3,4]:
     A_unsafe[0,nn] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
-property10 = Property(input_domain, unsafe_domains)
+property10 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)

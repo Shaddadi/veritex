@@ -1,6 +1,7 @@
 import numpy as np
 import copy as cp
 from vzono import VzonoFFNN as Vzono
+import torch
 from itertools import product
 from scipy.optimize import linprog
 from collections import deque
@@ -10,14 +11,12 @@ import multiprocessing
 
 class FFNN:
 
-    def __init__(self, W, b, verify=False, relu_linear=False, unsafe_inputs=False, exact_output=False, repair=False, outputs_len=np.infty):
-        self._W = W
-        self._b = b
-        self._num_layer = len(W)
+    def __init__(self, torch_model, verify=False, relu_linear=False, unsafe_inputs=False, exact_output=False, repair=False):
+        self.torch_model = torch_model
+        self.extract_weights()
         self.unsafe_domains = None
 
         # configurations for reachability analysis
-        self.outputs_len = outputs_len
         self.config_verify = verify
         self.config_relu_linear = relu_linear
         self.config_unsafe_input = unsafe_inputs
@@ -31,6 +30,27 @@ class FFNN:
         # output length should be set to infinity when computing the exact output reachable domains
         if self.config_exact_output:
             assert self.config_exact_output and (self.outputs_len==np.infty)
+
+
+    def extract_weights(self):
+        self._W = []
+        self._b = []
+        for name, param in self.torch_model.named_parameters():
+            if name[-4:] == 'ight':
+                if torch.cuda.is_available():
+                    self._W.append(param.data.cpu().numpy())
+                else:
+                    self._W.append(param.data.numpy())
+            if name[-4:] == 'bias':
+                if torch.cuda.is_available():
+                    temp = np.expand_dims(param.data.cpu().numpy(), axis=1)
+                    self._b.append(temp)
+                else:
+                    temp = np.expand_dims(param.data.numpy(), axis=1)
+                    self._b.append(temp)
+
+        self._num_layer = len(self._W)
+
 
 
     def backtrack(self, vfl_set, verify=False, unsafe_domain=None):
