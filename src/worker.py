@@ -270,13 +270,14 @@ class Worker:
 
     def collect_results(self, vfl):
         if self.dnn.config_repair:
-            unsafe_input_set = self.dnn.backtrack(vfl)
-            if unsafe_input_set is not None:
+            unsafe_input_sets = self.dnn.backtrack(vfl)
+            if unsafe_input_sets:
                 with self.shared_state.outputs_len.get_lock():
-                    unsafe_input = unsafe_input_set.vertices[0]
-                    unsafe_output = np.dot(unsafe_input_set.vertices[0], vfl.M.T) + vfl.b.T
-                    self.shared_state.outputs_len.value += 1
-                    self.shared_state.outputs.put([unsafe_input, unsafe_output])
+                    for aset in unsafe_input_sets:
+                        unsafe_input = aset.vertices[[0]]
+                        unsafe_output = np.dot(aset.vertices[0], vfl.M.T) + vfl.b.T
+                        self.shared_state.outputs_len.value += 1
+                        self.shared_state.outputs.put([unsafe_input, unsafe_output])
 
         elif self.dnn.config_verify:
             unsafe = self.dnn.verify(vfl)

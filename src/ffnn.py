@@ -72,11 +72,11 @@ class FFNN:
         else:
             vfls = []
             for i in range(len(self.unsafe_domains)):
-                As_unsafe = self.unsafe_domains[i][0]
-                ds_unsafe = self.unsafe_domains[i][1]
+                As_unsafe = self.unsafe_domains[i][0].numpy()
+                ds_unsafe = self.unsafe_domains[i][1].numpy()
                 elements = np.dot(np.dot(As_unsafe,vfl_set.M), vfl_set.vertices.T) + np.dot(As_unsafe, vfl_set.b) +ds_unsafe
                 if np.any(np.all(elements>0, axis=1)): # reachable set does not satisfy at least one linear constraint
-                    return None
+                    continue
 
                 unsafe_vfl = cp.deepcopy(vfl_set)
                 for j in range(len(As_unsafe)):
