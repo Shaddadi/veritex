@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     rp = REPAIR(torch_model, properties)
     optimizer = optim.SGD(torch_model.parameters(), lr=0.001, momentum=0.9)
-    criterion = nn.MSELoss #nn.CrossEntropyLoss()
+    criterion = nn.MSELoss() #nn.CrossEntropyLoss()
     savepath = './logs'
     if not os.path.isdir(savepath):
         os.mkdir(savepath)
