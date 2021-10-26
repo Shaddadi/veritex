@@ -17,8 +17,8 @@ import os
 if __name__ == '__main__':
     num_processors = multiprocessing.cpu_count()
     print('num_processors: ', num_processors)
-    properties = [property1, property2, property3, property4]
-    # properties = [property2]
+    # properties = [property1, property2, property3, property4]
+    properties = [property2]
 
     i, j = 1, 2
     nn_path = "nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"

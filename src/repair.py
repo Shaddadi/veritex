@@ -1,3 +1,5 @@
+import time
+
 from ffnn import FFNN
 import torch
 import numpy as np
@@ -24,7 +26,7 @@ class REPAIR:
             self.data = self.generate_data()
 
 
-    def compute_unsafety(self):
+    def compute_unsafety(self, output_len=100):
         all_unsafe_data = []
         num_processors = mp.cpu_count()
         for n, prop in enumerate(self.properties):
@@ -33,7 +35,7 @@ class REPAIR:
             processes = []
             unsafe_data = []
             shared_state = SharedState([vfl_input], num_processors)
-            one_worker = Worker(self.ffnn, output_len=100)
+            one_worker = Worker(self.ffnn, output_len=output_len)
             for index in range(num_processors):
                 p = mp.Process(target=one_worker.main_func, args=(index, shared_state))
                 processes.append(p)
@@ -77,8 +79,8 @@ class REPAIR:
             for ufd in p.unsafe_domains:
                 M, vec = ufd[0], ufd[1]
                 bools = torch.ones(len(data_x), dtype=torch.bool)
-                if torch.cuda.is_available():
-                    bools = bools.cuda()
+                # if torch.cuda.is_available():
+                #     bools = bools.cuda()
 
                 for n in range(len(lb)):
                     lbx, ubx = lb[n], ub[n]
@@ -94,8 +96,8 @@ class REPAIR:
                     continue
 
                 safe_indx = torch.nonzero(~out_bools)[:,0]
-                if torch.cuda.is_available():
-                    safe_indx = safe_indx.cuda()
+                # if torch.cuda.is_available():
+                #     safe_indx = safe_indx.cuda()
 
                 data_x = data_x[safe_indx]
                 data_y = data_y[safe_indx]
@@ -156,7 +158,9 @@ class REPAIR:
         all_unsafe_vfls = []
         for num in range(iters):
             print('Iteration of repairing: ', num)
-            unsafe_data = self.compute_unsafety()
+            t0 = time.time()
+            unsafe_data = self.compute_unsafety(output_len=1)
+            print(time.time() - t0)
             accuracy = self.compute_accuracy(candidate)
             if np.all([len(sub)==0 for sub in unsafe_data]) and (accuracy >= 0.94):
                 print('\nThe accurate and safe candidate model is found !\n')

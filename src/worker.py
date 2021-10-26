@@ -278,6 +278,8 @@ class Worker:
                         unsafe_output = np.dot(aset.vertices[0], vfl.M.T) + vfl.b.T
                         self.shared_state.outputs_len.value += 1
                         self.shared_state.outputs.put([unsafe_input, unsafe_output])
+                        if self.shared_state.outputs_len.value >= self.output_len:
+                            self.shared_state.work_done.set()
 
         elif self.dnn.config_verify:
             unsafe = self.dnn.verify(vfl)
