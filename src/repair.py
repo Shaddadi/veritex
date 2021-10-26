@@ -24,6 +24,8 @@ class REPAIR:
             self.data = data
         else:
             self.data = self.generate_data()
+            # torch.save(self.data, 'acasxu_data.pt')
+
 
 
     def compute_unsafety(self, output_len=100):
@@ -57,15 +59,18 @@ class REPAIR:
         ubs = self.properties[0].input_ranges[1]
 
         train_x = torch.tensor([np.random.uniform(lbs[i], ubs[i], num).tolist() for i in range(len(lbs))]).T
-        train_y = self.torch_model(train_x)
+        with torch.no_grad():
+            train_y = self.torch_model(train_x)
         train_data = self.purify_data([train_x, train_y])
 
         valid_x = torch.tensor([np.random.uniform(lbs[i], ubs[i], int(num * 0.2)).tolist() for i in range(len(lbs))]).T
-        valid_y = self.torch_model(valid_x)
+        with torch.no_grad():
+            valid_y = self.torch_model(valid_x)
         valid_data = self.purify_data([valid_x, valid_y])
 
         test_x = torch.tensor([np.random.uniform(lbs[i], ubs[i], int(num * 0.2)).tolist() for i in range(len(lbs))]).T
-        test_y = self.torch_model(test_x)
+        with torch.no_grad():
+            test_y = self.torch_model(test_x)
         test_data = self.purify_data([test_x, test_y])
 
         return DATA(train_data, valid_data, test_data)
@@ -146,37 +151,36 @@ class REPAIR:
         pred_actions = torch.argmax(predicts, dim=1)
         actl_actions = torch.argmax(self.data.test_data[1], dim=1)
         accuracy = len(torch.nonzero(pred_actions == actl_actions)) / len(predicts)
-        print('  Accuracy on the test data: {:.2f}% '.format(accuracy * 100))
+        print('Accuracy on the test data: {:.2f}% '.format(accuracy * 100))
         return accuracy
 
 
 
-    def repair_model(self, candidate, optimizer, loss_fun, savepath, iters=200, batch_size=1000):
+    def repair_model(self, candidate, optimizer, loss_fun, savepath, iters=200, batch_size=1000, epochs=200):
 
         all_test_accuracy = []
         all_reach_vfls = []
         all_unsafe_vfls = []
         for num in range(iters):
             print('Iteration of repairing: ', num)
-            t0 = time.time()
-            unsafe_data = self.compute_unsafety(output_len=1)
-            print(time.time() - t0)
+            unsafe_data = self.compute_unsafety(output_len=100)
             accuracy = self.compute_accuracy(candidate)
+            all_test_accuracy.append(accuracy)
             if np.all([len(sub)==0 for sub in unsafe_data]) and (accuracy >= 0.94):
                 print('\nThe accurate and safe candidate model is found !\n')
                 print('\n\n')
                 torch.save(candidate.state_dict(), savepath + "/acasxu_epoch" + str(num) + "_safe.pt")
                 sio.savemat(savepath + '/all_test_accuracy.mat',
                             {'all_test_accuracy': all_test_accuracy})
-                sio.savemat(savepath + '/reach_sets.mat',
-                            {'all_reach_vfls': all_reach_vfls, 'all_unsafe_vfls': all_unsafe_vfls})
                 break
 
             if not np.all([len(sub)==0 for sub in unsafe_data]):
-                unsafe_Xs, corrected_Ys = self.correct_inputs(unsafe_data, epsilon=0.01)
-                print('Unsafe_inputs: ', len(unsafe_Xs))
-                train_x = torch.cat((self.data.train_data[0], unsafe_Xs), dim=0)
-                train_y = torch.cat((self.data.train_data[1], corrected_Ys), dim=0)
+                original_Xs, corrected_Ys = self.correct_inputs(unsafe_data, epsilon=0.01)
+                print('Unsafe_inputs: ', len(original_Xs))
+                # train_x = torch.cat((self.data.train_data[0], original_Xs), dim=0)
+                # train_y = torch.cat((self.data.train_data[1], corrected_Ys), dim=0)
+                train_x = original_Xs
+                train_y = corrected_Ys
             else:
                 train_x = self.data.train_data[0]
                 train_y = self.data.train_data[1]
@@ -184,15 +188,17 @@ class REPAIR:
             training_dataset = TensorDataset(train_x.cpu(), train_y.cpu())
             train_loader = DataLoader(training_dataset, batch_size, shuffle=True, num_workers=num_cores)
 
-            print('  Start training...')
+            print('Start adv training...')
             candidate.train()
-            for batch_idx, (data, target) in enumerate(train_loader):
-                optimizer.zero_grad()
-                predicts = candidate(data)
-                loss = loss_fun(target, predicts)
-                loss.backward()
-            print('  The training is done\n')
+            for _ in range(epochs):
+                for batch_idx, (data, target) in enumerate(train_loader):
+                    optimizer.zero_grad()
+                    predicts = candidate(data)
+                    loss = loss_fun(target, predicts)
+                    loss.backward()
+                    optimizer.step()
 
+            print('The adv training is done\n')
             if num % 1 == 0:
                 torch.save(candidate.state_dict(), savepath + "/acasxu_epoch" + str(num) + ".pt")
 

@@ -18,7 +18,7 @@ def load_ffnn_onnx(path):
             new_modules.append(m)
 
     torch_model = nn.Sequential(*new_modules)
-    for param in torch_model.parameters():
-        param.requires_grad = False
+    # for param in torch_model.parameters():
+    #     param.requires_grad = False
 
     return torch_model
