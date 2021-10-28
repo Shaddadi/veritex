@@ -111,7 +111,7 @@ class REPAIR:
 
 
 
-    def correct_inputs(self, unsafe_data, epsilon=0.01):
+    def correct_inputs(self, unsafe_data, epsilon=0.001):
         corrected_Ys = []
         original_Xs = []
         for n, subdata in enumerate(unsafe_data):
@@ -133,7 +133,9 @@ class REPAIR:
                         assert violation == 1 # only one unsafe domain out of multiple should be violated
 
                     min_indx = torch.argmax(res)
-                    delta_y = M[min_indx] * (-res[min_indx, 0] + epsilon) / (torch.matmul(M[[min_indx]], M[[min_indx]].T))
+                    # delta_y = M[min_indx] * (-res[min_indx, 0] + epsilon) / (torch.matmul(M[[min_indx]], M[[min_indx]].T))
+                    delta_y = M[min_indx] * (-res[min_indx, 0]*epsilon) / (
+                        torch.matmul(M[[min_indx]], M[[min_indx]].T))
                     safe_y = unsafe_y + delta_y
                     corrected_Ys.append(safe_y)
                     original_Xs.append(orig_x)
@@ -156,26 +158,39 @@ class REPAIR:
 
 
 
-    def repair_model(self, candidate, optimizer, loss_fun, savepath, iters=200, batch_size=1000, epochs=200):
+    def repair_model(self, optimizer, loss_fun, savepath, iters=50, batch_size=1000, epochs=200):
 
         all_test_accuracy = []
         all_reach_vfls = []
         all_unsafe_vfls = []
+        accuracy_old = 1.0
+        candidate_old = cp.deepcopy(self.torch_model)
+
         for num in range(iters):
             print('Iteration of repairing: ', num)
-            unsafe_data = self.compute_unsafety(output_len=100)
-            accuracy = self.compute_accuracy(candidate)
-            all_test_accuracy.append(accuracy)
-            if np.all([len(sub)==0 for sub in unsafe_data]) and (accuracy >= 0.94):
+            accuracy_new = self.compute_accuracy(self.torch_model)
+            if accuracy_old - accuracy_new > 0.1:
+                print('A large drop of accuracy\n')
+                self.torch_model = candidate_old
+                for g in optimizer.param_groups:
+                    g['lr'] = g['lr']*0.5
+                continue
+
+            candidate_old = cp.deepcopy(self.torch_model)
+
+            all_test_accuracy.append(accuracy_new)
+            accuracy_old = accuracy_new
+            unsafe_data = self.compute_unsafety(output_len=1000)
+            if np.all([len(sub)==0 for sub in unsafe_data]) and (accuracy_new >= 0.94):
                 print('\nThe accurate and safe candidate model is found !\n')
                 print('\n\n')
-                torch.save(candidate.state_dict(), savepath + "/acasxu_epoch" + str(num) + "_safe.pt")
+                torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + "_safe.pt")
                 sio.savemat(savepath + '/all_test_accuracy.mat',
                             {'all_test_accuracy': all_test_accuracy})
                 break
 
             if not np.all([len(sub)==0 for sub in unsafe_data]):
-                original_Xs, corrected_Ys = self.correct_inputs(unsafe_data, epsilon=0.01)
+                original_Xs, corrected_Ys = self.correct_inputs(unsafe_data, epsilon=5.0)
                 print('Unsafe_inputs: ', len(original_Xs))
                 # train_x = torch.cat((self.data.train_data[0], original_Xs), dim=0)
                 # train_y = torch.cat((self.data.train_data[1], corrected_Ys), dim=0)
@@ -189,18 +204,19 @@ class REPAIR:
             train_loader = DataLoader(training_dataset, batch_size, shuffle=True, num_workers=num_cores)
 
             print('Start adv training...')
-            candidate.train()
+            self.torch_model.train()
             for _ in range(epochs):
                 for batch_idx, (data, target) in enumerate(train_loader):
                     optimizer.zero_grad()
-                    predicts = candidate(data)
+                    predicts = self.torch_model(data)
                     loss = loss_fun(target, predicts)
                     loss.backward()
                     optimizer.step()
 
             print('The adv training is done\n')
             if num % 1 == 0:
-                torch.save(candidate.state_dict(), savepath + "/acasxu_epoch" + str(num) + ".pt")
+                # torch.save(candidate.state_dict(), savepath + "/acasxu_epoch" + str(num) + ".pt")
+                torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + ".pt")
 
 
 class DATA:

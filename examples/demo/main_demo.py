@@ -29,8 +29,8 @@ if __name__ == "__main__":
         input_domain = [lbs, ubs]
         y1_lbs = -50 + n
         y1_ubs = -40 + n
-        A_unsafe = np.array([[-1, 0], [1, 0], [0, -1], [0, 1]])
-        d_unsafe = np.array([[y1_lbs], [-y1_ubs], [-15], [-25]])
+        A_unsafe = torch.tensor([[-1, 0], [1, 0], [0, -1], [0, 1]])
+        d_unsafe = torch.tensor([[y1_lbs], [-y1_ubs], [-15], [-25]])
         unsafe_domains = [[A_unsafe,d_unsafe]]
         property1 = Property(input_domain, unsafe_domains)
 

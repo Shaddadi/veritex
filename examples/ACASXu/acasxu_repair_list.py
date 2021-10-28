@@ -2,7 +2,7 @@
 from acasxu_properties import *
 
 # the list of neural networks that does not violate any of properties 1-10
-safe_nnet_list = [[1,1], [3,3], [4,2]]
+safe_nnet_list = [[1,1], [3,3], [4,2], [1,7], [1,8]]
 
 # the list of properties that are violated by at least one neural network
 # property7 is only for nnet19, property is only for nnet29
@@ -16,13 +16,7 @@ for i in range(1,6):
         if nnet in safe_nnet_list:
             continue
         property_ls =[property1, property2, property3, property4]
-        if nnet == [1,7]:
-            property_ls.pop()
-            property_ls.pop()
-        elif nnet == [1,8]:
-            property_ls.pop()
-            property_ls.pop()
-        elif nnet == [1,9]:
+        if nnet == [1,9]:
             property_ls.pop()
             property_ls.pop()
             property_ls.append(property7)
@@ -30,6 +24,26 @@ for i in range(1,6):
             property_ls.append(property8)
 
         repair_list.append([nnet, property_ls])
+
+
+# repair_dic = {}
+# for i in range(1,6):
+#     for j in range(1,10):
+#         nnet_name = 'nnet'+str(i)+str(j)
+#         nnet = [i,j]
+#         if nnet in safe_nnet_list:
+#             continue
+#         property_ls =[property1, property2, property3, property4]
+#         if nnet == [1,9]:
+#             property_ls.pop()
+#             property_ls.pop()
+#             property_ls.append(property7)
+#         elif nnet == [2,9]:
+#             property_ls.append(property8)
+#
+#         repair_dic[nnet_name] = [property_ls]
+
+
 
 
 

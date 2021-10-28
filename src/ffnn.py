@@ -52,8 +52,8 @@ class FFNN:
     def backtrack(self, vfl_set, verify=False, unsafe_domain=None):
 
         if verify:
-            As_unsafe = unsafe_domain[0]
-            ds_unsafe = unsafe_domain[1]
+            As_unsafe = unsafe_domain[0].numpy()
+            ds_unsafe = unsafe_domain[1].numpy()
             elements = np.dot(np.dot(As_unsafe, vfl_set.M), vfl_set.vertices.T) + np.dot(As_unsafe, vfl_set.b) + ds_unsafe
             if np.any(np.all(elements >= 0, axis=1)):  # reachable set does not satisfy at least one linear constraint
                 return False
@@ -170,8 +170,8 @@ class FFNN:
     def verifyVzono(self, vzono_set):
         safe = True
         for ud in self.unsafe_domains:
-            As_unsafe = ud[0]
-            ds_unsafe = ud[1]
+            As_unsafe = ud[0].numpy()
+            ds_unsafe = ud[1].numpy()
             for n in range(len(As_unsafe)):
                 A = As_unsafe[[n]]
                 d = ds_unsafe[[n]]
