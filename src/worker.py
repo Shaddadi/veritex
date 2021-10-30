@@ -81,9 +81,9 @@ class Worker:
                 if self.shared_state.work_done.is_set():
                     self.shared_state.work_assign_ready.set()
                     break
-                if self.shared_state.work_steal_ready.is_set() and (not self.shared_state.steal_disabled):
-                    # print('Worker ' + str(self.worker_id) + ' before workers_valid_status[self.worker_id] == 1')
-                    if self.shared_state.workers_valid_status[self.worker_id] == 1 and self.shared_state.work_steal_ready.is_set():
+
+                if self.shared_state.work_steal_ready.is_set() and (not self.shared_state.steal_disabled.is_set()):
+                    if self.shared_state.workers_valid_status[self.worker_id] == 1:
                         # #print('Worker ' + str(self.worker_id) + ' after workers_valid_status[self.worker_id] == 1')
                         # #print('Worker ' + str(self.worker_id) + ' steal_ready flag: ',
                         #       self.shared_state.work_steal_ready.is_set())
@@ -114,9 +114,9 @@ class Worker:
             self.shared_state.lock.release()
             #<<<<<<<<<<<<<<<<<<<<<<<<<<lock<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<#
 
-            print('Worker ' + str(self.worker_id) + ' is waiting for steal_assign_ready')
+            # print('Worker ' + str(self.worker_id) + ' is waiting for steal_assign_ready')
             self.shared_state.steal_assign_ready.wait()
-            print('Worker ' + str(self.worker_id) + ' passed steal_assign_ready')
+            # print('Worker ' + str(self.worker_id) + ' passed steal_assign_ready')
 
             with self.shared_state.num_workers_need_assigned.get_lock():
                 self.shared_state.num_workers_need_assigned.value += 1
@@ -134,18 +134,16 @@ class Worker:
                     self.shared_state.work_steal_ready.set()
                     if sum(self.shared_state.workers_idle_status) == self.shared_state.num_workers:
                         self.shared_state.work_done.set()
-                        print('self.shared_state.work_done.set() 4')
 
                     self.shared_state.all_idle_ready.set()
 
             self.shared_state.all_idle_ready.wait()
             if self.shared_state.work_done.is_set() or self.shared_state.steal_disabled.is_set():
                 self.shared_state.steal_assign_ready.set()
-                print('self.shared_state.steal_assign_ready.set()!')
                 break
-            print('Worker ' + str(self.worker_id) + ' is waiting for work_assign_ready')
+            # print('Worker ' + str(self.worker_id) + ' is waiting for work_assign_ready')
             self.shared_state.work_assign_ready.wait()
-            print('Worker ' + str(self.worker_id) + ' passed work_assign_ready')
+            # print('Worker ' + str(self.worker_id) + ' passed work_assign_ready')
             self.shared_state.work_steal_ready.clear()
             # if self.shared_state.work_done.is_set() or self.shared_state.steal_disabled.is_set():
             #     self.shared_state.steal_assign_ready.set()
@@ -171,7 +169,7 @@ class Worker:
         assert steal_rate != 0
 
         num_stealed_works = 0
-        if len(self.private_deque)>=2:
+        if len(self.private_deque)>=3:
             num_stealed_works = np.floor(len(self.private_deque) * steal_rate).astype(np.int64)
             if num_stealed_works == 0:
                 num_stealed_works = 1
@@ -229,8 +227,6 @@ class Worker:
         with self.shared_state.num_assigned_workers.get_lock():
             self.shared_state.num_assigned_workers.value += 1
 
-            print('Worker ' + str(self.worker_id) + ' num_assigned_workers: ',  self.shared_state.num_assigned_workers.value)
-            print('Worker ' + str(self.worker_id) + ' num_workers_need_assigned: ', self.shared_state.num_workers_need_assigned.value)
             assert self.shared_state.num_assigned_workers.value <= self.shared_state.num_workers_need_assigned.value
             if self.shared_state.num_assigned_workers.value == self.shared_state.num_workers_need_assigned.value:  # complete assigning
 
@@ -248,8 +244,6 @@ class Worker:
                 if self.shared_state.num_empty_assign.value == self.shared_state.num_assigned_workers.value:
                     if self.shared_state.num_empty_assign.value/self.shared_state.num_workers >= 0.8:
                         self.shared_state.steal_disabled.set()
-                        print('self.shared_state.steal_disabled.set()')
-                        print('self.shared_state.num_empty_assign.value :', self.shared_state.num_empty_assign.value)
 
                 with self.shared_state.workers_idle_status.get_lock():
                     for n, ele in enumerate(self.shared_state.workers_idle_status):
@@ -262,7 +256,6 @@ class Worker:
                 self.shared_state.work_assign_ready.clear()
                 self.shared_state.reset_after_assgin(self.worker_id)
                 self.shared_state.steal_assign_ready.set()
-                print('self.shared_state.steal_assign_ready.set()!!!!!!!!!!!!!!!')
                 self.shared_state.all_idle_ready.clear()
                 # self.shared_state.work_assign_done.set()
 
@@ -283,7 +276,6 @@ class Worker:
                         self.shared_state.outputs.put([unsafe_input, unsafe_output])
                         if self.shared_state.outputs_len.value >= self.output_len:
                             self.shared_state.work_done.set()
-                            print('self.shared_state.work_done.set() 1')
 
 
         elif self.dnn.config_verify:
@@ -291,7 +283,7 @@ class Worker:
             if unsafe:
                 self.shared_state.outputs.put(unsafe)
                 self.shared_state.work_done.set()
-                print('self.shared_state.work_done.set() 2')
+
 
         elif self.dnn.config_unsafe_input and (not self.dnn.config_exact_output):
             unsafe_inputs = self.dnn.backtrack(vfl)
@@ -301,7 +293,7 @@ class Worker:
                     self.shared_state.outputs.put(unsafe_inputs)
                 if self.shared_state.outputs_len.value >= self.output_len:
                     self.shared_state.work_done.set()
-                    print('self.shared_state.work_done.set() 3')
+
 
         elif (not self.dnn.config_unsafe_input) and self.dnn.config_exact_output:
             with self.shared_state.outputs_len.get_lock():
