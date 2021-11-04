@@ -165,7 +165,7 @@ class REPAIR:
 
 
     def repair_model(self, optimizer, loss_fun, savepath, iters=50, batch_size=100, epochs=200):
-
+        t0 = time.time()
         all_test_accuracy = []
         accuracy_old = 1.0
         candidate_old = cp.deepcopy(self.torch_model)
@@ -194,7 +194,7 @@ class REPAIR:
                     print('\n\n')
                     torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + "_safe.pt")
                     sio.savemat(savepath + '/all_test_accuracy.mat',
-                                {'all_test_accuracy': all_test_accuracy})
+                                {'all_test_accuracy': all_test_accuracy, 'time': time.time()-t0})
                     break
 
                 if not np.all([len(sub)==0 for sub in unsafe_data]):
