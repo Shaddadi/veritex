@@ -277,13 +277,11 @@ class Worker:
                         if self.shared_state.outputs_len.value >= self.output_len:
                             self.shared_state.work_done.set()
 
-
         elif self.dnn.config_verify:
             unsafe = self.dnn.verify(vfl)
             if unsafe:
                 self.shared_state.outputs.put(unsafe)
                 self.shared_state.work_done.set()
-
 
         elif self.dnn.config_unsafe_input and (not self.dnn.config_exact_output):
             unsafe_inputs = self.dnn.backtrack(vfl)
@@ -294,7 +292,6 @@ class Worker:
                 if self.shared_state.outputs_len.value >= self.output_len:
                     self.shared_state.work_done.set()
 
-
         elif (not self.dnn.config_unsafe_input) and self.dnn.config_exact_output:
             with self.shared_state.outputs_len.get_lock():
                 self.shared_state.outputs_len.value += 1
@@ -303,8 +300,8 @@ class Worker:
         elif self.dnn.config_unsafe_input and self.dnn.config_exact_output:
             unsafe_inputs = self.dnn.backtrack(vfl)
             with self.shared_state.outputs_len.get_lock():
-                self.shared_state.outputs_len.value += 1
                 self.shared_state.outputs.put([unsafe_inputs, vfl])
+                self.shared_state.outputs_len.value += 1
         else:
             raise ValueError('Reachability configuration error!')
 

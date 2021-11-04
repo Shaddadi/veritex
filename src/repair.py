@@ -9,7 +9,10 @@ from torch.utils.data import TensorDataset, DataLoader
 from worker import Worker
 from shared import SharedState
 import scipy.io as sio
-num_cores = mp.cpu_count()
+import torch.optim as optim
+import torch.nn as nn
+import pickle
+num_cores = 0 #mp.cpu_count()
 
 
 
@@ -18,7 +21,6 @@ class REPAIR:
     def __init__(self, torch_model, properties, data=None):
         self.properties = properties
         self.torch_model = torch_model
-        self.ffnn = FFNN(torch_model, repair=True)
 
         if data is not None:
             self.data = data
@@ -29,6 +31,7 @@ class REPAIR:
 
 
     def compute_unsafety(self, output_len=100):
+        self.ffnn = FFNN(self.torch_model, repair=True)
         all_unsafe_data = []
         num_processors = mp.cpu_count()
         for n, prop in enumerate(self.properties):
@@ -125,6 +128,7 @@ class REPAIR:
                 violation = 0
                 for ufd in p.unsafe_domains:
                     M, vec = ufd[0], ufd[1]
+                    target_dims = torch.any(M==0, dim=0)
                     res = torch.mm(M, unsafe_y.T) + vec
                     if torch.any(res > 0,axis=0):
                         continue
@@ -133,9 +137,11 @@ class REPAIR:
                         assert violation == 1 # only one unsafe domain out of multiple should be violated
 
                     min_indx = torch.argmax(res)
-                    # delta_y = M[min_indx] * (-res[min_indx, 0] + epsilon) / (torch.matmul(M[[min_indx]], M[[min_indx]].T))
-                    delta_y = M[min_indx] * (-res[min_indx, 0]*epsilon) / (
-                        torch.matmul(M[[min_indx]], M[[min_indx]].T))
+                    delta_y = M[min_indx] * (-res[min_indx, 0] + epsilon) / (torch.matmul(M[[min_indx]], M[[min_indx]].T))
+                    # delta_y = M[min_indx] * (-res[min_indx, 0]*epsilon) / (
+                    #     torch.matmul(M[[min_indx]], M[[min_indx]].T))
+                    delta_y[target_dims] = 0.0
+                    assert not torch.all(delta_y==0.0)
                     safe_y = unsafe_y + delta_y
                     corrected_Ys.append(safe_y)
                     original_Xs.append(orig_x)
@@ -158,54 +164,61 @@ class REPAIR:
 
 
 
-    def repair_model(self, optimizer, loss_fun, savepath, iters=50, batch_size=1000, epochs=200):
+    def repair_model(self, optimizer, loss_fun, savepath, iters=50, batch_size=100, epochs=200):
 
         all_test_accuracy = []
-        all_reach_vfls = []
-        all_unsafe_vfls = []
         accuracy_old = 1.0
         candidate_old = cp.deepcopy(self.torch_model)
+        reset_flag = False
 
         for num in range(iters):
             print('Iteration of repairing: ', num)
             accuracy_new = self.compute_accuracy(self.torch_model)
             if accuracy_old - accuracy_new > 0.1:
                 print('A large drop of accuracy\n')
-                self.torch_model = candidate_old
-                for g in optimizer.param_groups:
-                    g['lr'] = g['lr']*0.5
+                self.torch_model = cp.deepcopy(candidate_old)
+                lr = optimizer.param_groups[0]['lr'] * 0.8
+                print('lr :', lr)
+                optimizer = optim.SGD(self.torch_model.parameters(), lr=lr, momentum=0.9)
+                reset_flag = True
                 continue
 
-            candidate_old = cp.deepcopy(self.torch_model)
+            if not reset_flag:
+                candidate_old = cp.deepcopy(self.torch_model)
+                accuracy_old = accuracy_new
+                all_test_accuracy.append(accuracy_new)
 
-            all_test_accuracy.append(accuracy_new)
-            accuracy_old = accuracy_new
-            unsafe_data = self.compute_unsafety(output_len=1000)
-            if np.all([len(sub)==0 for sub in unsafe_data]) and (accuracy_new >= 0.94):
-                print('\nThe accurate and safe candidate model is found !\n')
-                print('\n\n')
-                torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + "_safe.pt")
-                sio.savemat(savepath + '/all_test_accuracy.mat',
-                            {'all_test_accuracy': all_test_accuracy})
-                break
+                unsafe_data = self.compute_unsafety(output_len=1000)
+                if np.all([len(sub)==0 for sub in unsafe_data]) and (accuracy_new >= 0.94):
+                    print('\nThe accurate and safe candidate model is found !\n')
+                    print('\n\n')
+                    torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + "_safe.pt")
+                    sio.savemat(savepath + '/all_test_accuracy.mat',
+                                {'all_test_accuracy': all_test_accuracy})
+                    break
 
-            if not np.all([len(sub)==0 for sub in unsafe_data]):
-                original_Xs, corrected_Ys = self.correct_inputs(unsafe_data, epsilon=5.0)
-                print('Unsafe_inputs: ', len(original_Xs))
-                # train_x = torch.cat((self.data.train_data[0], original_Xs), dim=0)
-                # train_y = torch.cat((self.data.train_data[1], corrected_Ys), dim=0)
-                train_x = original_Xs
-                train_y = corrected_Ys
-            else:
-                train_x = self.data.train_data[0]
-                train_y = self.data.train_data[1]
+                if not np.all([len(sub)==0 for sub in unsafe_data]):
+                    # original_Xs, corrected_Ys = self.correct_inputs(unsafe_data, epsilon=5.0)
+                    original_Xs, corrected_Ys = self.correct_inputs(unsafe_data)
+                    print('Unsafe_inputs: ', len(original_Xs))
+                    # train_x = torch.cat((self.data.train_data[0], original_Xs), dim=0)
+                    # train_y = torch.cat((self.data.train_data[1], corrected_Ys), dim=0)
+                    train_x = original_Xs
+                    train_y = corrected_Ys
+                else:
+                    train_x = self.data.train_data[0]
+                    train_y = self.data.train_data[1]
 
-            training_dataset = TensorDataset(train_x.cpu(), train_y.cpu())
-            train_loader = DataLoader(training_dataset, batch_size, shuffle=True, num_workers=num_cores)
+                training_dataset = TensorDataset(train_x.cpu(), train_y.cpu())
+                train_loader = DataLoader(training_dataset, batch_size, shuffle=True, num_workers=num_cores)
 
+            reset_flag = False
             print('Start adv training...')
             self.torch_model.train()
-            for _ in range(epochs):
+            old_weights = cp.deepcopy(self.torch_model[0].weight.data)
+            for e in range(epochs):
+                print('\rEpoch :'+str(e), end='')
+                # print(e, end='\r')
                 for batch_idx, (data, target) in enumerate(train_loader):
                     optimizer.zero_grad()
                     predicts = self.torch_model(data)
@@ -213,7 +226,10 @@ class REPAIR:
                     loss.backward()
                     optimizer.step()
 
-            print('The adv training is done\n')
+            new_weights = cp.deepcopy(self.torch_model[0].weight.data)
+            diff = new_weights - old_weights
+            xx = torch.any(diff!=0)
+            print('\nThe adv training is done\n')
             if num % 1 == 0:
                 # torch.save(candidate.state_dict(), savepath + "/acasxu_epoch" + str(num) + ".pt")
                 torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + ".pt")
