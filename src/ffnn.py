@@ -2,6 +2,7 @@ import numpy as np
 import copy as cp
 from vzono import VzonoFFNN as Vzono
 import torch
+from utils import split_bounds, split_bounds_vset
 from itertools import product
 from scipy.optimize import linprog
 from collections import deque
@@ -34,15 +35,15 @@ class FFNN:
         for name, param in self.torch_model.named_parameters():
             if name[-4:] == 'ight':
                 if torch.cuda.is_available():
-                    self._W.append(param.data.cpu().numpy())
+                    self._W.append(cp.deepcopy(param.data.cpu().numpy()))
                 else:
-                    self._W.append(param.data.numpy())
+                    self._W.append(cp.deepcopy(param.data.numpy()))
             if name[-4:] == 'bias':
                 if torch.cuda.is_available():
-                    temp = np.expand_dims(param.data.cpu().numpy(), axis=1)
+                    temp = np.expand_dims(cp.deepcopy(param.data.cpu().numpy()), axis=1)
                     self._b.append(temp)
                 else:
-                    temp = np.expand_dims(param.data.numpy(), axis=1)
+                    temp = np.expand_dims(cp.deepcopy(param.data.numpy()), axis=1)
                     self._b.append(temp)
 
         self._num_layer = len(self._W)
@@ -95,8 +96,27 @@ class FFNN:
             return vfls
 
 
+    def split_verify_vzono_depth_first(self, input_set, depth=0, max_depth=10):
+        if depth == max_depth:
+            print('False')
+            return [False] # unknown
 
-    def reluLayerLinearRelax(self, vzono_set):
+        input_vzono = input_set[0]
+        output_vzono = self.reach_over_app_nontuple(input_vzono)
+        if self.verify_vzono(output_vzono):
+            return [] # safe
+
+        lbs, ubs = input_set[1]
+        subsets = split_bounds(lbs, ubs, num=1)
+        all_results = []
+        for sub in subsets:
+            all_results.extend(self.split_verify_vzono_depth_first(sub, depth=depth+1, max_depth=max_depth))
+
+        return all_results
+
+
+
+    def relu_layer_linear_relax(self, vzono_set):
         neurons_neg_pos, neurons_neg = self.get_valid_neurons_for_over_app(vzono_set)
         vzono_set.base_vertices[neurons_neg,:] = 0
         vzono_set.base_vectors[neurons_neg,:] = 0
@@ -104,10 +124,10 @@ class FFNN:
         if neurons_neg_pos.shape[0] == 0:
             return vzono_set
 
-        base_vectices = vzono_set.base_vertices[neurons_neg_pos,:]
+        base_vertices = vzono_set.base_vertices[neurons_neg_pos,:]
         vals = np.sum(np.abs(vzono_set.base_vectors[neurons_neg_pos,:]), axis=1, keepdims=True)
-        ubs = np.max(base_vectices,axis=1, keepdims=True) + vals
-        lbs = np.min(base_vectices, axis=1, keepdims=True) - vals
+        ubs = np.max(base_vertices,axis=1, keepdims=True) + vals
+        lbs = np.min(base_vertices, axis=1, keepdims=True) - vals
         M = np.eye(vzono_set.base_vertices.shape[0])
         b = np.zeros((vzono_set.base_vertices.shape[0], 1))
         base_vectors_relax = np.zeros((vzono_set.base_vertices.shape[0],len(neurons_neg_pos)))
@@ -137,52 +157,122 @@ class FFNN:
         return valid_neurons_neg_pos, valid_neurons_neg
 
 
-    def singleLayerOverApp(self, vzono_set, layer_id):
+    def single_layer_over_app(self, vzono_set, layer_id):
         W = self._W[layer_id]
         b = self._b[layer_id]
         vzono_set.base_vertices = np.dot(W, vzono_set.base_vertices) + b
         vzono_set.base_vectors = np.dot(W, vzono_set.base_vectors)
-
         if layer_id == self._num_layer-1:
             return vzono_set
 
-        over_app_set = self.reluLayerLinearRelax(vzono_set)
-
+        over_app_set = self.relu_layer_linear_relax(vzono_set)
         return over_app_set
 
 
-    def reachOverApp(self, state_tuple):
+    def split_verify_vset_depth_first(self, input_set, depth=0, max_depth=10):
+        if depth == max_depth:
+            print('False')
+            return [False] # unknown
+
+        input_vzono = input_set[0]
+        output_vzono = self.reach_over_app_vset(input_vzono)
+        if self.verify_vzono(output_vzono):
+            return [] # safe
+
+        lbs, ubs = input_set[1]
+        subsets = split_bounds(lbs, ubs, num=1)
+        all_results = []
+        for sub in subsets:
+            all_results.extend(self.split_verify_vset_depth_first(sub, depth=depth+1, max_depth=max_depth))
+
+        return all_results
+
+
+    def reach_over_app_vset(self, vzono_set):
+        for n in range(self._num_layer):
+            vzono_set = self.single_layer_over_app_vset(vzono_set, n)
+
+        return vzono_set
+
+
+    def single_layer_over_app_vset(self, vzono_set, layer_id):
+        W = self._W[layer_id]
+        b = self._b[layer_id]
+
+        vzono_set.base_vertices = np.dot(W, vzono_set.base_vertices) + b
+        vzono_set.base_vectors = np.dot(W, vzono_set.base_vectors)
+        if layer_id == self._num_layer-1:
+            return vzono_set
+
+        over_app_vzono = self.relu_layer_project(vzono_set)
+        return over_app_vzono
+
+
+    def relu_layer_project(self, vzono_set):
+        vals = np.sum(np.abs(vzono_set.base_vectors), axis=1, keepdims=True)
+        ubs = np.max(vzono_set.base_vertices, axis=1, keepdims=True) + vals
+        lbs = np.min(vzono_set.base_vertices, axis=1, keepdims=True) - vals
+        lbs[lbs<0] = 0.0
+        ubs[ubs<0] = 0.0
+        new_base_vertices = (lbs+ubs)/2
+        new_base_vectors = np.diag((ubs[:,0]-lbs[:,0])/2)
+        new_vzono_set = Vzono(new_base_vertices, new_base_vectors)
+        return new_vzono_set
+
+
+
+
+
+
+
+    def reach_over_app_nontuple(self, vzono_set):
+        for n in range(self._num_layer):
+            vzono_set = self.single_layer_over_app(vzono_set, n)
+
+        return vzono_set
+
+
+    def reach_over_app(self, state_tuple, relu_first=True):
         vfl_set, layer, neurons = state_tuple # (vfl, layer, neurons)
         base_vertices = np.dot(vfl_set.M, vfl_set.vertices.T) + vfl_set.b
         base_vectors = np.zeros((base_vertices.shape[0], 1))
         vzono_set = Vzono(base_vertices, base_vectors)
 
-        neurons_neg_pos, neurons_neg = self.get_valid_neurons_for_over_app(vzono_set)
-        vzono_set.base_vertices[neurons_neg,:] = 0
-        vzono_set.base_vectors[neurons_neg,:] = 0
+        if relu_first:
+            neurons_neg_pos, neurons_neg = self.get_valid_neurons_for_over_app(vzono_set)
+            vzono_set.base_vertices[neurons_neg,:] = 0
+            vzono_set.base_vectors[neurons_neg,:] = 0
 
         for n in range(layer+1, self._num_layer):
-            vzono_set = self.singleLayerOverApp(vzono_set, n)
+            vzono_set = self.single_layer_over_app(vzono_set, n)
 
         return vzono_set
 
 
-    def verifyVzono(self, vzono_set):
-        safe = True
-        for ud in self.unsafe_domains:
+    def verify_vzono(self, vzono_set):
+
+        safe = []
+        for indx, ud in enumerate(self.unsafe_domains):
             As_unsafe = ud[0].numpy()
             ds_unsafe = ud[1].numpy()
+            safe.append(False)
             for n in range(len(As_unsafe)):
                 A = As_unsafe[[n]]
                 d = ds_unsafe[[n]]
                 base_vertices = np.dot(A, vzono_set.base_vertices) + d
                 base_vectors = np.dot(A, vzono_set.base_vectors)
                 vals = base_vertices - np.sum(np.abs(base_vectors),axis=1)
-                if np.any(vals<=0):
-                    safe = False
-                    return safe
+                if np.all(vals>0):
+                    safe[indx] = True
+                    break
 
-        return safe
+            if not safe[indx]:
+                break
+                # if np.any(vals<=0):
+                #     safe = False
+                #     return safe
+
+        return np.all(safe)
 
 
     def verify(self, vfl_set):
@@ -207,11 +297,19 @@ class FFNN:
     def compute_state(self, tuple_state):
         vfl_set, layer, neurons = tuple_state # (vfl, layer, neurons)
 
-        if layer == self._num_layer - 1:  # the last layer
-            return [(vfl_set, layer, None)]
+        if (layer == self._num_layer - 1) and (len(neurons)==0):  # the last layer
+            return [(vfl_set, layer, np.array([]))]
 
         new_tuple_states = []
         if neurons.shape[0] == 0: # neurons empty, go to the next layer
+            if self.config_relu_linear or self.config_repair:
+            # if self.dnn.config_relu_linear:
+                assert (not self.config_verify)
+                over_app_set = self.reach_over_app(tuple_state)
+                if self.verify_vzono(over_app_set):
+                    print('1')
+                    return []
+
             W = self._W[layer+1]
             b = self._b[layer+1]
             vfl_set.affineMap(W, b)

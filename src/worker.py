@@ -52,7 +52,8 @@ class Worker:
             self.state_spawn_breath_first(tuple_state)
 
             if len(self.private_deque) >= self.inital_num or tuple_state[1]==self.inital_layer:
-                # self.private_deque = deque(itertools.islice(self.private_deque, 170, 175))
+                # self.private_deque = deque(itertools.islice(self.private_deque, 295, 296))
+                # self.private_deque.appendleft(self.private_deque[295])
                 self.shared_state.steal_assign_ready.set()
                 # #print('This is Worker '+str(self.worker_id))
                 # with self.shared_state.num_valid_busy_workers.get_lock():
@@ -229,7 +230,6 @@ class Worker:
 
             assert self.shared_state.num_assigned_workers.value <= self.shared_state.num_workers_need_assigned.value
             if self.shared_state.num_assigned_workers.value == self.shared_state.num_workers_need_assigned.value:  # complete assigning
-
                 try:
                     assert self.shared_state.stolen_works.value == self.shared_state.assigned_works.value
                 except:
@@ -237,6 +237,7 @@ class Worker:
                     print('assigned_works', self.shared_state.assigned_works.value)
                     print('shared_queue_len', self.shared_state.shared_queue_len.value)
                     print('num_workers_need_assigned', self.shared_state.num_workers_need_assigned.value)
+                    print('num_assigned_workers',  self.shared_state.stolen_works.value)
                     print('works_to_assign_per_worker', self.shared_state.works_to_assign_per_worker.value)
 
                 assert self.shared_state.stolen_works.value == self.shared_state.assigned_works.value
@@ -308,28 +309,33 @@ class Worker:
 
 
     def state_spawn_depth_first(self, tuple_state):
-        # print('~~~~ private_deque: ' + str(len(self.private_deque)) +
-        #       '~~~~self.shared_state.steal_disabled.is_set(): ' + str(self.shared_state.steal_disabled.is_set()) +
-        #       '~~~~self.shared_state.work_done.is_set(): '+str(self.shared_state.work_done.is_set()) +
-        #       '~~~~sum(self.shared_state.workers_idle_status): '+str(sum(self.shared_state.workers_idle_status)))
         next_tuple_states = self.dnn.compute_state(tuple_state)
-        if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
-            assert len(next_tuple_states) == 1
-            self.collect_results(next_tuple_states[0][0])
+        if len(next_tuple_states) == 0:
             return
-
-        if self.dnn.config_relu_linear or self.dnn.config_repair:
-            assert (not self.dnn.config_verify)
-            temp_list = []
+        if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
             for one_state in next_tuple_states:
-                over_app_set = self.dnn.reachOverApp(one_state)
-                safe = self.dnn.verifyVzono(over_app_set)
-                if not safe:
-                    temp_list.append(one_state)
-            if len(temp_list) != 0:
-                next_tuple_states = temp_list
-            else:
-                return
+                if (len(one_state[2])!=0):
+                    self.private_deque.append(one_state)
+                else:
+                    self.collect_results(next_tuple_states[0][0])
+            return
+            # assert len(next_tuple_states) == 1
+            # self.collect_results(next_tuple_states[0][0])
+            # return
+
+        # if self.dnn.config_relu_linear or self.dnn.config_repair:
+        # # if self.dnn.config_relu_linear:
+        #     assert (not self.dnn.config_verify)
+        #     temp_list = []
+        #     for one_state in next_tuple_states:
+        #         over_app_set = self.dnn.reach_over_app(one_state)
+        #         safe = self.dnn.verify_vzono(over_app_set)
+        #         if not safe:
+        #             temp_list.append(one_state)
+        #     if len(temp_list) != 0:
+        #         next_tuple_states = temp_list
+        #     else:
+        #         return
 
         if len(next_tuple_states) == 2:
             self.private_deque.append(next_tuple_states[1])
@@ -340,6 +346,8 @@ class Worker:
 
     def state_spawn_breath_first(self, tuple_state):
         next_tuple_states = self.dnn.compute_state(tuple_state)
+        if len(next_tuple_states) == 0:
+            return
 
         # if next_tuple_states[0][1] == self.inital_layer or len(self.private_deque) >= self.inital_num: # reach to the next layer
         #     for one_state in next_tuple_states:
@@ -351,10 +359,18 @@ class Worker:
         #
         # self.state_spawn_breath_first(self.private_deque.popleft())
 
+        # if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
+        #     assert len(next_tuple_states) == 1
+        #     self.collect_results(next_tuple_states[0][0])
+        #     return
+
         if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
-            assert len(next_tuple_states) == 1
-            self.collect_results(next_tuple_states[0][0])
-            return 
+            for one_state in next_tuple_states:
+                if (len(one_state[2])!=0):
+                    self.private_deque.append(one_state)
+                else:
+                    self.collect_results(next_tuple_states[0][0])
+            return
 
         for one_state in next_tuple_states:
             self.private_deque.append(one_state)

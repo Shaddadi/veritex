@@ -12,15 +12,17 @@ import scipy.io as sio
 import torch.optim as optim
 import torch.nn as nn
 import pickle
+import sys
 num_cores = 0 #mp.cpu_count()
 
 
 
 class REPAIR:
 
-    def __init__(self, torch_model, properties, data=None):
+    def __init__(self, torch_model, properties, data=None, output_limit=1000):
         self.properties = properties
         self.torch_model = torch_model
+        self.output_limit = output_limit
 
         if data is not None:
             self.data = data
@@ -28,19 +30,51 @@ class REPAIR:
             self.data = self.generate_data()
             # torch.save(self.data, 'acasxu_data.pt')
 
+    def fast_verify_layers(self):
+        num_processors = mp.cpu_count()
+        for n, prop in enumerate(self.properties):
+            vfl_input = cp.deepcopy(prop.input_set)
+            affine_relu_lens = int((len(self.torch_model) - 1) / 2)
+            for layer in range(affine_relu_lens):
+                layer_model = self.torch_model[2*layer:(2*layer+2)]
+                self.ffnn = FFNN(layer_model, exact_output=True)
+                self.ffnn.unsafe_domains = prop.unsafe_domains
+                processes = []
+                output_sets = []
+                shared_state = SharedState([vfl_input], num_processors)
+                one_worker = Worker(self.ffnn, output_len=self.output_limit)
+                for index in range(num_processors):
+                    p = mp.Process(target=one_worker.main_func, args=(index, shared_state))
+                    processes.append(p)
+                    p.start()
+
+                for p in processes:
+                    p.join()
+
+                while not shared_state.outputs.empty():
+                    output_sets.append(shared_state.outputs.get())
+
+                # for item in output_sets:
 
 
-    def compute_unsafety(self, output_len=100):
+
+    def compute_unsafety(self):
         self.ffnn = FFNN(self.torch_model, repair=True)
         all_unsafe_data = []
         num_processors = mp.cpu_count()
         for n, prop in enumerate(self.properties):
             vfl_input = cp.deepcopy(prop.input_set)
+            from utils import split_bounds
+            from boxdomain import BoxDomain
+            lbs_input, ubs_input = prop.lbs, prop.ubs
+            sub_vzono_sets = split_bounds(lbs_input, ubs_input, num=2)
+            boxes = [BoxDomain(item[1][0], item[1][1]) for item in sub_vzono_sets]
+            new_sub_vzono_sets = [item.toFacetVertex() for item in boxes]
             self.ffnn.unsafe_domains = prop.unsafe_domains
             processes = []
             unsafe_data = []
-            shared_state = SharedState([vfl_input], num_processors)
-            one_worker = Worker(self.ffnn, output_len=output_len)
+            shared_state = SharedState(new_sub_vzono_sets, num_processors)
+            one_worker = Worker(self.ffnn, output_len=self.output_limit)
             for index in range(num_processors):
                 p = mp.Process(target=one_worker.main_func, args=(index, shared_state))
                 processes.append(p)
@@ -115,6 +149,7 @@ class REPAIR:
 
 
     def correct_inputs(self, unsafe_data, epsilon=0.001):
+        # for classification
         corrected_Ys = []
         original_Xs = []
         for n, subdata in enumerate(unsafe_data):
@@ -125,10 +160,19 @@ class REPAIR:
             for i in range(len(subdata)):
                 orig_x = torch.tensor(subdata[i][0], dtype=torch.float32)
                 unsafe_y = torch.tensor(subdata[i][1], dtype=torch.float32)
+                label = torch.argmax(unsafe_y)
                 violation = 0
+
+                target_dim_all = []
                 for ufd in p.unsafe_domains:
+                    target_dim_temp = torch.nonzero(torch.all(ufd[0] != 0, dim=0))[0][0]
+                    target_dim_all.append(target_dim_temp)
+
+                target_dim_all.append(label)
+
+                for ufd_id, ufd in enumerate(p.unsafe_domains):
                     M, vec = ufd[0], ufd[1]
-                    target_dims = torch.any(M==0, dim=0)
+                    target_dim = target_dim_all[ufd_id]
                     res = torch.mm(M, unsafe_y.T) + vec
                     if torch.any(res > 0,axis=0):
                         continue
@@ -137,13 +181,22 @@ class REPAIR:
                         assert violation == 1 # only one unsafe domain out of multiple should be violated
 
                     min_indx = torch.argmax(res)
-                    delta_y = M[min_indx] * (-res[min_indx, 0] + epsilon) / (torch.matmul(M[[min_indx]], M[[min_indx]].T))
-                    # delta_y = M[min_indx] * (-res[min_indx, 0]*epsilon) / (
-                    #     torch.matmul(M[[min_indx]], M[[min_indx]].T))
-                    delta_y[target_dims] = 0.0
-                    assert not torch.all(delta_y==0.0)
-                    safe_y = unsafe_y + delta_y
-                    corrected_Ys.append(safe_y)
+                    if M[min_indx][target_dim] < 0.0: # or unsafe_y[0][target_dim] == torch.max(unsafe_y)
+                        delta_y = (-res[min_indx, 0] + epsilon) / M[min_indx][target_dim]
+                        unsafe_y[0][target_dim] = unsafe_y[0][target_dim] + delta_y  # safe y
+                    else: # unsafe_y[0][target_dim] < torch.max(unsafe_y[0])
+                        sorted, indices = torch.sort(res)
+                        for min_indx2 in indices[:,0]:
+                            target_dim2 = torch.nonzero(M[min_indx2] == -1)[0][0]
+                            if target_dim2 not in target_dim_all:
+                                delta_y = (-res[min_indx2, 0] + epsilon) / M[min_indx2][target_dim2]
+                                unsafe_y[0][target_dim2] = unsafe_y[0][target_dim2] + delta_y  # safe y
+                                break
+
+                    res = torch.mm(M, unsafe_y.T) + vec
+                    assert torch.any(res > 0, axis=0)
+
+                    corrected_Ys.append(unsafe_y)
                     original_Xs.append(orig_x)
 
         corrected_Ys = torch.cat(corrected_Ys, dim=0)
@@ -188,7 +241,7 @@ class REPAIR:
                 accuracy_old = accuracy_new
                 all_test_accuracy.append(accuracy_new)
 
-                unsafe_data = self.compute_unsafety(output_len=1000)
+                unsafe_data = self.compute_unsafety()
                 if np.all([len(sub)==0 for sub in unsafe_data]) and (accuracy_new >= 0.94):
                     print('\nThe accurate and safe candidate model is found !\n')
                     print('\n\n')
@@ -201,31 +254,39 @@ class REPAIR:
                     # original_Xs, corrected_Ys = self.correct_inputs(unsafe_data, epsilon=5.0)
                     original_Xs, corrected_Ys = self.correct_inputs(unsafe_data)
                     print('Unsafe_inputs: ', len(original_Xs))
-                    # train_x = torch.cat((self.data.train_data[0], original_Xs), dim=0)
-                    # train_y = torch.cat((self.data.train_data[1], corrected_Ys), dim=0)
+                    # original_Xs = original_Xs.repeat(1000,1)
+                    # corrected_Ys = corrected_Ys.repeat(1000, 1)
+                    # train_x = torch.cat((self.data.train_data[0][:10000], original_Xs), dim=0)
+                    # train_y = torch.cat((self.data.train_data[1][:10000], corrected_Ys), dim=0)
                     train_x = original_Xs
                     train_y = corrected_Ys
                 else:
                     train_x = self.data.train_data[0]
                     train_y = self.data.train_data[1]
 
-                training_dataset = TensorDataset(train_x.cpu(), train_y.cpu())
+                training_dataset = TensorDataset(train_x.cuda(), train_y.cuda())
                 train_loader = DataLoader(training_dataset, batch_size, shuffle=True, num_workers=num_cores)
 
             reset_flag = False
             print('Start adv training...')
             self.torch_model.train()
             old_weights = cp.deepcopy(self.torch_model[0].weight.data)
+            self.torch_model.cuda()
             for e in range(epochs):
                 print('\rEpoch :'+str(e), end='')
                 # print(e, end='\r')
+                average_loss = 0
                 for batch_idx, (data, target) in enumerate(train_loader):
                     optimizer.zero_grad()
                     predicts = self.torch_model(data)
                     loss = loss_fun(target, predicts)
+                    average_loss += loss.data
                     loss.backward()
                     optimizer.step()
 
+                print('Averaged loss :', average_loss/(batch_idx+1))
+
+            self.torch_model.cpu()
             new_weights = cp.deepcopy(self.torch_model[0].weight.data)
             diff = new_weights - old_weights
             xx = torch.any(diff!=0)

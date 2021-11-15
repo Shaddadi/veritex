@@ -4,11 +4,45 @@ import numpy as np
 import time
 # import spconv
 
+class VzonoAdap: # adaptive over approximation
+    def __init__(self, base_vertices, matrix_A, vector_v):
+        self.base_vertices = base_vertices
+        self.matrix_A = [matrix_A]
+        self.vector_v = [vector_v]
+
+    def affine_mapping(self, W, b):
+        self.base_vertices = np.dot(W, self.base_vertices) + b
+        for n in range(len(self.matrix_A)):
+            self.matrix_A[n] = np.dot(W, self.matrix_A[n])
+            self.vector_v[n] = np.dot(W, self.vector_v[n])
+
+    def affine_mapping_negative(self, neurons_neg):
+        self.base_vertices[neurons_neg, :] = 0.0
+        for n in range(len(self.matrix_A)):
+            self.matrix_A[n][neurons_neg, :] = 0.0
+            self.vector_v[n][neurons_neg, :] = 0.0
+
+
+    def compute_interval(self):
+        interval_vals = np.dot(self.matrix_A, self.base_vertices) + self.vector_v
+
+    def relu_linear_relax_adaptive(self, neurons_neg_pos):
+        assert neurons_neg_pos.shape[0] != 0
+        base_vectices = self.base_vertices[neurons_neg_pos, :]
+        vals = np.
+
+
+
+
 
 class VzonoFFNN:
     def __init__(self, base_vertices: np.ndarray, base_vectors: np.ndarray):
         self.base_vertices = base_vertices
         self.base_vectors = base_vectors
+
+    def create_from_bounds(self, lbs, ubs):
+        self.base_vertices = (np.array(lbs)+np.array(ubs))/2
+        self.base_vectors = np.diag((np.array(ubs)-np.array(lbs))/2)
 
     def affineMap(self, W: np.ndarray, b: np.ndarray):
         self.base_vertices = np.dot(W, self.base_vertices) + b

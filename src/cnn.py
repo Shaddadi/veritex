@@ -1,6 +1,6 @@
 import numpy as np
 import copy as cp
-from vzono_cnn import Vzono, Vzonop
+from vzono import Vzono, Vzonop
 import sys
 import torch
 import time

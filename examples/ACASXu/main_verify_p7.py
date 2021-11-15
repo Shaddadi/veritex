@@ -7,6 +7,7 @@ from acasxu_properties import *
 import multiprocessing as mp
 from worker import Worker
 from shared import SharedState
+from load_onnx import load_ffnn_onnx
 import multiprocessing
 import time
 import pickle
@@ -22,12 +23,10 @@ if __name__ == "__main__":
     # for th in np.arange(500,2000,100):
     for n, prop in enumerate(properties):
         i, j = 1, 9
-        nn_path = "nnet-mat-files/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.mat"
-        filemat = loadmat(nn_path)
-        W = filemat['W'][0]
-        b = filemat['b'][0]
+        nn_path = "nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
+        torch_model = load_ffnn_onnx(nn_path)
 
-        dnn0 = FFNN(W, b, verify=True)
+        dnn0 = FFNN(torch_model, verify=True)
 
         t0 = time.time()
         unsafe = False

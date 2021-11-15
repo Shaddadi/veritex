@@ -128,6 +128,7 @@ ubs7 = [60760, 3.141592, 3.141592, 1200, 1200]
 for n in range(5):
     lbs7[n] = (lbs7[n] - means[n]) / ranges[n]
     ubs7[n] = (ubs7[n] - means[n]) / ranges[n]
+
 input_domain = [lbs7, ubs7]
 A_unsafe0 = torch.tensor([[-1.0, 0, 0, 1.0, 0], [0, -1.0, 0, 1.0, 0], [0, 0, -1.0, 1.0, 0], [0, 0, 0, 1.0, -1.0]])
 d_unsafe0 = torch.tensor([[0.0], [0.0],[0.0],[0.0]])

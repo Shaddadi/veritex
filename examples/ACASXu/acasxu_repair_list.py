@@ -17,9 +17,7 @@ for i in range(1,6):
             continue
         property_ls =[property1, property2, property3, property4]
         if nnet == [1,9]:
-            property_ls.pop()
-            property_ls.pop()
-            property_ls.append(property7)
+            property_ls = [property7]
         elif nnet == [2,9]:
             property_ls.append(property8)
 
