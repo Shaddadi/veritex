@@ -278,8 +278,8 @@ class FFNN:
     def verify(self, vfl_set):
         unsafe = False
         for ud in self.unsafe_domains:
-            A_unsafe = ud[0]
-            d_unsafe = ud[1]
+            A_unsafe = ud[0].numpy()
+            d_unsafe = ud[1].numpy()
             if len(A_unsafe) == 1:
                 vertices = np.dot(vfl_set.vertices, vfl_set.M.T) + vfl_set.b.T
                 vals = np.dot(A_unsafe, vertices.T) + d_unsafe
@@ -302,13 +302,12 @@ class FFNN:
 
         new_tuple_states = []
         if neurons.shape[0] == 0: # neurons empty, go to the next layer
-            if self.config_relu_linear or self.config_repair:
-            # if self.dnn.config_relu_linear:
-                assert (not self.config_verify)
-                over_app_set = self.reach_over_app(tuple_state)
-                if self.verify_vzono(over_app_set):
-                    print('1')
-                    return []
+            # if self.config_relu_linear or self.config_repair:
+            # # if self.dnn.config_relu_linear:
+            #     assert (not self.config_verify)
+            #     over_app_set = self.reach_over_app(tuple_state)
+            #     if self.verify_vzono(over_app_set):
+            #         return []
 
             W = self._W[layer+1]
             b = self._b[layer+1]

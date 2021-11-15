@@ -64,16 +64,16 @@ class REPAIR:
         num_processors = mp.cpu_count()
         for n, prop in enumerate(self.properties):
             vfl_input = cp.deepcopy(prop.input_set)
-            from utils import split_bounds
-            from boxdomain import BoxDomain
-            lbs_input, ubs_input = prop.lbs, prop.ubs
-            sub_vzono_sets = split_bounds(lbs_input, ubs_input, num=2)
-            boxes = [BoxDomain(item[1][0], item[1][1]) for item in sub_vzono_sets]
-            new_sub_vzono_sets = [item.toFacetVertex() for item in boxes]
+            # from utils import split_bounds
+            # from boxdomain import BoxDomain
+            # lbs_input, ubs_input = prop.lbs, prop.ubs
+            # sub_vzono_sets = split_bounds(lbs_input, ubs_input, num=2)
+            # boxes = [BoxDomain(item[1][0], item[1][1]) for item in sub_vzono_sets]
+            # new_sub_vzono_sets = [item.toFacetVertex() for item in boxes]
             self.ffnn.unsafe_domains = prop.unsafe_domains
             processes = []
             unsafe_data = []
-            shared_state = SharedState(new_sub_vzono_sets, num_processors)
+            shared_state = SharedState([vfl_input], num_processors)
             one_worker = Worker(self.ffnn, output_len=self.output_limit)
             for index in range(num_processors):
                 p = mp.Process(target=one_worker.main_func, args=(index, shared_state))
@@ -275,16 +275,16 @@ class REPAIR:
             for e in range(epochs):
                 print('\rEpoch :'+str(e), end='')
                 # print(e, end='\r')
-                average_loss = 0
+                # average_loss = 0
                 for batch_idx, (data, target) in enumerate(train_loader):
                     optimizer.zero_grad()
                     predicts = self.torch_model(data)
                     loss = loss_fun(target, predicts)
-                    average_loss += loss.data
+                    # average_loss += loss.data
                     loss.backward()
                     optimizer.step()
 
-                print('Averaged loss :', average_loss/(batch_idx+1))
+                # print('Averaged loss :', average_loss/(batch_idx+1))
 
             self.torch_model.cpu()
             new_weights = cp.deepcopy(self.torch_model[0].weight.data)

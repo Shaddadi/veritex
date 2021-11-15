@@ -15,7 +15,7 @@ class Worker:
         self.worker_id = None
         self.shared_state = None
         self.output_len = output_len
-        self.inital_num = 1000
+        self.inital_num = 500
         self.inital_layer = 2
 
 
@@ -313,15 +313,9 @@ class Worker:
         if len(next_tuple_states) == 0:
             return
         if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
-            for one_state in next_tuple_states:
-                if (len(one_state[2])!=0):
-                    self.private_deque.append(one_state)
-                else:
-                    self.collect_results(next_tuple_states[0][0])
+            assert len(next_tuple_states) == 1
+            self.collect_results(next_tuple_states[0][0])
             return
-            # assert len(next_tuple_states) == 1
-            # self.collect_results(next_tuple_states[0][0])
-            # return
 
         # if self.dnn.config_relu_linear or self.dnn.config_repair:
         # # if self.dnn.config_relu_linear:
@@ -349,27 +343,9 @@ class Worker:
         if len(next_tuple_states) == 0:
             return
 
-        # if next_tuple_states[0][1] == self.inital_layer or len(self.private_deque) >= self.inital_num: # reach to the next layer
-        #     for one_state in next_tuple_states:
-        #         self.private_deque.append(one_state)
-        #     return
-        #
-        # for one_state in next_tuple_states:
-        #     self.private_deque.appendleft(one_state)
-        #
-        # self.state_spawn_breath_first(self.private_deque.popleft())
-
-        # if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
-        #     assert len(next_tuple_states) == 1
-        #     self.collect_results(next_tuple_states[0][0])
-        #     return
-
         if next_tuple_states[0][1] == self.dnn._num_layer - 1: # last layer
-            for one_state in next_tuple_states:
-                if (len(one_state[2])!=0):
-                    self.private_deque.append(one_state)
-                else:
-                    self.collect_results(next_tuple_states[0][0])
+            assert len(next_tuple_states) == 1
+            self.collect_results(next_tuple_states[0][0])
             return
 
         for one_state in next_tuple_states:

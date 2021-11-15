@@ -2,7 +2,8 @@
 from acasxu_properties import *
 
 # the list of neural networks that does not violate any of properties 1-10
-safe_nnet_list = [[1,1], [3,3], [4,2], [1,7], [1,8]]
+# safe_nnet_list = [[1,1], [3,3], [4,2], [1,7], [1,8]]
+safe_nnet_list = [[1,1], [3,3], [4,2], [1,7], [1,8],[1,9],[2,9]]
 
 # the list of properties that are violated by at least one neural network
 # property7 is only for nnet19, property is only for nnet29
