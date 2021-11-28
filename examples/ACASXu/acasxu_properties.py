@@ -146,42 +146,42 @@ for n in range(5):
     lbs8[n] = (lbs8[n] - means[n]) / ranges[n]
     ubs8[n] = (ubs8[n] - means[n]) / ranges[n]
 input_domain = [lbs8, ubs8]
-# # x0>x1, x0>x2, x0>x3, x0>x4
-# arry0 = [torch.tensor([[-1.0, 1.0, 0, 0, 0]]),
-#          torch.tensor([[-1.0, 0, 1.0, 0, 0]]),
-#          torch.tensor([[-1.0, 0, 0, 1.0, 0]]),
-#          torch.tensor([[-1.0, 0, 0, 0, 1.0]]),]
-# # x1>x0, x1>x2, x1>x3, x1>x4
-# arry1 = [torch.tensor([[1.0, -1.0, 0, 0, 0]]),
-#          torch.tensor([[0, -1.0, 1.0, 0, 0]]),
-#          torch.tensor([[0, -1.0, 0, 1.0, 0]]),
-#          torch.tensor([[0, -1.0, 0, 0, 1.0]]),
-#          ]
-#
-# unsafe_domains = []
-# for ii in range(4):
-#     for jj in range(4):
-#         if ii == 0 and jj ==0:
-#             continue
-#         A_unsafe = np.concatenate((arry0[ii], arry1[jj]),axis=0)
-#         d_unsafe = torch.tensor([[0.0],[0.0]])
-#         unsafe_domains.append([A_unsafe, d_unsafe])
-#
-# property8 = Property(input_domain, unsafe_domains)
-
-# the following is from vnn-comp 2021
-arry0 = [torch.tensor([[-1.0, 0, 1.0, 0, 0]]),
+# x0>x1, x0>x2, x0>x3, x0>x4
+arry0 = [torch.tensor([[-1.0, 1.0, 0, 0, 0]]),
+         torch.tensor([[-1.0, 0, 1.0, 0, 0]]),
          torch.tensor([[-1.0, 0, 0, 1.0, 0]]),
          torch.tensor([[-1.0, 0, 0, 0, 1.0]]),]
-arry1 = [torch.tensor([[0, -1.0, 1.0, 0, 0]]),
+# x1>x0, x1>x2, x1>x3, x1>x4
+arry1 = [torch.tensor([[1.0, -1.0, 0, 0, 0]]),
+         torch.tensor([[0, -1.0, 1.0, 0, 0]]),
          torch.tensor([[0, -1.0, 0, 1.0, 0]]),
-         torch.tensor([[0, -1.0, 0, 0, 1.0]]),]
+         torch.tensor([[0, -1.0, 0, 0, 1.0]]),
+         ]
+
 unsafe_domains = []
-for ii in range(3):
-    A_unsafe = np.concatenate((arry0[ii], arry1[ii]),axis=0)
-    d_unsafe = torch.tensor([[0.0],[0.0]])
-    unsafe_domains.append([A_unsafe, d_unsafe])
-property8 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
+for ii in range(4):
+    for jj in range(4):
+        if ii == 0 and jj ==0:
+            continue
+        A_unsafe = torch.cat((arry0[ii], arry1[jj]),dim=0)
+        d_unsafe = torch.tensor([[0.0],[0.0]])
+        unsafe_domains.append([A_unsafe, d_unsafe])
+
+property8 = Property(input_domain, unsafe_domains)
+
+# # the following is from vnn-comp 2021
+# arry0 = [torch.tensor([[-1.0, 0, 1.0, 0, 0]]),
+#          torch.tensor([[-1.0, 0, 0, 1.0, 0]]),
+#          torch.tensor([[-1.0, 0, 0, 0, 1.0]]),]
+# arry1 = [torch.tensor([[0, -1.0, 1.0, 0, 0]]),
+#          torch.tensor([[0, -1.0, 0, 1.0, 0]]),
+#          torch.tensor([[0, -1.0, 0, 0, 1.0]]),]
+# unsafe_domains = []
+# for ii in range(3):
+#     A_unsafe = np.concatenate((arry0[ii], arry1[ii]),axis=0)
+#     d_unsafe = torch.tensor([[0.0],[0.0]])
+#     unsafe_domains.append([A_unsafe, d_unsafe])
+# property8 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
 
 
 # property 9

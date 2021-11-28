@@ -19,8 +19,9 @@ num_cores = 0 #mp.cpu_count()
 
 class REPAIR:
 
-    def __init__(self, torch_model, properties, data=None, output_limit=1000):
-        self.properties = properties
+    def __init__(self, torch_model, properties_repair, data=None, output_limit=1000):
+        self.properties = [item[0] for item in properties_repair]
+        self.corrections = [item[1] for item in properties_repair]
         self.torch_model = torch_model
         self.output_limit = output_limit
 
@@ -91,7 +92,7 @@ class REPAIR:
         return all_unsafe_data
 
 
-    def generate_data(self, num=100000):  # for training and test
+    def generate_data(self, num=10000):  # for training and test
         lbs = self.properties[0].input_ranges[0]
         ubs = self.properties[0].input_ranges[1]
 
@@ -100,12 +101,12 @@ class REPAIR:
             train_y = self.torch_model(train_x)
         train_data = self.purify_data([train_x, train_y])
 
-        valid_x = torch.tensor([np.random.uniform(lbs[i], ubs[i], int(num * 0.2)).tolist() for i in range(len(lbs))]).T
+        valid_x = torch.tensor([np.random.uniform(lbs[i], ubs[i], int(num * 0.5)).tolist() for i in range(len(lbs))]).T
         with torch.no_grad():
             valid_y = self.torch_model(valid_x)
         valid_data = self.purify_data([valid_x, valid_y])
 
-        test_x = torch.tensor([np.random.uniform(lbs[i], ubs[i], int(num * 0.2)).tolist() for i in range(len(lbs))]).T
+        test_x = torch.tensor([np.random.uniform(lbs[i], ubs[i], int(num * 0.5)).tolist() for i in range(len(lbs))]).T
         with torch.no_grad():
             test_y = self.torch_model(test_x)
         test_data = self.purify_data([test_x, test_y])
@@ -140,19 +141,19 @@ class REPAIR:
                 safe_indx = torch.nonzero(~out_bools)[:,0]
                 # if torch.cuda.is_available():
                 #     safe_indx = safe_indx.cuda()
-
                 data_x = data_x[safe_indx]
                 data_y = data_y[safe_indx]
 
         return [data_x, data_y]
 
 
-
     def correct_inputs(self, unsafe_data, epsilon=0.001):
         # for classification
         corrected_Ys = []
         original_Xs = []
+        length_unsafe_data = 0
         for n, subdata in enumerate(unsafe_data):
+            length_unsafe_data += len(subdata)
             if len(subdata) == 0:
                 continue
 
@@ -160,11 +161,13 @@ class REPAIR:
             for i in range(len(subdata)):
                 orig_x = torch.tensor(subdata[i][0], dtype=torch.float32)
                 unsafe_y = torch.tensor(subdata[i][1], dtype=torch.float32)
-                label = torch.argmax(unsafe_y)
+                label = torch.argmax(unsafe_y*(-1))
                 violation = 0
 
                 target_dim_all = []
                 for ufd in p.unsafe_domains:
+                    zz = torch.all(ufd[0] != 0, dim=0)
+                    xx = torch.nonzero(torch.all(ufd[0] != 0, dim=0))
                     target_dim_temp = torch.nonzero(torch.all(ufd[0] != 0, dim=0))[0][0]
                     target_dim_all.append(target_dim_temp)
 
@@ -174,27 +177,35 @@ class REPAIR:
                     M, vec = ufd[0], ufd[1]
                     target_dim = target_dim_all[ufd_id]
                     res = torch.mm(M, unsafe_y.T) + vec
-                    if torch.any(res > 0,axis=0):
+                    if torch.any(res > 0,dim=0):
                         continue
                     else:
                         violation += 1
                         assert violation == 1 # only one unsafe domain out of multiple should be violated
 
-                    min_indx = torch.argmax(res)
-                    if M[min_indx][target_dim] < 0.0: # or unsafe_y[0][target_dim] == torch.max(unsafe_y)
-                        delta_y = (-res[min_indx, 0] + epsilon) / M[min_indx][target_dim]
+                    max_indx = torch.argmax(res)
+                    if M[max_indx][target_dim] > 0.0: # or unsafe_y[0][target_dim] == torch.max(unsafe_y)
+                        delta_y = (-res[max_indx, 0] + epsilon) / M[max_indx][target_dim]
                         unsafe_y[0][target_dim] = unsafe_y[0][target_dim] + delta_y  # safe y
                     else: # unsafe_y[0][target_dim] < torch.max(unsafe_y[0])
-                        sorted, indices = torch.sort(res)
-                        for min_indx2 in indices[:,0]:
-                            target_dim2 = torch.nonzero(M[min_indx2] == -1)[0][0]
+                        sorted, indices = torch.sort(res[:,0], descending=True)
+                        for min_indx2 in indices:
+                            target_dim2 = torch.nonzero(M[min_indx2] == 1)[0][0]
                             if target_dim2 not in target_dim_all:
                                 delta_y = (-res[min_indx2, 0] + epsilon) / M[min_indx2][target_dim2]
                                 unsafe_y[0][target_dim2] = unsafe_y[0][target_dim2] + delta_y  # safe y
                                 break
 
                     res = torch.mm(M, unsafe_y.T) + vec
-                    assert torch.any(res > 0, axis=0)
+                    assert torch.any(res > 0, dim=0)
+
+                    # # make this classification comply the most common classification by switching values
+                    # max_indx = torch.argmax(unsafe_y)
+                    # if max_indx != self.optimal_dim:
+                    #     actual_max = cp.deepcopy(unsafe_y[0][max_indx])
+                    #     prefered_max = cp.deepcopy(unsafe_y[0][self.optimal_dim])
+                    #     unsafe_y[0][self.optimal_dim] = actual_max
+                    #     unsafe_y[0][max_indx] = prefered_max
 
                     corrected_Ys.append(unsafe_y)
                     original_Xs.append(orig_x)
@@ -202,28 +213,51 @@ class REPAIR:
         corrected_Ys = torch.cat(corrected_Ys, dim=0)
         original_Xs = torch.cat(original_Xs, dim=0)
 
+        print('Unsafe_inputs: ', length_unsafe_data)
+        return original_Xs, corrected_Ys
+
+
+    def correct_unsafe_data(self, unsafe_data):
+        length_unsafe_data = 0
+        corrected_Ys = []
+        original_Xs = []
+        for n, subdata in enumerate(unsafe_data):
+            length_unsafe_data += len(subdata)
+            if len(subdata) == 0:
+                continue
+
+            correction = self.corrections[n]
+            safe_x, safe_y = correction(subdata)
+            original_Xs.append(safe_x)
+            corrected_Ys.append(safe_y)
+
+        corrected_Ys = torch.cat(corrected_Ys, dim=0)
+        original_Xs = torch.cat(original_Xs, dim=0)
+        print('Unsafe_inputs: ', length_unsafe_data)
         return original_Xs, corrected_Ys
 
 
 
     def compute_accuracy(self, model):
         model.eval()
-        predicts = model(self.data.test_data[0])
+        predicts = model(self.data.test_data[0]) * (-1)  # The minimum is the predication
         pred_actions = torch.argmax(predicts, dim=1)
-        actl_actions = torch.argmax(self.data.test_data[1], dim=1)
+        actl_actions = torch.argmax(self.data.test_data[1] * (-1), dim=1)
+        actions_times = torch.tensor([len(torch.nonzero(actl_actions==n)[:,0]) for n in range(predicts.shape[1])])
+        self.optimal_dim = torch.argmax(actions_times)
         accuracy = len(torch.nonzero(pred_actions == actl_actions)) / len(predicts)
         print('Accuracy on the test data: {:.2f}% '.format(accuracy * 100))
         return accuracy
 
 
 
-    def repair_model(self, optimizer, loss_fun, savepath, iters=50, batch_size=100, epochs=200):
+    def repair_model(self, optimizer, loss_fun, savepath, iters=100, batch_size=2000, epochs=200):
         t0 = time.time()
         all_test_accuracy = []
         accuracy_old = 1.0
         candidate_old = cp.deepcopy(self.torch_model)
         reset_flag = False
-
+        t0 = time.time()
         for num in range(iters):
             print('Iteration of repairing: ', num)
             accuracy_new = self.compute_accuracy(self.torch_model)
@@ -242,22 +276,19 @@ class REPAIR:
                 all_test_accuracy.append(accuracy_new)
 
                 unsafe_data = self.compute_unsafety()
-                if np.all([len(sub)==0 for sub in unsafe_data]) and (accuracy_new >= 0.94):
-                    print('\nThe accurate and safe candidate model is found !\n')
-                    print('\n\n')
+                if np.all([len(sub)==0 for sub in unsafe_data]):
+                    print('The accurate and safe candidate model is found !')
                     torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + "_safe.pt")
+                    print('Running time: ', time.time()-t0)
+                    print('\n\n')
                     sio.savemat(savepath + '/all_test_accuracy.mat',
                                 {'all_test_accuracy': all_test_accuracy, 'time': time.time()-t0})
                     break
 
                 if not np.all([len(sub)==0 for sub in unsafe_data]):
-                    # original_Xs, corrected_Ys = self.correct_inputs(unsafe_data, epsilon=5.0)
-                    original_Xs, corrected_Ys = self.correct_inputs(unsafe_data)
-                    print('Unsafe_inputs: ', len(original_Xs))
-                    # original_Xs = original_Xs.repeat(1000,1)
-                    # corrected_Ys = corrected_Ys.repeat(1000, 1)
-                    # train_x = torch.cat((self.data.train_data[0][:10000], original_Xs), dim=0)
-                    # train_y = torch.cat((self.data.train_data[1][:10000], corrected_Ys), dim=0)
+                    # original_Xs, corrected_Ys = self.correct_inputs(unsafe_data)
+                    original_Xs, corrected_Ys = self.correct_unsafe_data(unsafe_data)
+
                     train_x = original_Xs
                     train_y = corrected_Ys
                 else:
@@ -291,6 +322,7 @@ class REPAIR:
             diff = new_weights - old_weights
             xx = torch.any(diff!=0)
             print('\nThe adv training is done\n')
+            print('Running time: ', time.time() - t0)
             if num % 1 == 0:
                 # torch.save(candidate.state_dict(), savepath + "/acasxu_epoch" + str(num) + ".pt")
                 torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + ".pt")

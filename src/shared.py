@@ -7,7 +7,7 @@ class SharedState: #
     def __init__(self, vfl_inputs, num_workers):
 
         self.num_workers = num_workers
-        self.shared_queue = mp.Queue()
+        self.shared_queue = mp.Manager().Queue()
         self.shared_queue_len = mp.Value('i', 0)
 
         self.outputs = mp.Manager().Queue()

@@ -96,7 +96,7 @@ class FFNN:
             return vfls
 
 
-    def split_verify_vzono_depth_first(self, input_set, depth=0, max_depth=10):
+    def split_verify_vzono_depth_first(self, input_set, depth=0, max_depth=2):
         if depth == max_depth:
             print('False')
             return [False] # unknown
@@ -302,12 +302,12 @@ class FFNN:
 
         new_tuple_states = []
         if neurons.shape[0] == 0: # neurons empty, go to the next layer
-            # if self.config_relu_linear or self.config_repair:
-            # # if self.dnn.config_relu_linear:
+            if self.config_relu_linear or self.config_repair:
+            # if self.dnn.config_relu_linear:
             #     assert (not self.config_verify)
-            #     over_app_set = self.reach_over_app(tuple_state)
-            #     if self.verify_vzono(over_app_set):
-            #         return []
+                over_app_set = self.reach_over_app(tuple_state)
+                if self.verify_vzono(over_app_set):
+                    return []
 
             W = self._W[layer+1]
             b = self._b[layer+1]
