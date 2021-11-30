@@ -30,6 +30,7 @@ class SharedState: #
         self.all_idle_ready = mp.Event()
         self.steal_assign_ready = mp.Event()
         self.work_done = mp.Event()
+        self.work_interrupted = mp.Event()
         self.steal_disabled = mp.Event()
 
         self.lock = mp.Lock()

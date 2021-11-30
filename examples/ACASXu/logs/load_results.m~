@@ -55,7 +55,7 @@ for num = 3:length(files)
     filename = files(num).name;
     try
         load([folder1, '/', filename, '/all_test_accuracy.mat'])
-        p = plot(all_test_accuracy,'-','color',[0.7 0.7 0.7],'LineWidth',0.5);
+        p = plot(all_test_accuracy,'-','color',[0.4 0.4 0.4],'LineWidth',0.5);
         
         if length(all_test_accuracy)<25 % 25 is the longest trace
             tmp_trace = ones(1,25-length(all_test_accuracy))*all_test_accuracy(end);
@@ -81,8 +81,8 @@ ylim([0.984, 1.0])
 hold off
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%% art %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% %%%%%%%%%%%%%% art %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % load('art_accuracy_time.mat')
 % all_accu = [];
 % for num = 1:length(results_refine)
@@ -122,7 +122,7 @@ fill([x fliplr(x)], [lbs fliplr(ubs)],[0.9,0.9,0.9])
 low_accuracys = [];
 for num = 1:length(results_refine)
     accuracys = results_refine{num,1};
-    p = plot(accuracys,'-','color',[0.7 0.7 0.7],'LineWidth',0.5);
+    plot(accuracys,'-','color',[0.7 0.7 0.7],'LineWidth',0.5)
 end
 
 p1 = plot(ubs,'-','color',[0.5 0.0 0.5],'LineWidth',1.5);
@@ -135,7 +135,7 @@ legend([p1(1),p2(1),p3(1),p(1)],'Upper Bound','Lower Bound','Average', 'Instance
 ylim([0.1,1.0])
 hold off 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % fig3 = figure();
 % hold on
 % for num = 1:length(results_no_refine)

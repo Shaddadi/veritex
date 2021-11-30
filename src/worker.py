@@ -72,27 +72,19 @@ class Worker:
         # print('Worker '+str(self.worker_id)+' works: ', len(self.private_deque))
 
         # normal computation, depth-first computation
-        while not self.shared_state.work_done.is_set():
+        while (not self.shared_state.work_done.is_set()) and (not self.shared_state.work_interrupted.is_set()):
             while self.private_deque:
 
                 tuple_state = self.private_deque.popleft()
                 self.state_spawn_depth_first(tuple_state)
-                # if time.time() -t0 >= 60:
-                #     self.shared_state.work_done.set()
-                if self.shared_state.work_done.is_set():
+                if self.shared_state.work_interrupted.is_set():
                     self.shared_state.work_assign_ready.set()
                     break
 
-                if self.shared_state.work_steal_ready.is_set() and (not self.shared_state.steal_disabled.is_set()):
-                    if self.shared_state.workers_valid_status[self.worker_id] == 1:
-                        # #print('Worker ' + str(self.worker_id) + ' after workers_valid_status[self.worker_id] == 1')
-                        # #print('Worker ' + str(self.worker_id) + ' steal_ready flag: ',
-                        #       self.shared_state.work_steal_ready.is_set())
-                        # #print('Worker ' + str(self.worker_id) + ' steal_assign_ready flag: ',
-                        #       self.shared_state.steal_assign_ready.is_set())
-                        # #print('Worker ' + str(self.worker_id) + ' will be stolen')
-
-                        self.steal_from_this_worker()
+                elif (not self.shared_state.work_done.is_set()):
+                    if self.shared_state.work_steal_ready.is_set() and (not self.shared_state.steal_disabled.is_set()):
+                        if self.shared_state.workers_valid_status[self.worker_id] == 1:
+                            self.steal_from_this_worker()
 
                     # #print('Worker ' + str(self.worker_id) + ' skiped workers_valid_status[self.worker_id] == 1')
 
@@ -114,8 +106,11 @@ class Worker:
             self.shared_state.lock.release()
             #<<<<<<<<<<<<<<<<<<<<<<<<<<lock<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<#
             if sum(self.shared_state.workers_idle_status) == self.shared_state.num_workers:
-                self.shared_state.steal_assign_ready.set()
-                self.shared_state.work_done.set()
+                if self.shared_state.shared_queue_len == 0:
+                    self.shared_state.steal_assign_ready.set()
+                    self.shared_state.work_done.set()
+                    self.shared_state.all_idle_ready.set()
+                    break
 
             # print('Worker ' + str(self.worker_id) + ' is waiting for steal_assign_ready')
             self.shared_state.steal_assign_ready.wait()
@@ -128,25 +123,29 @@ class Worker:
                 # print('self.shared_state.workers_idle_status', sum(self.shared_state.workers_idle_status))
                 if self.shared_state.num_workers_need_assigned.value == sum(self.shared_state.workers_idle_status):  # steal work from other workers
                     self.shared_state.steal_assign_ready.clear()
-                    #print('shared_state.steal_assign_ready.clear()')
+                    # print('shared_state.steal_assign_redy.clear()')
                     self.shared_state.compute_steal_rate()
 
                     with self.shared_state.num_empty_assign.get_lock():
                         self.shared_state.num_empty_assign.value = 0
 
-                    self.shared_state.work_steal_ready.set()
                     if sum(self.shared_state.workers_idle_status) == self.shared_state.num_workers:
                         self.shared_state.work_done.set()
 
                     self.shared_state.all_idle_ready.set()
+                    if not self.shared_state.work_done.is_set():
+                        self.shared_state.work_steal_ready.set()
 
             # print('Worker ' + str(self.worker_id) + ' is waiting for all_idle_ready')
             self.shared_state.all_idle_ready.wait()
             # print('Worker ' + str(self.worker_id) + ' passed all_idle_ready')
-            if self.shared_state.work_done.is_set() or self.shared_state.steal_disabled.is_set():
+            if self.shared_state.work_done.is_set() or self.shared_state.steal_disabled.is_set() or self.shared_state.work_interrupted.is_set():
                 self.shared_state.steal_assign_ready.set()
                 self.shared_state.work_assign_ready.set()
+                # print('self.shared_state.shared_queue_len: ', self.shared_state.shared_queue_len.value)
                 break
+
+
             # print('Worker ' + str(self.worker_id) + ' is waiting for work_assign_ready')
             self.shared_state.work_assign_ready.wait()
             # print('Worker ' + str(self.worker_id) + ' passed work_assign_ready')
@@ -154,8 +153,9 @@ class Worker:
             # if self.shared_state.work_done.is_set() or self.shared_state.steal_disabled.is_set():
             #     self.shared_state.steal_assign_ready.set()
             #     break
-            if self.shared_state.work_done.is_set() or self.shared_state.steal_disabled.is_set():
-                break
+            # if self.shared_state.shared_queue_len == 0:
+            #     if self.shared_state.work_done.is_set() or self.shared_state.steal_disabled.is_set():
+            #         break
             self.asssign_to_this_worker()
 
         # print('Processor '+str(self.worker_id)+' Output: ', len(self.output_sets))
@@ -218,6 +218,7 @@ class Worker:
         if self.shared_state.works_to_assign_per_worker.value == 0 or self.shared_state.shared_queue_len == 0:
             with self.shared_state.num_empty_assign.get_lock():
                 self.shared_state.num_empty_assign.value += 1
+                self.shared_state.steal_assign_ready.set()
                 # print('Worker ' + str(self.worker_id) + ' empty assigned')
         else:
             with self.shared_state.assigned_works.get_lock():
@@ -292,13 +293,15 @@ class Worker:
                         self.shared_state.outputs_len.value += 1
                         self.shared_state.outputs.put([unsafe_input, unsafe_output])
                         if self.shared_state.outputs_len.value >= self.output_len:
-                            self.shared_state.work_done.set()
+                            #self.shared_state.work_done.set()
+                            self.shared_state.work_interrupted.set()
 
         elif self.dnn.config_verify:
             unsafe = self.dnn.verify(vfl)
             if unsafe:
                 self.shared_state.outputs.put(unsafe)
-                self.shared_state.work_done.set()
+                # self.shared_state.work_done.set()
+                self.shared_state.work_interrupted.set()
 
         elif self.dnn.config_unsafe_input and (not self.dnn.config_exact_output):
             unsafe_inputs = self.dnn.backtrack(vfl)
@@ -307,9 +310,11 @@ class Worker:
                 if unsafe_inputs:
                     self.shared_state.outputs.put(unsafe_inputs)
                 if self.shared_state.outputs_len.value >= self.output_len:
-                    self.shared_state.work_done.set()
+                    #self.shared_state.work_done.set()
+                    self.shared_state.work_interrupted.set()
 
         elif (not self.dnn.config_unsafe_input) and self.dnn.config_exact_output:
+            self.shared_state.outputs.put(vfl)
             with self.shared_state.outputs_len.get_lock():
                 self.shared_state.outputs_len.value += 1
                 self.shared_state.outputs.put(vfl)
@@ -318,6 +323,10 @@ class Worker:
             unsafe_inputs = self.dnn.backtrack(vfl)
             with self.shared_state.outputs_len.get_lock():
                 self.shared_state.outputs.put([unsafe_inputs, vfl])
+                self.shared_state.outputs_len.value += 1
+
+        elif self.dnn.config_linear_regions:
+            with self.shared_state.outputs_len.get_lock():
                 self.shared_state.outputs_len.value += 1
         else:
             raise ValueError('Reachability configuration error!')

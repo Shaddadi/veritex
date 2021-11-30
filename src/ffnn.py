@@ -12,9 +12,15 @@ import multiprocessing
 
 class FFNN:
 
-    def __init__(self, torch_model, verify=False, relu_linear=False, unsafe_inputs=False, exact_output=False, repair=False):
-        self.torch_model = torch_model
-        self.extract_weights()
+    def __init__(self, model, verify=False, relu_linear=False, unsafe_inputs=False, exact_output=False, repair=False, linear_regions=False):
+        if isinstance(model, torch.nn.Sequential):
+            self.torch_model = model
+            self.extract_weights()
+        else:
+            self._W = model[0]
+            self._b = model[1]
+            self._num_layer = len(self._W)
+
         self.unsafe_domains = None
 
         # configurations for reachability analysis
@@ -23,6 +29,7 @@ class FFNN:
         self.config_unsafe_input = unsafe_inputs
         self.config_exact_output = exact_output
         self.config_repair = repair
+        self.config_linear_regions = linear_regions
 
         # relu linearization does not support computation of unsafe input domains and exact output domains
         assert not(self.config_exact_output and self.config_relu_linear)
