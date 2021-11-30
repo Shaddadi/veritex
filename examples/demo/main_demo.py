@@ -16,7 +16,7 @@ if __name__ == "__main__":
     num_processors = mp.cpu_count()
     print('num_processors: ', num_processors)
     model = torch.load('nets/demo_model.pt')
-    dnn0 = FFNN(model, unsafe_inputs=True, exact_output=True)
+    dnn0 = FFNN(model, unsafe_inputs=False, exact_output=True)
 
     # nnet = FFNN(model, verify=True)
     # lbs = [-0.1, -0.1, -0.1]
@@ -31,8 +31,8 @@ if __name__ == "__main__":
     all_time = []
     for n in range(55):
         print('Instance: ', n)
-        lbs = [-10, -10, -10]
-        ubs = [10, 10, 10]
+        lbs = [-20, -20, -20]
+        ubs = [20, 20, 20]
         input_domain = [lbs, ubs]
         y1_lbs = -50 + n
         y1_ubs = -40 + n

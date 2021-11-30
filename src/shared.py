@@ -39,7 +39,7 @@ class SharedState: #
         self.num_workers_need_assigned = mp.Value('i', 0) # initial
         self.num_assigned_workers = mp.Value('i', 0) # should equal to num_workers_need_assigned
 
-        self.workers_valid_status = mp.Array('i',[1]*num_workers, lock=False)
+        self.workers_valid_status = mp.Array('i',[1]*num_workers)
         self.workers_idle_status = mp.Array('i', [0]*num_workers)
 
 
@@ -65,7 +65,7 @@ class SharedState: #
             self.work_steal_rate.value = self.num_workers_need_assigned.value / self.num_workers
 
 
-    def reset_after_assgin(self, worker_id):
+    def reset_after_assgin(self):
         if not self.work_done.is_set():
             assert self.initial_comput.value == 0
             assert not self.work_steal_ready.is_set()
