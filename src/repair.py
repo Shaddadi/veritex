@@ -64,6 +64,7 @@ class REPAIR:
         all_unsafe_data = []
         num_processors = mp.cpu_count()
         for n, prop in enumerate(self.properties):
+            print('Run one property')
             vfl_input = cp.deepcopy(prop.input_set)
             # from utils import split_bounds
             # from boxdomain import BoxDomain
@@ -251,7 +252,7 @@ class REPAIR:
 
 
 
-    def repair_model(self, optimizer, loss_fun, savepath, iters=100, batch_size=2000, epochs=200):
+    def repair_model(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=200, epochs=200):
         t0 = time.time()
         all_test_accuracy = []
         accuracy_old = 1.0
@@ -274,11 +275,12 @@ class REPAIR:
                 candidate_old = cp.deepcopy(self.torch_model)
                 accuracy_old = accuracy_new
                 all_test_accuracy.append(accuracy_new)
-
+                tt0 = time.time()
                 unsafe_data = self.compute_unsafety()
+                print('Time: ', time.time()-tt0)
                 if np.all([len(sub)==0 for sub in unsafe_data]):
                     print('The accurate and safe candidate model is found !')
-                    torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + "_safe.pt")
+                    # torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + "_safe.pt")
                     print('Running time: ', time.time()-t0)
                     print('\n\n')
                     sio.savemat(savepath + '/all_test_accuracy.mat',
@@ -288,15 +290,18 @@ class REPAIR:
                 if not np.all([len(sub)==0 for sub in unsafe_data]):
                     # original_Xs, corrected_Ys = self.correct_inputs(unsafe_data)
                     original_Xs, corrected_Ys = self.correct_unsafe_data(unsafe_data)
-
                     train_x = original_Xs
                     train_y = corrected_Ys
+                    # train_x = torch.cat((original_Xs, self.data.train_data[0]), dim=0)
+                    # train_y = torch.cat((corrected_Ys, self.data.train_data[1]), dim=0)
                 else:
                     train_x = self.data.train_data[0]
                     train_y = self.data.train_data[1]
 
-                training_dataset = TensorDataset(train_x.cuda(), train_y.cuda())
-                train_loader = DataLoader(training_dataset, batch_size, shuffle=True, num_workers=num_cores)
+                training_dataset_adv = TensorDataset(train_x.cuda(), train_y.cuda())
+                train_loader_adv = DataLoader(training_dataset_adv, batch_size, shuffle=True, num_workers=num_cores)
+                training_dataset_train = TensorDataset(self.data.train_data[0].cuda(), self.data.train_data[1].cuda())
+                train_loader_train = DataLoader(training_dataset_train, batch_size, shuffle=True, num_workers=num_cores)
 
             reset_flag = False
             print('Start adv training...')
@@ -307,13 +312,26 @@ class REPAIR:
                 print('\rEpoch :'+str(e), end='')
                 # print(e, end='\r')
                 # average_loss = 0
-                for batch_idx, (data, target) in enumerate(train_loader):
+                for batch_idx, data in enumerate(zip(train_loader_adv, train_loader_train)):
+                    datax, datay = data[0][0], data[0][1]
+                    datax_train, datay_train = data[1][0], data[1][1]
                     optimizer.zero_grad()
-                    predicts = self.torch_model(data)
-                    loss = loss_fun(target, predicts)
-                    # average_loss += loss.data
+
+                    predicts_adv = self.torch_model(datax)
+                    loss_adv = loss_fun(datay, predicts_adv)
+                    predicts_train = self.torch_model(datax_train)
+                    loss_train = loss_fun(datay_train, predicts_train)
+
+                    loss = alpha*loss_adv + beta*loss_train
                     loss.backward()
                     optimizer.step()
+                # for batch_idx, (data, target) in enumerate(train_loader_adv):
+                #     optimizer.zero_grad()
+                #     predicts = self.torch_model(data)
+                #     loss = loss_fun(target, predicts)
+                #     # average_loss += loss.data
+                #     loss.backward()
+                #     optimizer.step()
 
                 # print('Averaged loss :', average_loss/(batch_idx+1))
 
@@ -323,9 +341,9 @@ class REPAIR:
             xx = torch.any(diff!=0)
             print('\nThe adv training is done\n')
             print('Running time: ', time.time() - t0)
-            if num % 1 == 0:
+            # if num % 1 == 0:
                 # torch.save(candidate.state_dict(), savepath + "/acasxu_epoch" + str(num) + ".pt")
-                torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + ".pt")
+                # torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + ".pt")
 
 
 class DATA:
