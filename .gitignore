@@ -1,8 +1,7 @@
-
-# Compiled Python bytecode
+*.onnx
 *.py[cod]
-*
 # Log files
+*.pt
 *.log
 *.pkl
 # Package files
