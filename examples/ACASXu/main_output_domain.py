@@ -5,6 +5,7 @@ from scipy.io import loadmat
 from ffnn import FFNN
 from acasxu_properties import *
 import multiprocessing as mp
+from logs.nnet_file import NNet
 from worker import Worker
 from shared import SharedState
 from load_onnx import load_ffnn_onnx
@@ -22,16 +23,20 @@ if __name__ == "__main__":
     num_processors = multiprocessing.cpu_count()
     print('num_processors: ', num_processors)
 
-    item = repair_list[4]
+    item = repair_list[1]
     i, j = item[0][0], item[0][1]
-    # properties = item[1][1:]
-    properties = [item[1][1]]
+    # properties = [item[1][1]]
+    properties = [item[1][indx] for indx in range(2,4)]
     t0 = time.time()
     for iter in range(1):
-        # nn_path = "logs/nnet12_lr2e-05_epochs200/acasxu_epoch" + str(iter) + ".pt"
-        # torch_model = torch.load(nn_path)
-        nn_path = "nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
-        torch_model = load_ffnn_onnx(nn_path)
+        nn_path = "logs/logs_lr0.001_epochs200/nnet21_lr0.001_epochs200/acasxu_epoch24_safe.pt"
+        torch_model = torch.load(nn_path)
+        # nn_path = "logs/art_test_goal_safety/repaired_network_21_safe.nnet"
+        # model = NNet(nn_path)
+        # biases = [np.array([bia]).T for bia in model.biases]
+        # torch_model = [model.weights, biases]
+        # nn_path = "nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
+        # torch_model = load_ffnn_onnx(nn_path)
 
         all_out_sets = []
         all_out_unsafe_sets = []
@@ -39,8 +44,8 @@ if __name__ == "__main__":
             dnn0 = FFNN(torch_model, unsafe_inputs=True, exact_output=True)
 
             results = []
-            vfl_input = cp.deepcopy(prop.input_set)
-            dnn0.unsafe_domains = prop.unsafe_domains
+            vfl_input = cp.deepcopy(prop[0].input_set)
+            dnn0.unsafe_domains = prop[0].unsafe_domains
 
             processes = []
             shared_state = SharedState([vfl_input], num_processors)
@@ -73,7 +78,7 @@ if __name__ == "__main__":
 
 
         # savemat('logs/nnet12_lr2e-05_epochs200/outputs_sets_p2'+str(iter)+'.mat', {'all_out_sets': all_out_sets, 'all_out_unsafe_sets': all_out_unsafe_sets})
-        savemat('logs/nnet16/outputs_sets_p2' + str(iter) + '.mat',
+        savemat('logs/nnet21/outputs_sets_p34_our.mat',
                 {'all_out_sets': all_out_sets, 'all_out_unsafe_sets': all_out_unsafe_sets})
 
     print('Time: ', time.time() - t0)

@@ -31,8 +31,10 @@ if __name__ == "__main__":
     all_time = []
     for n in range(55):
         print('Instance: ', n)
-        lbs = [-20, -20, -20]
-        ubs = [20, 20, 20]
+        # lbs = [-20, -20, -20]
+        # ubs = [20, 20, 20]
+        lbs = [-1, -1, -1]
+        ubs = [1, 1, 1]
         input_domain = [lbs, ubs]
         y1_lbs = -50 + n
         y1_ubs = -40 + n
