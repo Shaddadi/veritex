@@ -1,7 +1,4 @@
 import onnx
-import onnxruntime as ort
-from onnx import numpy_helper
-import gzip
 import torch
 from torch import nn
 import onnx2pytorch  # pip install onnx2pytorch

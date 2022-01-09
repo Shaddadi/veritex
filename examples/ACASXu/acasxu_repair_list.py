@@ -1,4 +1,3 @@
-import torch
 
 from acasxu_properties import *
 

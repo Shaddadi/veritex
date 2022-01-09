@@ -1,5 +1,4 @@
 import time
-
 from ffnn import FFNN
 import torch
 import numpy as np
@@ -10,9 +9,6 @@ from worker import Worker
 from shared import SharedState
 import scipy.io as sio
 import torch.optim as optim
-import torch.nn as nn
-import pickle
-import sys
 num_cores = 0 #mp.cpu_count()
 
 

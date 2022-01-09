@@ -3,10 +3,6 @@ import copy as cp
 from vzono import VzonoFFNN as Vzono
 import torch
 from utils import split_bounds, split_bounds_vset
-from itertools import product
-from scipy.optimize import linprog
-from collections import deque
-import multiprocessing
 
 
 

@@ -4,11 +4,8 @@ import nnet
 import cubelattice as cl
 import multiprocessing
 from functools import partial
-from scipy.linalg import null_space
-import copy as cp
 import torch
 import numpy as np
-import random
 import psutil
 
 def compute_unsafety(model, datax, over_app=False):

@@ -1,7 +1,6 @@
 import sys
 import copy as cp
 import numpy as np
-import collections as cln
 
 class FacetVertex:
     def __init__(self, fmatrix:np.ndarray, vertices:np.ndarray, dim: int, M:np.ndarray, b:np.ndarray):

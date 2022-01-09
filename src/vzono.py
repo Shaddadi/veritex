@@ -2,7 +2,6 @@
 import torch
 import numpy as np
 import time
-# import spconv
 
 class VzonoAdap: # adaptive over approximation
     def __init__(self, base_vertices, matrix_A, vector_v):

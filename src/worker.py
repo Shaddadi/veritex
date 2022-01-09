@@ -1,11 +1,8 @@
 
-import random
-import sys
 import time
 import numpy as np
-import copy as cp
 from collections import deque
-import itertools
+
 
 idle_workers = 1
 class Worker:

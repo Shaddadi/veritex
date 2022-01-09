@@ -3,10 +3,6 @@ import sys
 import numpy as np
 import copy as cp
 from vzono import Vzono
-from itertools import product
-from scipy.optimize import linprog
-from collections import deque
-import multiprocessing
 import os
 
 

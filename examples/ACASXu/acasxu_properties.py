@@ -1,8 +1,6 @@
 import sys
 sys.path.insert(0, '../../src')
 import torch
-from scipy.io import loadmat
-import numpy as np
 from sfproperty import Property
 
 
