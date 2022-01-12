@@ -4,7 +4,7 @@
 ```bash
 git clone https://github.com/Shaddadi/veritex.git
 ```
-3. Build the image for the dockerfile
+3. Build the image from the dockerfile
 ```bash
 sudo docker build . -t veritex_image
 ```
