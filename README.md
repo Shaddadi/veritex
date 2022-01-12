@@ -2,5 +2,6 @@
 
 
 <figure>
-    <img src="examples/Demo/reach_analysis.gif" style="width:70%"> <figcaption>Vertical view of a generic example of the ACAS Xu benchmark set</figcaption>
+    <img src="examples/Demo/reach_analysis.gif" style="width:70%"> 
+    <figcaption>Demo for our reachability analysis algorithms</figcaption>
 </figure>
