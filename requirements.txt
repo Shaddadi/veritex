@@ -4,4 +4,4 @@ scipy==1.7.2
 onnx==1.10.2
 onnx2pytorch==0.4.1
 diffabs==0.1
-
+matplotlib==3.5.1

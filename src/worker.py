@@ -314,7 +314,7 @@ class Worker:
                     self.shared_state.outputs.put(unsafe)
                     self.shared_state.work_interrupted.set()
 
-        elif self.dnn.config_unsafe_input and (not self.dnn.config_exact_output):
+        elif self.dnn.config_unsafe_in_dom and (not self.dnn.config_exact_out_dom):
             unsafe_inputs = self.dnn.backtrack(vfl)
             with self.shared_state.outputs_len.get_lock():
                 if not self.shared_state.work_interrupted.is_set():
@@ -324,19 +324,15 @@ class Worker:
                         if self.shared_state.outputs_len.value >= self.output_len:
                             self.shared_state.work_interrupted.set()
 
-        elif (not self.dnn.config_unsafe_input) and self.dnn.config_exact_output:
+        elif (not self.dnn.config_unsafe_in_dom) and self.dnn.config_exact_out_dom:
             with self.shared_state.outputs_len.get_lock():
                 self.shared_state.outputs_len.value += 1
                 self.shared_state.outputs.put(vfl)
 
-        elif self.dnn.config_unsafe_input and self.dnn.config_exact_output:
+        elif self.dnn.config_unsafe_in_dom and self.dnn.config_exact_out_dom:
             unsafe_inputs = self.dnn.backtrack(vfl)
             with self.shared_state.outputs_len.get_lock():
                 self.shared_state.outputs.put([unsafe_inputs, vfl])
-                self.shared_state.outputs_len.value += 1
-
-        elif self.dnn.config_linear_regions:
-            with self.shared_state.outputs_len.get_lock():
                 self.shared_state.outputs_len.value += 1
         else:
             raise ValueError('Reachability configuration error!')

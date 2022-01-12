@@ -2,13 +2,12 @@ import numpy as np
 import copy as cp
 from vzono import VzonoFFNN as Vzono
 import torch
-from utils import split_bounds, split_bounds_vset
 
 
 
 class FFNN:
 
-    def __init__(self, model, verify=False, relu_linear=False, unsafe_inputs=False, exact_output=False, repair=False, linear_regions=False):
+    def __init__(self, model, verify=False, relu_linear=False, unsafe_in_dom=False, exact_out_dom=False, repair=False):
         if isinstance(model, torch.nn.Sequential):
             self.torch_model = model
             self.extract_weights()
@@ -21,15 +20,14 @@ class FFNN:
 
         # configurations for reachability analysis
         self.config_verify = verify
-        self.config_relu_linear = relu_linear
-        self.config_unsafe_input = unsafe_inputs
-        self.config_exact_output = exact_output
+        self.config_relu_linear = relu_linear # relu linearization for over approximation
+        self.config_unsafe_in_dom = unsafe_in_dom
+        self.config_exact_out_dom = exact_out_dom
         self.config_repair = repair
-        self.config_linear_regions = linear_regions
 
         # relu linearization does not support computation of unsafe input domains and exact output domains
-        assert not(self.config_exact_output and self.config_relu_linear)
-        assert not (self.config_unsafe_input and self.config_relu_linear)
+        assert not(self.config_exact_out_dom and self.config_relu_linear)
+        assert not (self.config_unsafe_in_dom and self.config_relu_linear)
 
 
     def extract_weights(self):
@@ -99,26 +97,6 @@ class FFNN:
             return vfls
 
 
-    def split_verify_vzono_depth_first(self, input_set, depth=0, max_depth=2):
-        if depth == max_depth:
-            print('False')
-            return [False] # unknown
-
-        input_vzono = input_set[0]
-        output_vzono = self.reach_over_app_nontuple(input_vzono)
-        if self.verify_vzono(output_vzono):
-            return [] # safe
-
-        lbs, ubs = input_set[1]
-        subsets = split_bounds(lbs, ubs, num=1)
-        all_results = []
-        for sub in subsets:
-            all_results.extend(self.split_verify_vzono_depth_first(sub, depth=depth+1, max_depth=max_depth))
-
-        return all_results
-
-
-
     def relu_layer_linear_relax(self, vzono_set):
         neurons_neg_pos, neurons_neg = self.get_valid_neurons_for_over_app(vzono_set)
         vzono_set.base_vertices[neurons_neg,:] = 0
@@ -172,25 +150,6 @@ class FFNN:
         return over_app_set
 
 
-    def split_verify_vset_depth_first(self, input_set, depth=0, max_depth=10):
-        if depth == max_depth:
-            print('False')
-            return [False] # unknown
-
-        input_vzono = input_set[0]
-        output_vzono = self.reach_over_app_vset(input_vzono)
-        if self.verify_vzono(output_vzono):
-            return [] # safe
-
-        lbs, ubs = input_set[1]
-        subsets = split_bounds(lbs, ubs, num=1)
-        all_results = []
-        for sub in subsets:
-            all_results.extend(self.split_verify_vset_depth_first(sub, depth=depth+1, max_depth=max_depth))
-
-        return all_results
-
-
     def reach_over_app_vset(self, vzono_set):
         for n in range(self._num_layer):
             vzono_set = self.single_layer_over_app_vset(vzono_set, n)
@@ -221,11 +180,6 @@ class FFNN:
         new_base_vectors = np.diag((ubs[:,0]-lbs[:,0])/2)
         new_vzono_set = Vzono(new_base_vertices, new_base_vectors)
         return new_vzono_set
-
-
-
-
-
 
 
     def reach_over_app_nontuple(self, vzono_set):

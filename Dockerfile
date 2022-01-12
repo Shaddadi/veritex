@@ -7,8 +7,9 @@
 # docker run -it veritex_image bash
 
 FROM python:3.7
-# FROM mathworks/matlab:r2020b
-FROM mathworks/matlab-deps:r2020b
+
+# set user
+USER root
 
 # set working directory
 WORKDIR /veritex
@@ -30,3 +31,6 @@ ENV OMP_NUM_THREADS=1
 
 # copy files to docker
 COPY . .
+
+# # set user
+# USER 1001
