@@ -4,30 +4,30 @@
 ```bash
 git clone https://github.com/Shaddadi/veritex.git
 ```
-3. Build the image from the dockerfile
+2. Build the image from the dockerfile
 ```bash
 sudo docker build . -t veritex_image
 ```
-4. Create the docker container
+3. Create the docker container
 ```bash
 sudo docker run --rm -it veritex_image bash
 ```
-5. Run the demo in the container. Results will be saved in /images.
+4. Run the demo in the container. Results will be saved in /images.
 ```bash
 cd examples/Demo
 python main_demo.py
 ````
-6. Run the verification of ACAS Xu neural networks. Info will be logged
+5. Run the verification of ACAS Xu neural networks. Info will be logged
 ```bash
 cd examples/ACASXu/verify
 ./verify_all_instances.sh
 ```
-7. Run the repair of the unsafe ACAS Xu neural networks. Repaired networks will be saved in /logs and the info will be logged.
+6. Run the repair of the unsafe ACAS Xu neural networks. Repaired networks will be saved in /logs and the info will be logged.
 ```bash
 cd examples/ACASXu/repair
 python main_repair_nnets.py
 ```
-8. Visualize the output reachable domain 
+7. Visualize the output reachable domain 
 ```bash 
 cd examples/ACASXu/repair
 python main_reachable_domain.py --property x --dims x x --network_path 'xxx'
