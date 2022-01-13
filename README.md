@@ -27,6 +27,15 @@ cd examples/ACASXu/verify
 cd examples/ACASXu/repair
 python main_repair_nnets.py
 ```
+10. Visualize the output reachable domain 
+```bash main_reachable_domain.py --property x --dims x x --network_path 'xxx'
+cd examples/ACASXu/repair
+python
+```
+Example
+```bash
+python main_reachable_domain.py --property 3 --dims 0 1 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
+```
 ## To DO...
 ## Demo for Our Reachability Analysis Algorithm
 <figure>
