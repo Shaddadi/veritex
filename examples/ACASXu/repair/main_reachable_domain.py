@@ -63,24 +63,27 @@ if __name__ == "__main__":
     for item in results:
         if item[0]: unsafe_sets.extend(item[0])
 
-    ax = plt.gca()
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
     for item in output_sets:
         out_vertices = np.dot(item.vertices, item.M.T) + item.b.T
         xx = out_vertices[:, [dim0, dim1]]
-        plot_polytope2d(out_vertices[:,[dim0,dim1]], ax, color='b',alpha=1.0, edgecolor='k',linewidth=0.0,)
+        plot_polytope2d(out_vertices[:,[dim0,dim1]], ax, color='b',alpha=1.0, edgecolor='k',linewidth=0.0)
 
     all_output_unsafe_sets = []
     for item in unsafe_sets:
         out_unsafe_vertices = np.dot(item.vertices, item.M.T) + item.b.T
-        plot_polytope2d(out_unsafe_vertices[:,[dim0,dim1]], ax, color='r', alpha=1.0, edgecolor='k', linewidth=0.0, )
+        plot_polytope2d(out_unsafe_vertices[:,[dim0,dim1]], ax, color='r', alpha=1.0, edgecolor='k', linewidth=0.0)
 
     ax.autoscale()
     ax.set_xlabel('$y_'+str(dim0+1)+'$', fontsize=15)
     ax.set_ylabel('$y_'+str(dim1+1)+'$', fontsize=15)
-    ax.title.set_text('Exact output reachable domain (blue) & Unsafe domain (red) on'+' Property '+args.property)
+    plt.title('Exact output reachable domain (blue) & Unsafe domain (red) on'+' Property '+args.property, fontsize=18)
     if not os.path.exists('images'):
         os.mkdir('images')
-    plt.savefig('images/reachable_domain_'+'property_'+args.property+'_dims'+str(dim0+1)+'_'+str(dim1+1)+'.png')
+
+    plt.savefig('images/reachable_domain_'+'property_'+args.property+'_dims'+str(dim0+1)+'_'+str(dim1+1)+'.png',bbox_inches='tight')
+    plt.close()
 
 
 
