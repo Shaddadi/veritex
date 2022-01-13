@@ -37,14 +37,14 @@ python main_reachable_domain.py --property x --dims x x --network_path 'xxx'
 python main_reachable_domain.py --property 3 --dims 0 1 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
 ```
 <figure>
-    <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims1_2.png" style="width:55%"> 
+    <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_1.png" style="width:55%"> 
     <figcaption></figcaption>
 </figure>
 
 ## To DO...
 ## Demo for Our Reachability Analysis Algorithm
 <figure>
-    <img src="examples/Demo/reach_analysis.gif" style="width:70%"> 
+    <img src="examples/Demo/reach_demo.gif" style="width:70%"> 
     <figcaption>Figure: Demo for our reachability analysis algorithms. The network consists of 3 inputs, 2 outputs and 8 layers with each having 7 neurons. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.</figcaption>
 </figure>
 
