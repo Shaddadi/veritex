@@ -17,11 +17,13 @@ sudo docker run --rm -it veritex_image bash
 cd examples/Demo
 python main_demo.py
 ````
+
 8. Run the verification of ACAS Xu neural networks. Info will be logged
 ```bash
 cd examples/ACASXu/verify
 ./verify_all_instances.sh
 ```
+
 9. Run the repair of the unsafe ACAS Xu neural networks. Repaired networks will be saved in /logs and the info will be logged.
 ```bash
 cd examples/ACASXu/repair
