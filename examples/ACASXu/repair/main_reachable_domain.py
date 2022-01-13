@@ -76,8 +76,8 @@ if __name__ == "__main__":
         plot_polytope2d(out_unsafe_vertices[:,[dim0,dim1]], ax, color='r', alpha=1.0, edgecolor='k', linewidth=0.0)
 
     ax.autoscale()
-    ax.set_xlabel('$y_'+str(dim0)+'$', fontsize=15)
-    ax.set_ylabel('$y_'+str(dim1)+'$', fontsize=15)
+    ax.set_xlabel('$y_'+str(dim0)+'$', fontsize=18)
+    ax.set_ylabel('$y_'+str(dim1)+'$', fontsize=18)
     plt.title('Exact output reachable domain (blue) & Unsafe domain (red) on'+' Property '+args.property, fontsize=18, pad=20)
     if not os.path.exists('images'):
         os.mkdir('images')
