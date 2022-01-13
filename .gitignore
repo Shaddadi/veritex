@@ -1,6 +1,7 @@
 /tbxmanager
 /__pycache__
 *.onnx
+*.png
 *.py[cod]
 # Log files
 *.pt
