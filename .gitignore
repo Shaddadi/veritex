@@ -1,5 +1,7 @@
 /tbxmanager
 /__pycache__
+logs/
+.png
 *.onnx
 *.py[cod]
 # Log files
@@ -11,4 +13,3 @@
 # JetBrains IDE
 .idea/
 
-logs/
