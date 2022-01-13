@@ -31,7 +31,7 @@ python main_repair_nnets.py
 ```bash 
 cd examples/ACASXu/repair
 python main_reachable_domain.py --property x --dims x x --network_path 'xxx'
-'Example': 
+*Example* 
 python main_reachable_domain.py --property 3 --dims 0 1 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
 ```
 ## To DO...
