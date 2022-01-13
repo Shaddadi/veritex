@@ -34,6 +34,11 @@ python main_reachable_domain.py --property x --dims x x --network_path 'xxx'
 Example: 
 python main_reachable_domain.py --property 3 --dims 0 1 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
 ```
+<figure>
+    <img src="examples/ACASXu/repair/reachable_domain_property_3_dims1_2.png" style="width:70%"> 
+    <figcaption></figcaption>
+</figure>
+
 ## To DO...
 ## Demo for Our Reachability Analysis Algorithm
 <figure>
