@@ -38,6 +38,7 @@ python main_reachable_domain.py --property 3 --dims 0 1 --network_path '../nets/
 ```
 <figure>
     <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_1.png" style="width:55%"> 
+    <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_1.png" style="width:55%"> 
     <figcaption></figcaption>
 </figure>
 
