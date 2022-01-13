@@ -37,8 +37,8 @@ python main_reachable_domain.py --property x --dims x x --network_path 'xxx'
 python main_reachable_domain.py --property 3 --dims 0 1 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
 ```
 <figure>
-    <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_1.png" style="width:45%"> 
-    <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_1.png" style="width:45%"> 
+    <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_1.png" style="width:25%"> 
+    <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_1.png" style="width:25%"> 
 </figure>
 
 ## To DO...
