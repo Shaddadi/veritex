@@ -78,7 +78,7 @@ if __name__ == "__main__":
     ax.autoscale()
     ax.set_xlabel('$y_'+str(dim0)+'$', fontsize=15)
     ax.set_ylabel('$y_'+str(dim1)+'$', fontsize=15)
-    plt.title('Exact output reachable domain (blue) & Unsafe domain (red) on'+' Property '+args.property, fontsize=18)
+    plt.title('Exact output reachable domain (blue) & Unsafe domain (red) on'+' Property '+args.property, fontsize=18, pad=20)
     if not os.path.exists('images'):
         os.mkdir('images')
 
