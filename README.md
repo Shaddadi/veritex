@@ -12,24 +12,22 @@ sudo docker build . -t veritex_image
 ```bash
 sudo docker run --rm -it veritex_image bash
 ```
-6. Run the demo in the container. Results will be saved in /images.
+5. Run the demo in the container. Results will be saved in /images.
 ```bash
 cd examples/Demo
 python main_demo.py
 ````
-
-8. Run the verification of ACAS Xu neural networks. Info will be logged
+6. Run the verification of ACAS Xu neural networks. Info will be logged
 ```bash
 cd examples/ACASXu/verify
 ./verify_all_instances.sh
 ```
-
-9. Run the repair of the unsafe ACAS Xu neural networks. Repaired networks will be saved in /logs and the info will be logged.
+7. Run the repair of the unsafe ACAS Xu neural networks. Repaired networks will be saved in /logs and the info will be logged.
 ```bash
 cd examples/ACASXu/repair
 python main_repair_nnets.py
 ```
-10. Visualize the output reachable domain 
+8. Visualize the output reachable domain 
 ```bash 
 cd examples/ACASXu/repair
 python main_reachable_domain.py --property x --dims x x --network_path 'xxx'
