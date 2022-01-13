@@ -214,3 +214,8 @@ for nn in [1,2,3,4]:
     unsafe_domains.append([A_unsafe, d_unsafe])
 
 property10 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
+
+all_properties = {'property1': property1, 'property2': property2, 'property3': property3,
+                  'property4': property4, 'property5': property5, 'property6.1': property6_1,
+                  'property6.2': property6_2, 'property7': property7, 'property8': property8,
+                  'property9': property9, 'property10': property10}
