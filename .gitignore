@@ -4,7 +4,6 @@ logs/
 *.onnx
 *.py[cod]
 # Log files
-*.pt
 *.log
 *.pkl
 # Package files
