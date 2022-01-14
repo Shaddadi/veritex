@@ -2,6 +2,7 @@
 /__pycache__
 logs/
 *.onnx
+*.pt
 *.py[cod]
 # Log files
 *.log
