@@ -1,6 +1,8 @@
 # Tool for Reachability Analysis and Repair of Neural Networks
 
-## Run with Docker
+## Usage
+
+### Docker setup
 
 1. Clone this repository to your local machine.
 
@@ -20,12 +22,16 @@
     sudo docker run --rm -it veritex_image bash
     ```
 
-1. Run the demo in the container. Results will be saved in /images.
+### Run demo
 
-    ```bash
-    cd examples/Demo
-    python main_demo.py
-    ````
+Run the demo in the container. Results will be saved in /images.
+
+```bash
+cd examples/Demo
+python main_demo.py
+````
+
+### ACAS experiments
 
 1. Run the verification of ACAS Xu neural networks. Info will be logged
 
@@ -41,25 +47,25 @@
     python main_repair_nnets.py
     ```
 
-1. Visualize the output reachable domain
+### Visulaization
 
-    ```bash
-    cd examples/ACASXu/repair
-    python main_reachable_domain.py --property x --dims x x --network_path 'xxx'
-    ```
+Visualize the output reachable domain
 
-    Example:
+```bash
+cd examples/ACASXu/repair
+python main_reachable_domain.py --property x --dims x x --network_path 'xxx'
+```
 
-    ```bash
-    python main_reachable_domain.py --property 3 --dims 0 1 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
-    python main_reachable_domain.py --property 3 --dims 0 2 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
-    ```
+Example:
 
-    <figure>
-        <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_1.png" style="width:50%"> <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_2.png" style="width:50%">
-    </figure>
+```bash
+python main_reachable_domain.py --property 3 --dims 0 1 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
+python main_reachable_domain.py --property 3 --dims 0 2 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
+```
 
-## To DO
+<figure>
+    <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_1.png" style="width:50%"> <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_2.png" style="width:50%">
+</figure>
 
 ## Demo for Our Reachability Analysis Algorithm
 
@@ -67,3 +73,5 @@
     <img src="examples/Demo/reach_demo.gif" style="width:70%">
     <figcaption>Figure: Demo for our reachability analysis algorithms. The network consists of 3 inputs, 2 outputs and 8 layers with each having 7 neurons. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.</figcaption>
 </figure>
+
+## TODO
