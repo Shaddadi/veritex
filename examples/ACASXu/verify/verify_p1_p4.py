@@ -21,7 +21,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     Log_Format = logging.Formatter('%(levelname)s %(asctime)s - %(message)s')
     logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler('verify_p1_p4.log')
+    file_handler = logging.FileHandler('verify_p1_p4.log', 'w+')
     file_handler.setFormatter(Log_Format)
     logger.addHandler(file_handler)
     console_handler = logging.StreamHandler()
