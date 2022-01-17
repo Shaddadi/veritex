@@ -16,6 +16,16 @@ import logging
 if __name__ == "__main__":
     all_times = []
     all_results = []
+    # Creating and Configuring Logger
+    logger = logging.getLogger()
+    Log_Format = logging.Formatter('%(levelname)s %(asctime)s - %(message)s')
+    logger.setLevel(logging.INFO)
+    file_handler = logging.FileHandler('verify_p6.log')
+    file_handler.setFormatter(Log_Format)
+    logger.addHandler(file_handler)
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(Log_Format)
+    logger.addHandler(console_handler)
 
     num_processors = multiprocessing.cpu_count()
     print('num_processors: ', num_processors)
@@ -52,8 +62,8 @@ if __name__ == "__main__":
         all_times.append(time.time()-t0)
         all_results.append(unsafe)
 
-    with open('verification_p6.pkl', 'wb') as f:
-        pickle.dump([all_times, all_results], f)
+    # with open('verification_p6.pkl', 'wb') as f:
+    #     pickle.dump([all_times, all_results], f)
 
 
 
