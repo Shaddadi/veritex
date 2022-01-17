@@ -12,6 +12,8 @@ import multiprocessing
 import time
 import pickle
 import logging
+import pickle
+
 
 if __name__ == "__main__":
     all_times = []
@@ -62,8 +64,8 @@ if __name__ == "__main__":
         all_times.append(time.time()-t0)
         all_results.append(unsafe)
 
-    # with open('verification_p6.pkl', 'wb') as f:
-    #     pickle.dump([all_times, all_results], f)
+    with open('verification_p6.pkl', 'wb') as f:
+        pickle.dump([all_times, all_results], f)
 
 
 

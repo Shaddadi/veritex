@@ -32,7 +32,6 @@ if __name__ == "__main__":
     num_processors = multiprocessing.cpu_count()
     print('num_processors: ', num_processors)
     properties = [property7]
-    # for th in np.arange(500,2000,100):
     for n, prop in enumerate(properties):
         i, j = 1, 9
         nn_path = "../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
@@ -47,7 +46,6 @@ if __name__ == "__main__":
         processes = []
         shared_state = SharedState([vfl_input], num_processors)
         one_worker = Worker(dnn0)
-        # one_worker.inital_num = th
         for index in range(num_processors):
             p = mp.Process(target=one_worker.main_func, args=(index, shared_state))
             processes.append(p)
@@ -66,8 +64,8 @@ if __name__ == "__main__":
         all_times.append(time.time()-t0)
         all_results.append(unsafe)
 
-    # with open('verification_p7.pkl', 'wb') as f:
-    #     pickle.dump([all_times, all_results], f)
+    with open('verification_p7.pkl', 'wb') as f:
+        pickle.dump([all_times, all_results], f)
 
 
 

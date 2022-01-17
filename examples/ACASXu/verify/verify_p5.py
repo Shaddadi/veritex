@@ -10,6 +10,7 @@ from load_onnx import load_ffnn_onnx
 import multiprocessing
 import time
 import logging
+import pickle
 
 
 if __name__ == "__main__":
@@ -62,8 +63,8 @@ if __name__ == "__main__":
         all_times.append(time.time()-t0)
         all_results.append(unsafe)
 
-    # with open('verification_p5.pkl', 'wb') as f:
-    #     pickle.dump([all_times, all_results], f)
+    with open('verification_p5.pkl', 'wb') as f:
+        pickle.dump([all_times, all_results], f)
 
 
 
