@@ -24,7 +24,7 @@ if __name__ == '__main__':
     logger.addHandler(console_handler)
 
     num_processors = multiprocessing.cpu_count()
-    for n in range(1,len(repair_list)):
+    for n in range(len(repair_list)):
         lr = 0.001
         epochs = 200
         alpha, beta = 1.0, 0.0
