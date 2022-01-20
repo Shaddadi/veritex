@@ -3,13 +3,12 @@ import sys
 sys.path.insert(0, '../../../src')
 import copy as cp
 from ffnn import FFNN
-from acasxu_properties import *
+from agent_properties import *
 from plot_poly import plot_polytope2d
 import multiprocessing as mp
 from worker import Worker
 from shared import SharedState
 from load_onnx import load_ffnn_onnx
-from nnet_file import NNet
 import matplotlib.pyplot as plt
 import numpy as np
 import multiprocessing
@@ -19,11 +18,11 @@ import argparse
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Verification Settings')
-    parser.add_argument('--property', type=str, required=False, help='It supports 1,2,3,4,5,6,7,8,9,10')
+    parser.add_argument('--property', type=str, required=False, help='It supports 0, 1')
     parser.add_argument('--network_path', type=str, required=False)
-    parser.add_argument('--dims', nargs='+', type=int, default=(0, 1))
+    parser.add_argument('--dims',  nargs='+', type=int, default=(0,1))
     args = parser.parse_args()
-    args.property = '3,4'
+    args.property = '0, 1'
     prop_indx = np.fromstring(args.property, dtype=int, sep=',')
     props = []
     for n in prop_indx:
@@ -31,26 +30,21 @@ if __name__ == "__main__":
         assert prop_name in all_properties
         props.append(all_properties[prop_name])
     assert props
-    network_path = '../nets/ACASXU_run2a_2_1_batch_2000.onnx' #args.network_path
-    # network_path = 'logs/acasxu_epoch24_safe.pt'
-    # network_path = "logs/art_repaired_network_21_safe.nnet"
-    dim0, dim1 = (0, 1)  # tuple(args.dims)
+    # network_path = '../nets/unsafe_agent0.pt' #args.network_path
+    network_path = 'logs/agent2_lr1e-06_epochs50_alpha1.0_beta0.0/epoch6.pt'
+    dim0, dim1 = (0,1) #tuple(args.dims)
 
     try:
-        if network_path[-4:] == 'onnx':
+        if network_path[-4:]=='onnx':
             torch_model = load_ffnn_onnx(network_path)
-        elif network_path[-2:] == 'pt':
+        elif network_path[-2:]=='pt':
             torch_model = torch.load(network_path)
-        elif network_path[-4:] == 'nnet':
-            model = NNet(network_path)
-            biases = [np.array([bia]).T for bia in model.biases]
-            torch_model = [model.weights, biases]
         else:
             torch_model = None
     except:
         sys.exit('Network file is not found!')
 
-    fig = plt.figure(figsize=(2.0, 2.67))
+    fig = plt.figure(figsize=(2, 2.67))
     ax = fig.add_subplot(111)
     dnn0 = FFNN(torch_model, unsafe_in_dom=True, exact_out_dom=True)
     for prop in props:
@@ -80,24 +74,21 @@ if __name__ == "__main__":
 
         for item in output_sets:
             out_vertices = np.dot(item.vertices, item.M.T) + item.b.T
-            plot_polytope2d(out_vertices[:, [dim0, dim1]], ax, color='b', alpha=1.0, edgecolor='k', linewidth=0.0)
+            plot_polytope2d(out_vertices[:,[dim0,dim1]], ax, color='b',alpha=1.0, edgecolor='k',linewidth=0.0)
 
         all_output_unsafe_sets = []
         for item in unsafe_sets:
             out_unsafe_vertices = np.dot(item.vertices, item.M.T) + item.b.T
-            plot_polytope2d(out_unsafe_vertices[:, [dim0, dim1]], ax, color='r', alpha=1.0, edgecolor='k',
-                            linewidth=0.0)
+            plot_polytope2d(out_unsafe_vertices[:,[dim0,dim1]], ax, color='r', alpha=1.0, edgecolor='k', linewidth=0.0)
 
     ax.autoscale()
-    ax.set_xlabel('$y_' + str(dim0) + '$', fontsize=16)
-    ax.set_ylabel('$y_' + str(dim1) + '$', fontsize=16)
+    ax.set_xlabel('$y_'+str(dim0)+'$', fontsize=16)
+    ax.set_ylabel('$y_'+str(dim1)+'$', fontsize=16)
     # plt.title('Exact output reachable domain (blue) & Unsafe domain (red) on'+' Property '+args.property, fontsize=18, pad=20)
     if not os.path.exists('images'):
         os.mkdir('images')
 
-    plt.savefig(
-        'images/reachable_domain_' + 'property_' + args.property + '_dims' + str(dim0) + '_' + str(dim1) + '.png',
-        bbox_inches='tight')
+    plt.savefig('images/reachable_domain_'+'property_'+args.property+'_dims'+str(dim0)+'_'+str(dim1)+'.png',bbox_inches='tight')
     plt.close()
 
 

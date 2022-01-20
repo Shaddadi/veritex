@@ -1,6 +1,7 @@
 /tbxmanager
 /__pycache__
 logs/
+venv/
 *.onnx
 *.pt
 *.py[cod]

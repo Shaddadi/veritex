@@ -121,10 +121,20 @@ class REPAIR:
         return original_Xs, corrected_Ys
 
 
+    def compute_deviation(self, model):
+        model.eval()
+        with torch.no_grad():
+            predicts = model(self.data.test_data[0]) # The minimum is the predication
+        actl_ys = self.data.test_data[1]
+        rls = torch.sqrt(torch.sum(torch.square(predicts-actl_ys)))/ torch.sqrt(torch.sum(torch.square(actl_ys)))
+        logging.info(f'Output deviation on the test data: {rls :.2f} ')
+        return rls
+
 
     def compute_accuracy(self, model):
         model.eval()
-        predicts = model(self.data.test_data[0]) * (-1)  # The minimum is the predication
+        with torch.no_grad():
+            predicts = model(self.data.test_data[0]) * (-1)  # The minimum is the predication
         pred_actions = torch.argmax(predicts, dim=1)
         actl_actions = torch.argmax(self.data.test_data[1] * (-1), dim=1)
         actions_times = torch.tensor([len(torch.nonzero(actl_actions==n)[:,0]) for n in range(predicts.shape[1])])
@@ -134,8 +144,60 @@ class REPAIR:
         return accuracy
 
 
+    def repair_model_regular(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=200, epochs=200):
+        t0 = time.time()
+        all_test_deviation = []
+        for num in range(iters):
+            logging.info(f'Iteration of repair: {num}')
+            deviation = self.compute_deviation(self.torch_model)
 
-    def repair_model(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=200, epochs=200):
+            all_test_deviation.append(deviation)
+            tt0 = time.time()
+            unsafe_data = self.compute_unsafety()
+            logging.info(f'Time for reachability analysis: {time.time()-tt0 :.2f} sec')
+            if np.all([len(sub)==0 for sub in unsafe_data]):
+                logging.info('The accurate and safe candidate model is found !')
+                logging.info(f'Total running time: {time.time()-t0 :.2f} sec')
+                break
+
+            if not np.all([len(sub)==0 for sub in unsafe_data]):
+                original_Xs, corrected_Ys = self.correct_unsafe_data(unsafe_data)
+                train_x = original_Xs
+                train_y = corrected_Ys
+                print('Unsafe data: ', len(train_x))
+            else:
+                train_x = self.data.train_data[0]
+                train_y = self.data.train_data[1]
+
+            training_dataset_adv = TensorDataset(train_x, train_y)
+            train_loader_adv = DataLoader(training_dataset_adv, batch_size, shuffle=True)
+            training_dataset_train = TensorDataset(self.data.train_data[0], self.data.train_data[1])
+            train_loader_train = DataLoader(training_dataset_train, batch_size, shuffle=True)
+
+
+            logging.info('Start retraining for the repair...')
+            self.torch_model.train()
+            for e in range(epochs):
+                # print('\rEpoch: '+str(e)+'/'+str(epochs),end='')
+                for batch_idx, data in enumerate(zip(train_loader_adv, train_loader_train)):
+                    datax, datay = data[0][0], data[0][1]
+                    datax_train, datay_train = data[1][0], data[1][1]
+                    optimizer.zero_grad()
+
+                    predicts_adv = self.torch_model(datax)
+                    loss_adv = loss_fun(datay, predicts_adv)
+                    predicts_train = self.torch_model(datax_train)
+                    loss_train = loss_fun(datay_train, predicts_train)
+                    loss = alpha*loss_adv + beta*loss_train
+                    loss.backward()
+                    optimizer.step()
+            self.torch_model.cpu()
+            logging.info('The retraining is done\n')
+            if num % 1 == 0:
+                torch.save(self.torch_model, savepath + "/epoch" + str(num) + ".pt")
+
+
+    def repair_model_classification(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=200, epochs=200):
         all_test_accuracy = []
         accuracy_old = 1.0
         candidate_old = cp.deepcopy(self.torch_model)
