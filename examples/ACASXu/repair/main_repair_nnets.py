@@ -16,7 +16,7 @@ if __name__ == '__main__':
     logger = logging.getLogger()
     Log_Format = logging.Formatter('%(levelname)s %(asctime)s - %(message)s')
     logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler('neural_network_repair.log')
+    file_handler = logging.FileHandler('neural_network_repair.log', 'w+')
     file_handler.setFormatter(Log_Format)
     logger.addHandler(file_handler)
     console_handler = logging.StreamHandler()
