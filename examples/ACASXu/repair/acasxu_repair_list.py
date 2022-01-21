@@ -128,10 +128,6 @@ def repair_property7(unsafe_data):
         assert max0<=0.0 or max1<=0.0
 
         if (max1 >= 0) or (max0>=max1 and max0<=0.0): # strong right
-            try:
-                assert max0 <= 0
-            except:
-                xx = 1
             delta_y = -max0 + epsilon
             unsafe_y[0][3] = unsafe_y[0][3] + delta_y  # safe y
         elif (max0 >= 0) or (max1 >= max0 and max1<=0.0): # weak left

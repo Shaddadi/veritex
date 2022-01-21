@@ -197,7 +197,7 @@ class REPAIR:
                 torch.save(self.torch_model, savepath + "/epoch" + str(num) + ".pt")
 
 
-    def repair_model_classification(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=200, epochs=200):
+    def repair_model_classification(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=2000, epochs=200):
         all_test_accuracy = []
         accuracy_old = 1.0
         candidate_old = cp.deepcopy(self.torch_model)
@@ -225,8 +225,8 @@ class REPAIR:
                 if np.all([len(sub)==0 for sub in unsafe_data]):
                     logging.info('The accurate and safe candidate model is found !')
                     logging.info(f'Total running time: {time.time()-t0 :.2f} sec')
-                    # sio.savemat(savepath + '/all_test_accuracy.mat',
-                    #             {'all_test_accuracy': all_test_accuracy, 'time': time.time()-t0})
+                    sio.savemat(savepath + '/all_test_accuracy.mat',
+                                {'all_test_accuracy': all_test_accuracy, 'time': time.time()-t0})
                     break
 
                 if not np.all([len(sub)==0 for sub in unsafe_data]):
