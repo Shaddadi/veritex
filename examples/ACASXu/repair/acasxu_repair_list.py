@@ -195,7 +195,6 @@ for i in range(1,6):
         if nnet == [1,9]:
             property_ls = [[property7, repair_property7]]
         elif nnet == [2,9]:
-            continue
             property_ls.append([property8, repair_property8])
 
         repair_list.append([nnet, property_ls])
