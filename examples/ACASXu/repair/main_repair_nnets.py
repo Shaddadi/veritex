@@ -31,7 +31,8 @@ if __name__ == '__main__':
         item = repair_list[n]
         i, j = item[0][0], item[0][1]
         if (i==1 and j ==9) or (i==2 and j ==9):
-            output_limit = 1
+            output_limit = 10
+            lr = 0.01
         else:
             output_limit = 1000
         logging.info(f'Neural Network {i}{j}')
