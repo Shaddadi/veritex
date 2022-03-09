@@ -74,12 +74,12 @@ python main_reachable_domain.py --property 3,4 --dims 0 1 --network_path '../net
 python main_reachable_domain.py --property 3,4 --dims 0 2 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
 ```
 
-<figure>
+<p align="center">
     <div>
         <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_1.png" style="width:20%">
         <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_2.png" style="width:20%">
     </div>
-    <figcaption> Figure: Output reachable domains of Network21 on Properties 3 and 4. They are projected on (y0,y1) and (y0, y2).
-    </figcaption>
-</figure>
+</p>
+<p align="center">Figure: Output reachable domains of Network21 on Properties 3 and 4. They are projected on (y0,y1) and (y0, y2).
+</p>
 
