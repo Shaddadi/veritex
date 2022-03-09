@@ -3,6 +3,8 @@
 logs/
 venv/
 *.onnx
+*.odg
+*.pdf
 *.pt
 *.py[cod]
 # Log files
