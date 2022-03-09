@@ -53,18 +53,18 @@ Visualize the output reachable domain
 
 ```bash
 cd examples/ACASXu/repair
-python main_reachable_domain.py --property x --dims x x --network_path 'xxx'
+python main_reachable_domain.py --property x,x --dims x x --network_path 'xxx'
 ```
 
 Example:
 
 ```bash
-python main_reachable_domain.py --property 3 --dims 0 1 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
-python main_reachable_domain.py --property 3 --dims 0 2 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
+python main_reachable_domain.py --property 3,4 --dims 0 1 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
+python main_reachable_domain.py --property 3,4 --dims 0 2 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
 ```
 
 <figure>
-    <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_1.png" style="width:50%"> <img src="examples/ACASXu/repair/images/reachable_domain_property_3_dims0_2.png" style="width:50%">
+    <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_1.png" style="width:50%"> <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_2.png" style="width:50%">
 </figure>
 
 ## Demo for Our Reachability Analysis Algorithm
