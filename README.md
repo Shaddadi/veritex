@@ -2,7 +2,7 @@
 
 <figure>
     <img src="veritex.png" style="width:70%">
-    <figcaption>Figure: Demo for our reachability analysis algorithms. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.</figcaption>
+    <figcaption>Figure: An overview of Veritex architecture.</figcaption>
 </figure>
 
 ## Usage
