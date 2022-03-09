@@ -72,7 +72,7 @@ python main_reachable_domain.py --property 3,4 --dims 0 2 --network_path '../net
         <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_1.png" style="width:25%">
         <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_2.png" style="width:25%">
     </div>
-    <figcaption> Output reachable domains of Network21 on Properties 3 and 4. They are projected on (y0,y1) and (y0, y2).
+    <figcaption> Figure: Output reachable domains of Network21 on Properties 3 and 4. They are projected on (y0,y1) and (y0, y2).
     </figcaption>
 </figure>
 
