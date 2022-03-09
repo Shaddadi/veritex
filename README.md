@@ -22,14 +22,18 @@
     sudo docker run --rm -it veritex_image bash
     ```
 
-### II. Run demo
+### II. Run Demo
 
-Run the demo in the container. Results will be saved in /images.
+This demo includes the computation of the exact output reachable domain of a neural network using our reachability analysis method. It also includes the computation of its exact unsafe input space that leads to safety violations in the output using our Backtracking algorithm. The neural network consists of 3 inputs, 2 outputs, and 8 layers with each having 7 neurons. Results will be saved in /images.
 
 ```bash
 cd examples/Demo
 python main_demo.py
 ````
+<figure>
+    <img src="examples/Demo/reach_demo.gif" style="width:70%">
+    <figcaption>Figure: Demo for our reachability analysis algorithms. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.</figcaption>
+</figure>
 
 ### III. Run ACAS experiments
 
@@ -72,11 +76,3 @@ python main_reachable_domain.py --property 3,4 --dims 0 2 --network_path '../net
     </figcaption>
 </figure>
 
-## Demo for Our Reachability Analysis Algorithm
-
-<figure>
-    <img src="examples/Demo/reach_demo.gif" style="width:70%">
-    <figcaption>Figure: Demo for our reachability analysis algorithms. The network consists of 3 inputs, 2 outputs and 8 layers with each having 7 neurons. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.</figcaption>
-</figure>
-
-## TODO
