@@ -64,17 +64,17 @@ python main_reachable_domain.py --property 3,4 --dims 0 2 --network_path '../net
 ```
 
 <figure>
-    <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_1.png" style="width:25%"/>
-    <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_2.png" style="width:25%"/>
+    <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_1.png" style="width:25%">
+    <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_2.png" style="width:25%">
     <figcaption> Output reachable domains of Network21 on Properties 3 and 4. They are projected on (y0,y1) and (y0, y2).
     </figcaption>
 </figure>
 
 ## Demo for Our Reachability Analysis Algorithm
 
-<figure>
+<div>
     <img src="examples/Demo/reach_demo.gif" style="width:70%">
     <figcaption>Figure: Demo for our reachability analysis algorithms. The network consists of 3 inputs, 2 outputs and 8 layers with each having 7 neurons. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.</figcaption>
-</figure>
+</div>
 
 ## TODO
