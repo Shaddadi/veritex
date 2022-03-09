@@ -1,5 +1,10 @@
 # Tool for Reachability Analysis and Repair of Neural Networks
 
+<figure>
+    <img src="veritex.pdf" style="width:70%">
+    <figcaption>Figure: Demo for our reachability analysis algorithms. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.</figcaption>
+</figure>
+
 ## Usage
 
 ### I. Docker setup
