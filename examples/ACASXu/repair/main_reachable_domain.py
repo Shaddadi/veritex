@@ -1,3 +1,4 @@
+import sys
 import os.path
 import copy as cp
 from ffnn import FFNN
@@ -32,7 +33,7 @@ if __name__ == "__main__":
     network_path = '../nets/ACASXU_run2a_2_1_batch_2000.onnx' #args.network_path
     # network_path = 'logs/acasxu_epoch24_safe.pt'
     # network_path = "logs/art_repaired_network_21_safe.nnet"
-    dim0, dim1 = (0, 1)  # tuple(args.dims)
+    dim0, dim1 = (0, 2)  # tuple(args.dims)
 
     try:
         if network_path[-4:] == 'onnx':
