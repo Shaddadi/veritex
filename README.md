@@ -64,7 +64,7 @@ python main_reachable_domain.py --property 3,4 --dims 0 2 --network_path '../net
 ```
 
 <figure>
-    <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_1.png" style="width:50%"> <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_2.png" style="width:50%">
+    <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_1.png" style="width:25%"> <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_2.png" style="width:25%">
 </figure>
 
 ## Demo for Our Reachability Analysis Algorithm
