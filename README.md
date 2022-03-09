@@ -66,7 +66,8 @@ python main_reachable_domain.py --property 3,4 --dims 0 2 --network_path '../net
 <figure>
     <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_1.png" style="width:25%">
     <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_2.png" style="width:25%">
-    <figcaption> </figcaption>
+    <figcaption> Output reachable domains of Network_{2,1} on Properties 3\&4 projected on (y_0,y_1) and (y_0, y_2)
+    </figcaption>
 </figure>
 
 ## Demo for Our Reachability Analysis Algorithm
