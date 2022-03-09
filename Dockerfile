@@ -26,6 +26,7 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 # set environment variables
+ENV PYTHONPATH=$PYTHONPATH:/veritex/src/methods:/veritex/src/networks:/veritex/src/sets:/veritex/src/utils
 ENV OPENBLAS_NUM_THREADS=1
 ENV OMP_NUM_THREADS=1
 

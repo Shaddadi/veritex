@@ -1,5 +1,4 @@
-import sys
-sys.path.insert(0, '../../../src')
+
 import copy as cp
 from ffnn import FFNN
 from acasxu_properties import *

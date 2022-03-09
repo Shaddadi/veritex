@@ -1,6 +1,5 @@
-import sys
+
 import logging
-sys.path.insert(0, '../../../src')
 from acasxu_repair_list import *
 from load_onnx import load_ffnn_onnx, save_onnx
 import multiprocessing
@@ -24,7 +23,7 @@ if __name__ == '__main__':
     logger.addHandler(console_handler)
 
     num_processors = multiprocessing.cpu_count()
-    for n in range(1,len(repair_list)):
+    for n in range(9,len(repair_list)):
         lr = 0.001
         epochs = 200
         alpha, beta = 1.0, 0.0

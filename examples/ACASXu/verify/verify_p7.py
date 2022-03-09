@@ -1,5 +1,4 @@
-import sys
-sys.path.insert(0, '../../../src')
+
 import copy as cp
 from scipy.io import loadmat
 from ffnn import FFNN
