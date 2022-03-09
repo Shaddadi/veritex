@@ -2,7 +2,7 @@
 
 ## Usage
 
-### Docker setup
+### I Docker setup
 
 1. Clone this repository to your local machine.
 
@@ -10,19 +10,19 @@
     git clone https://github.com/Shaddadi/veritex.git
     ```
 
-1. Build the image from the dockerfile
+2. Build the image from the dockerfile
 
     ```bash
     sudo docker build . -t veritex_image
     ```
 
-1. Create the docker container
+3. Create the docker container
 
     ```bash
     sudo docker run --rm -it veritex_image bash
     ```
 
-### Run demo
+### II Run demo
 
 Run the demo in the container. Results will be saved in /images.
 
@@ -31,7 +31,7 @@ cd examples/Demo
 python main_demo.py
 ````
 
-### ACAS experiments
+### III ACAS experiments
 
 1. Run the verification of ACAS Xu neural networks. Info will be logged
 
@@ -40,14 +40,14 @@ python main_demo.py
     ./verify_all_instances.sh
     ```
 
-1. Run the repair of the unsafe ACAS Xu neural networks. Repaired networks will be saved in /logs and the info will be logged.
+2. Run the repair of the unsafe ACAS Xu neural networks. Repaired networks will be saved in /logs and the info will be logged.
 
     ```bash
     cd examples/ACASXu/repair
     python main_repair_nnets.py
     ```
 
-### Visulaization
+### IV Visulaization
 
 Visualize the output reachable domain
 
