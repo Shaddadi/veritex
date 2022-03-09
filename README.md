@@ -3,7 +3,7 @@ Veritex is an object-oriented software programmed in Python. It takes in two inp
 <p align="center">
    <img src="veritex.png" style="width:70%">
 </p>
-<p Figure: An overview of Veritex architecture.</p>
+<p align="center"> Figure: An overview of Veritex architecture.</p>
 
 ## Usage
 
