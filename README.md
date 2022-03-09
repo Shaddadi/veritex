@@ -31,7 +31,7 @@ cd examples/Demo
 python main_demo.py
 ````
 
-### III. ACAS experiments
+### III. Run ACAS experiments
 
 1. Run the verification of ACAS Xu neural networks. Info will be logged
 
@@ -47,7 +47,7 @@ python main_demo.py
     python main_repair_nnets.py
     ```
 
-### IV. Visulaization
+### IV. Visualize Reachable Domains of ACASXu Networks
 
 Visualize the output reachable domain
 
