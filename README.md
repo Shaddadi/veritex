@@ -2,7 +2,7 @@
 
 ## Usage
 
-### I Docker setup
+### I. Docker setup
 
 1. Clone this repository to your local machine.
 
@@ -22,7 +22,7 @@
     sudo docker run --rm -it veritex_image bash
     ```
 
-### II Run demo
+### II. Run demo
 
 Run the demo in the container. Results will be saved in /images.
 
@@ -31,7 +31,7 @@ cd examples/Demo
 python main_demo.py
 ````
 
-### III ACAS experiments
+### III. ACAS experiments
 
 1. Run the verification of ACAS Xu neural networks. Info will be logged
 
@@ -47,7 +47,7 @@ python main_demo.py
     python main_repair_nnets.py
     ```
 
-### IV Visulaization
+### IV. Visulaization
 
 Visualize the output reachable domain
 
