@@ -1,7 +1,7 @@
 # Tool for Reachability Analysis and Repair of Neural Networks
 Veritex is an object-oriented software programmed in Python. It takes in two inputs, the network model and safety properties. Veritex supports the standardized format ONNX and PyTorch for the network and the unified format Vnnnlib for the safety property. With the network model and its safety properties, Veritex can compute the exact or over-approximated output reachable domain and also the entire unsafe input space if exists. It supports the plotting of 2 or 3-dimensional polytopes. When the repair option is enabled, it will produce a provable safe network in ONNX or PyTorch format.
 <p align="center">
-   <img src="veritex.png" style="width:70%">
+   <img src="veritex.png" style="width:80%">
 </p>
 <p align="center"> Figure: An overview of Veritex architecture.</p>
 
@@ -35,10 +35,12 @@ This demo includes the computation of the exact output reachable domain of a neu
 cd examples/Demo
 python main_demo.py
 ````
-<figure>
+<p align="center">
     <img src="examples/Demo/reach_demo.gif" style="width:70%">
-    <figcaption>Figure: Demo for our reachability analysis algorithms. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.</figcaption>
-</figure>
+</p>
+<p align="center">
+   Figure: Demo for our reachability analysis algorithms. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.
+</p>
 
 ### III. Run ACAS experiments
 
