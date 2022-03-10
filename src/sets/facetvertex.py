@@ -16,7 +16,6 @@ class FacetVertex:
         self.b = np.dot(M, self.b) + b
 
 
-
     def affineMapNegative(self, n:int):
         self.M[n, :] = 0
         self.b[n, :] = 0
