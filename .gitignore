@@ -15,3 +15,5 @@ venv/
 # JetBrains IDE
 .idea/
 
+# Demo
+examples/Demo/images
