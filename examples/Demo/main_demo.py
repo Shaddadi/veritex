@@ -1,6 +1,4 @@
 import os.path
-import sys
-sys.path.insert(0, '../../src')
 import copy as cp
 import torch
 from veritex.networks.ffnn import FFNN
