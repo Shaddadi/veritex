@@ -6,7 +6,7 @@ from facetvertex import FacetVertex
 
 class BoxDomain:
 
-    def __init__(self, lbs=list, ubs=list):
+    def __init__(self, lbs:list, ubs:list):
         assert len(lbs) == len(ubs)
 
         lbs, ubs = np.array(lbs), np.array(ubs)

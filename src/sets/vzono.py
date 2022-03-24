@@ -35,7 +35,7 @@ class VzonoAdap: # adaptive over approximation
 
 
 class VzonoFFNN:
-    def __init__(self, base_vertices=np.ndarray, base_vectors=np.ndarray):
+    def __init__(self, base_vertices: np.ndarray, base_vectors: np.ndarray):
         self.base_vertices = base_vertices
         self.base_vectors = base_vectors
 
@@ -43,15 +43,15 @@ class VzonoFFNN:
         self.base_vertices = (np.array(lbs)+np.array(ubs))/2
         self.base_vectors = np.diag((np.array(ubs)-np.array(lbs))/2)
 
-    def affineMap(self, W=np.ndarray, b=np.ndarray):
+    def affineMap(self, W: np.ndarray, b: np.ndarray):
         self.base_vertices = np.dot(W, self.base_vertices) + b
         self.base_vectors = np.dot(W, self.base_vectors)
 
-    def affineMapNegative(self, neurons_neg=np.ndarray):
+    def affineMapNegative(self, neurons_neg:np.ndarray):
         self.base_vertices[neurons_neg,:] = 0.0
         self.base_vectors[neurons_neg,:] = 0.0
 
-    def reluLinearRelax(self, neurons_neg_pos=np.ndarray):
+    def reluLinearRelax(self, neurons_neg_pos:np.ndarray):
         assert neurons_neg_pos.shape[0] != 0
 
         # compute ubs and lbs of relu neurons

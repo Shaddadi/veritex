@@ -3,7 +3,7 @@ import copy as cp
 import numpy as np
 
 class FacetVertex:
-    def __init__(self, fmatrix=np.ndarray, vertices=np.ndarray, dim=int, M=np.ndarray, b=np.ndarray):
+    def __init__(self, fmatrix:np.ndarray, vertices:np.ndarray, dim: int, M:np.ndarray, b:np.ndarray):
         self.fmatrix = fmatrix
         self.vertices = vertices
         self.dim = dim
@@ -11,17 +11,17 @@ class FacetVertex:
         self.b = b
 
 
-    def affineMap(self, M=np.ndarray, b=np.ndarray):
+    def affineMap(self, M:np.ndarray, b:np.ndarray):
         self.M = np.dot(M, self.M)
         self.b = np.dot(M, self.b) + b
 
 
-    def affineMapNegative(self, n=int):
+    def affineMapNegative(self, n:int):
         self.M[n, :] = 0
         self.b[n, :] = 0
 
 
-    def reluSplit(self, neuron_pos_neg=np.ndarray):
+    def reluSplit(self, neuron_pos_neg:np.ndarray):
         elements = np.matmul(self.vertices, self.M[neuron_pos_neg,:].T)+self.b[neuron_pos_neg,:].T
         if np.any(elements==0.0):
             sys.exit('Hyperplane intersect with vertices!')
@@ -78,11 +78,11 @@ class FacetVertex:
         subset1 = FacetVertex(sub_vs_facets1, new_vertices1, self.dim, cp.copy(self.M), cp.copy(self.b))
         if flg == -1:
             subset1.affineMapNegative(neuron_pos_neg)
-
+        
         return subset0, subset1
 
 
-    def reluSplitHyperplane(self, A=np.ndarray, d=np.ndarray):
+    def reluSplitHyperplane(self, A:np.ndarray, d:np.ndarray):
         A_new = np.dot(A,self.M)
         d_new = np.dot(A, self.b) +d
         elements = np.dot(A_new, self.vertices.T) + d_new
