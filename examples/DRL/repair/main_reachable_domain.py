@@ -8,7 +8,7 @@ from veritex.utils.plot_poly import plot_polytope2d
 import multiprocessing as mp
 from veritex.methods.worker import Worker
 from veritex.methods.shared import SharedState
-from load_onnx import load_ffnn_onnx
+from veritex.utils.load_onnx import load_ffnn_onnx
 import matplotlib.pyplot as plt
 import numpy as np
 import multiprocessing

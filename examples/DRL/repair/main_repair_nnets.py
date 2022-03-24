@@ -2,9 +2,9 @@ import sys
 import logging
 sys.path.insert(0, '../../../src')
 from agent_repair_list import *
-from load_onnx import load_ffnn_onnx, save_onnx
+from veritex.utils.load_onnx import load_ffnn_onnx, save_onnx
 import multiprocessing
-from repair import REPAIR, DATA
+from veritex.methods.repair import REPAIR, DATA
 import torch.optim as optim
 import torch.nn as nn
 import torch

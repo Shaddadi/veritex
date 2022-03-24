@@ -6,7 +6,7 @@ from acasxu_properties_vnnlib import *
 import multiprocessing as mp
 from veritex.methods.worker import Worker
 from veritex.methods.shared import SharedState
-from load_onnx import load_ffnn_onnx
+from veritex.utils.load_onnx import load_ffnn_onnx
 import multiprocessing
 import logging
 import time
