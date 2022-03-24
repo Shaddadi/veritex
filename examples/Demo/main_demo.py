@@ -3,14 +3,14 @@ import sys
 sys.path.insert(0, '../../src')
 import copy as cp
 import torch
-from ffnn import FFNN
+from networks.ffnn import FFNN
 import multiprocessing as mp
-from worker import Worker
-from shared import SharedState
+from methods.worker import Worker
+from methods.shared import SharedState
 import numpy as np
-from sfproperty import Property
+from utils.sfproperty import Property
 import matplotlib.pyplot as plt
-from plot_poly import *
+from utils.plot_poly import *
 import logging
 
 
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     all_output_sets = []
     all_input_unsafe_sets = []
     for n in range(55):
-        logging.info(f'Completed instances: {n+1}/55')
+        logging.info('Completed instances: {n+1}/55')
         lbs = [-1, -1, -1]
         ubs = [1, 1, 1]
         input_domain = [lbs, ubs]

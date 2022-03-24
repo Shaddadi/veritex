@@ -1,8 +1,8 @@
 import sys
-from boxdomain import BoxDomain
+from sets.boxdomain import BoxDomain
 
 class Property:
-    def __init__(self, input_domain: list, unsafe_output_domains: list, input_ranges=None, set_type='facet-vertex'):
+    def __init__(self, input_domain=list, unsafe_output_domains=list, input_ranges=None, set_type='facet-vertex'):
         assert len(input_domain)!=0
         self.lbs = input_domain[0]
         self.ubs = input_domain[1]

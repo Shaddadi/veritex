@@ -1,6 +1,6 @@
 import numpy as np
 import copy as cp
-from vzono import VzonoFFNN as Vzono
+from sets.vzono import VzonoFFNN as Vzono
 import torch
 
 
