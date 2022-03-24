@@ -13,24 +13,41 @@ When the repair option is enabled, it will produce a provable safe network in ON
 
 ## Install
 
-### I. Docker setup
+Clone this repository to your local machine.
 
-1. Clone this repository to your local machine.
+```bash
+git clone https://github.com/Shaddadi/veritex.git
+cd veritex
+```
 
-    ```bash
-    git clone https://github.com/Shaddadi/veritex.git
-    ```
+### Docker installing as a User (recommend)
 
-2. Build the image from the dockerfile
+1. Build the image from the dockerfile.
 
     ```bash
     sudo docker build . -t veritex_image
     ```
 
-3. Create the docker container
+1. Create the docker container.
 
     ```bash
     sudo docker run --rm -it veritex_image bash
+    ```
+
+### Installing as a Developer
+
+This tool is confirmed with only Python3.7.
+
+1. Install required python packages.
+
+    ```bash
+    python3.7 -m pip install -r requirements.txt
+    ```
+
+1. Set path to /veritex under this repository.
+
+    ```bash
+    export PYTHONPATH='<YOUR_REPO_PATH>/veritex/veritex'
     ```
 
 ## Run experiments
