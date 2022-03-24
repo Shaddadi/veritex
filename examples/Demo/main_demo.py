@@ -3,14 +3,14 @@ import sys
 sys.path.insert(0, '../../src')
 import copy as cp
 import torch
-from ffnn import FFNN
+from veritex.networks.ffnn import FFNN
 import multiprocessing as mp
-from worker import Worker
-from shared import SharedState
+from veritex.methods.worker import Worker
+from veritex.methods.shared import SharedState
 import numpy as np
-from sfproperty import Property
+from veritex.utils.sfproperty import Property
 import matplotlib.pyplot as plt
-from plot_poly import *
+from veritex.utils.plot_poly import *
 import logging
 
 

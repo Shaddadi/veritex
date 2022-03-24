@@ -1,14 +1,14 @@
 import logging
 import time
 import logging
-from ffnn import FFNN
+from veritex.networks.ffnn import FFNN
 import torch
 import numpy as np
 import copy as cp
 import multiprocessing as mp
 from torch.utils.data import TensorDataset, DataLoader
-from worker import Worker
-from shared import SharedState
+from veritex.methods.worker import Worker
+from veritex.methods.shared import SharedState
 import scipy.io as sio
 import torch.optim as optim
 

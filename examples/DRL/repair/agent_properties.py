@@ -4,7 +4,7 @@ import numpy as np
 
 sys.path.insert(0, '../../src')
 import torch
-from sfproperty import Property
+from veritex.utils.sfproperty import Property
 import math
 
 lbs_input = [-0.2, 0.02, -0.5, -1.0, -20 * math.pi / 180, -0.2, 0.0, 0.0, 0.0, -1.0, -15 * math.pi / 180]

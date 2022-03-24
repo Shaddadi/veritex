@@ -1,10 +1,10 @@
 
 import copy as cp
-from ffnn import FFNN
+from veritex.networks.ffnn import FFNN
 from acasxu_properties import *
 import multiprocessing as mp
-from worker import Worker
-from shared import SharedState
+from veritex.methods.worker import Worker
+from veritex.methods.shared import SharedState
 from load_onnx import load_ffnn_onnx
 import multiprocessing
 import time

@@ -19,7 +19,7 @@ class Worker:
 
 
     def inital_assgin(self):
-        # get inputs from shared state
+        # get inputs from veritex.methods.shared state
         while True:
             try:
                 one_work = self.shared_state.shared_queue.get_nowait()

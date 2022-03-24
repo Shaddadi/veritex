@@ -1,7 +1,7 @@
 import sys
 import itertools
 import numpy as np
-from facetvertex import FacetVertex
+from veritex.sets.facetvertex import FacetVertex
 
 
 class BoxDomain:

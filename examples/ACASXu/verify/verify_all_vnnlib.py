@@ -1,11 +1,11 @@
 import sys
 sys.path.insert(0, '../../../src')
 import copy as cp
-from ffnn import FFNN
+from veritex.networks.ffnn import FFNN
 from acasxu_properties_vnnlib import *
 import multiprocessing as mp
-from worker import Worker
-from shared import SharedState
+from veritex.methods.worker import Worker
+from veritex.methods.shared import SharedState
 from load_onnx import load_ffnn_onnx
 import multiprocessing
 import logging

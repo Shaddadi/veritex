@@ -1,12 +1,12 @@
 import sys
 import os.path
 import copy as cp
-from ffnn import FFNN
+from veritex.networks.ffnn import FFNN
 from acasxu_properties import *
-from plot_poly import plot_polytope2d
+from veritex.utils.plot_poly import plot_polytope2d
 import multiprocessing as mp
-from worker import Worker
-from shared import SharedState
+from veritex.methods.worker import Worker
+from veritex.methods.shared import SharedState
 from load_onnx import load_ffnn_onnx
 from nnet_file import NNet
 import matplotlib.pyplot as plt

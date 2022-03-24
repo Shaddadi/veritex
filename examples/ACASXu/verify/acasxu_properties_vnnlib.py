@@ -1,6 +1,6 @@
 
 import torch
-from sfproperty import Property
+from veritex.utils.sfproperty import Property
 from vnnlib import read_vnnlib_simple
 
 properties = []
