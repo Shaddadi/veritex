@@ -2,7 +2,7 @@
 import sys
 import os
 import torch.multiprocessing
-sys.path.insert(0, '../../src')
+sys.path.insert(0, '../src')
 import matlab.engine
 import argparse
 import methods
