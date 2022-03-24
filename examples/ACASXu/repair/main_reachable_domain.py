@@ -1,19 +1,20 @@
 import sys
 import os.path
 import copy as cp
-from veritex.networks.ffnn import FFNN
-from acasxu_properties import *
-from veritex.utils.plot_poly import plot_polytope2d
 import multiprocessing as mp
-from veritex.methods.worker import Worker
-from veritex.methods.shared import SharedState
-from veritex.utils.load_onnx import load_ffnn_onnx
-from nnet_file import NNet
 import matplotlib.pyplot as plt
 import numpy as np
 import multiprocessing
 import argparse
+from nnet_file import NNet
 
+from veritex.networks.ffnn import FFNN
+from veritex.utils.plot_poly import plot_polytope2d
+from veritex.methods.worker import Worker
+from veritex.methods.shared import SharedState
+from veritex.utils.load_onnx import load_ffnn_onnx
+
+from acasxu_properties import *
 
 
 if __name__ == "__main__":
