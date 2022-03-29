@@ -1,40 +1,69 @@
 # Tool for Reachability Analysis and Repair of Neural Networks
-Veritex is an object-oriented software programmed in Python. It takes in two inputs, the network model and safety properties. Veritex supports the standardized format ONNX and PyTorch for the network and the unified format Vnnnlib for the safety property. With the network model and its safety properties, Veritex can compute the exact or over-approximated output reachable domain and also the entire unsafe input space if exists. It supports the plotting of 2 or 3-dimensional polytopes. When the repair option is enabled, it will produce a provable safe network in ONNX or PyTorch format.
+
+Veritex is an object-oriented software programmed in Python.
+It takes in two inputs, the network model and safety properties.
+Veritex supports the standardized format ONNX and PyTorch for the network and the unified format Vnnnlib for the safety property.
+With the network model and its safety properties, Veritex can compute the exact or over-approximated output reachable domain and also the entire unsafe input space if exists.
+It supports the plotting of 2 or 3-dimensional polytopes.
+When the repair option is enabled, it will produce a provable safe network in ONNX or PyTorch format.
 <p align="center">
    <img src="veritex.png" style="width:80%">
 </p>
 <p align="center"> Figure: An overview of Veritex architecture.</p>
 
-## Usage
+## Install
 
-### I. Docker setup
+Clone this repository to your local machine.
 
-1. Clone this repository to your local machine.
+```bash
+git clone https://github.com/Shaddadi/veritex.git
+cd veritex
+```
 
-    ```bash
-    git clone https://github.com/Shaddadi/veritex.git
-    ```
+### Docker installing as a User (recommend)
 
-2. Build the image from the dockerfile
+1. Build the image from the dockerfile.
 
     ```bash
     sudo docker build . -t veritex_image
     ```
 
-3. Create the docker container
+1. Create the docker container.
 
     ```bash
     sudo docker run --rm -it veritex_image bash
     ```
 
-### II. Run Demo
+### Installing as a Developer
 
-This demo includes the computation of the exact output reachable domain of a neural network using our reachability analysis method. It also includes the computation of its exact unsafe input space that leads to safety violations in the output using our Backtracking algorithm. The neural network consists of 3 inputs, 2 outputs, and 8 layers with each having 7 neurons. Results will be saved in /images.
+This tool is confirmed with only Python3.7.
+
+1. Install required python packages.
+
+    ```bash
+    python3.7 -m pip install -r requirements.txt
+    ```
+
+1. Set path to /veritex under this repository.
+
+    ```bash
+    export PYTHONPATH='<YOUR_REPO_PATH>/veritex/veritex'
+    ```
+
+## Run experiments
+
+### Demo
+
+This demo includes the computation of the exact output reachable domain of a neural network using our reachability analysis method.
+It also includes the computation of its exact unsafe input space that leads to safety violations in the output using our Backtracking algorithm.
+The neural network consists of 3 inputs, 2 outputs, and 8 layers with each having 7 neurons.
+Results will be saved in /images.
 
 ```bash
 cd examples/Demo
 python main_demo.py
-````
+```
+
 <p align="center">
     <img src="examples/Demo/reach_demo.gif" style="width:70%">
 </p>
@@ -42,7 +71,7 @@ python main_demo.py
    Figure: Demo for our reachability analysis algorithms. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.
 </p>
 
-### III. Run ACAS experiments
+### ACAS experiments
 
 1. Run the verification of ACAS Xu neural networks. Info will be logged
 
@@ -51,14 +80,14 @@ python main_demo.py
     ./verify_all_instances.sh
     ```
 
-2. Run the repair of the unsafe ACAS Xu neural networks. Repaired networks will be saved in /logs and the info will be logged.
+1. Run the repair of the unsafe ACAS Xu neural networks. Repaired networks will be saved in /logs and the info will be logged.
 
     ```bash
     cd examples/ACASXu/repair
     python main_repair_nnets.py
     ```
 
-### IV. Visualize Reachable Domains of ACASXu Networks
+### Visualize Reachable Domains of ACASXu Networks
 
 Visualize the output reachable domain
 
@@ -80,4 +109,3 @@ python main_reachable_domain.py --property 3,4 --dims 0 2 --network_path '../net
 </p>
 <p align="center">Figure: Output reachable domains of Network21 on Properties 3 and 4. They are projected on (y0,y1) and (y0, y2).
 </p>
-
