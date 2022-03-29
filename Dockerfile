@@ -14,16 +14,11 @@ USER root
 # set working directory
 WORKDIR /veritex
 
-COPY requirements.txt requirements.txt
-
 # install pip
 RUN set -xe \
     && apt-get update -y \
     && apt-get install -y python3-pip
 RUN pip install --upgrade pip
-
-# install python package dependencies
-RUN pip install --no-cache-dir -r requirements.txt
 
 # set environment variables
 ENV PYTHONPATH=$PYTHONPATH:/veritex/src/methods:/veritex/src/networks:/veritex/src/sets:/veritex/src/utils
@@ -32,6 +27,9 @@ ENV OMP_NUM_THREADS=1
 
 # copy files to docker
 COPY . .
+
+# install python package dependencies
+RUN pip install .
 
 # # set user
 # USER 1001
