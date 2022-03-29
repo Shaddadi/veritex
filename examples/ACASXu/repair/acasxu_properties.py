@@ -1,6 +1,6 @@
 
 import torch
-from sfproperty import Property
+from veritex.utils.sfproperty import Property
 
 
 ranges = torch.tensor([6.02610000e+04, 6.28318531e+00, 6.28318531e+00, 1.10000000e+03,

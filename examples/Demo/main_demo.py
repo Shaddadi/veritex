@@ -1,19 +1,16 @@
 import os.path
-import sys
-sys.path.insert(0, '../../src')
-import copy as cp
-import torch
-from ffnn import FFNN
-import multiprocessing as mp
-from worker import Worker
-from shared import SharedState
-import numpy as np
-from sfproperty import Property
-import matplotlib.pyplot as plt
-from plot_poly import *
 import logging
+import copy as cp
+import numpy as np
+import torch
+import multiprocessing as mp
+import matplotlib.pyplot as plt
 
-
+from veritex.networks.ffnn import FFNN
+from veritex.methods.worker import Worker
+from veritex.methods.shared import SharedState
+from veritex.utils.sfproperty import Property
+from veritex.utils.plot_poly import *
 
 
 def plot_sets(input_unsafe_sets, output_sets, unsafe_domain, savepath='', image_id=0):
@@ -113,4 +110,3 @@ if __name__ == "__main__":
         plot_sets(input_unsafe_sets, output_sets, unsafe_domain, savepath='images/', image_id=n)
 
     logging.info('The input-output reachable domain of each instance is printed in /images')
-

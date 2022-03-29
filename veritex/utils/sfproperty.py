@@ -1,5 +1,5 @@
 import sys
-from boxdomain import BoxDomain
+from veritex.sets.boxdomain import BoxDomain
 
 class Property:
     def __init__(self, input_domain: list, unsafe_output_domains: list, input_ranges=None, set_type='facet-vertex'):
