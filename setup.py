@@ -14,8 +14,8 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/Shaddadi/veritex',
-    author='Nickovic Dejan, Tomoya Yamaguchi',
-    author_email='dejan.nickovic@ait.ac.at, tomoya.yamaguchi@toyota.com',
+    author='Xiaodong Yang',
+    author_email='xiaodong.yang@vanderbilt.edu',
     license='BSD',
     python_requires='>=3.7.0, <3.8',
     install_requires=[
