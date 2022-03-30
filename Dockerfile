@@ -21,7 +21,6 @@ RUN set -xe \
 RUN pip install --upgrade pip
 
 # set environment variables
-ENV PYTHONPATH=$PYTHONPATH:/veritex/veritex
 ENV OPENBLAS_NUM_THREADS=1
 ENV OMP_NUM_THREADS=1
 
