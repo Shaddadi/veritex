@@ -34,6 +34,15 @@ cd veritex
     sudo docker run --rm -it veritex_image bash
     ```
 
+### Installing as a User
+
+This tool is confirmed with only Python3.7.
+Simply you may install veritex pkg with pip.
+
+```bash
+python3.7 -m pip install .
+```
+
 ### Installing as a Developer
 
 This tool is confirmed with only Python3.7.
@@ -41,7 +50,7 @@ This tool is confirmed with only Python3.7.
 1. Install required python packages.
 
     ```bash
-    python3.7 -m pip install -r requirements.txt
+    python3.7 -m pip install -e .
     ```
 
 1. Set path to /veritex under this repository.
