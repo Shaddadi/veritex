@@ -2,8 +2,8 @@
 from acasxu_properties import *
 
 # the list of neural networks that does not violate any of properties 1-10
-# safe_nnet_list = [[1,1], [3,3], [4,2], [1,7], [1,8]]
 safe_nnet_list = [[1,1],[1,2],[1,3],[1,4],[1,5],[1,6], [3,3], [4,2], [1,7], [1,8]]
+hard_cases = [[1,9],[2,9]]
 
 # the list of properties that are violated by at least one neural network
 # property7 is only for nnet19, property is only for nnet29
@@ -186,7 +186,7 @@ repair_list = []
 for i in range(1,6):
     for j in range(1,10):
         nnet = [i,j]
-        if nnet in safe_nnet_list:
+        if nnet in safe_nnet_list or nnet in hard_cases:
             continue
         property_ls =[[property1, repair_property1],
                       [property2, repair_property2],

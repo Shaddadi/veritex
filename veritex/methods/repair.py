@@ -9,7 +9,6 @@ import multiprocessing as mp
 from torch.utils.data import TensorDataset, DataLoader
 from veritex.methods.worker import Worker
 from veritex.methods.shared import SharedState
-import scipy.io as sio
 import torch.optim as optim
 
 
@@ -147,6 +146,7 @@ class REPAIR:
     def repair_model_regular(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=200, epochs=200):
         t0 = time.time()
         all_test_deviation = []
+        repaired = False
         for num in range(iters):
             logging.info(f'Iteration of repair: {num}')
             deviation = self.compute_deviation(self.torch_model)
@@ -156,8 +156,10 @@ class REPAIR:
             unsafe_data = self.compute_unsafety()
             logging.info(f'Time for reachability analysis: {time.time()-tt0 :.2f} sec')
             if np.all([len(sub)==0 for sub in unsafe_data]):
-                logging.info('The accurate and safe candidate model is found !')
+                logging.info('The accurate and safe candidate model is found? True')
                 logging.info(f'Total running time: {time.time()-t0 :.2f} sec')
+                torch.save(self.torch_model, savepath + "/epoch" + str(num) + ".pt")
+                repaired = True
                 break
 
             if not np.all([len(sub)==0 for sub in unsafe_data]):
@@ -173,7 +175,6 @@ class REPAIR:
             train_loader_adv = DataLoader(training_dataset_adv, batch_size, shuffle=True)
             training_dataset_train = TensorDataset(self.data.train_data[0], self.data.train_data[1])
             train_loader_train = DataLoader(training_dataset_train, batch_size, shuffle=True)
-
 
             logging.info('Start retraining for the repair...')
             self.torch_model.train()
@@ -196,12 +197,18 @@ class REPAIR:
             if num % 1 == 0:
                 torch.save(self.torch_model, savepath + "/epoch" + str(num) + ".pt")
 
+        if not repaired:
+            logging.info('The accurate and safe candidate model is found? False')
+            logging.info(f'Total running time: {time.time() - t0 :.2f} sec')
+            torch.save(self.torch_model, savepath + "/epoch" + str(num) + ".pt")
+
 
     def repair_model_classification(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=2000, epochs=200):
         all_test_accuracy = []
         accuracy_old = 1.0
         candidate_old = cp.deepcopy(self.torch_model)
         reset_flag = False
+        repaired = False
         t0 = time.time()
         for num in range(iters):
             logging.info(f'Iteration of repair: {num}')
@@ -223,10 +230,10 @@ class REPAIR:
                 unsafe_data = self.compute_unsafety()
                 logging.info(f'Time for reachability analysis: {time.time()-tt0 :.2f} sec')
                 if np.all([len(sub)==0 for sub in unsafe_data]):
-                    logging.info('The accurate and safe candidate model is found !')
+                    logging.info('The accurate and safe candidate model is found? True')
                     logging.info(f'Total running time: {time.time()-t0 :.2f} sec')
-                    sio.savemat(savepath + '/all_test_accuracy.mat',
-                                {'all_test_accuracy': all_test_accuracy, 'time': time.time()-t0})
+                    torch.save(self.torch_model, savepath + "/epoch" + str(num) + ".pt")
+                    repaired = True
                     break
 
                 if not np.all([len(sub)==0 for sub in unsafe_data]):
@@ -263,6 +270,11 @@ class REPAIR:
             logging.info('The retraining is done\n')
             if num % 1 == 0:
                 torch.save(self.torch_model, savepath + "/acasxu_epoch" + str(num) + ".pt")
+
+        if not repaired:
+            logging.info('The accurate and safe candidate model is found? False')
+            logging.info(f'Total running time: {time.time() - t0 :.2f} sec')
+            torch.save(self.torch_model, savepath + "/epoch" + str(num) + ".pt")
 
 
 class DATA:

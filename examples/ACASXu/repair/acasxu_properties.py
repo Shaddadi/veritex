@@ -76,10 +76,10 @@ for n in range(5):
     ubs4[n] = (ubs4[n] - means[n]) / ranges[n]
 input_domain = [lbs4, ubs4]
 unsafe_domains = []
-for nn in [0,1,2,3]:
+for m in [0,1,2,3]:
     A_unsafe = torch.tensor([[0, 0, 0, 0, -1.0], ])
     d_unsafe = torch.tensor([[0.0]])
-    A_unsafe[0,nn] = 1.0
+    A_unsafe[0,m] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
 property5 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
@@ -93,10 +93,10 @@ for n in range(5):
     ubs6[n] = (ubs6[n] - means[n]) / ranges[n]
 input_domain = [lbs6, ubs6]
 unsafe_domains = []
-for nn in [1,2,3,4]:
+for m in [1,2,3,4]:
     A_unsafe = torch.tensor([[-1.0, 0, 0, 0, 0], ])
     d_unsafe = torch.tensor([[0.0]])
-    A_unsafe[0,nn] = 1.0
+    A_unsafe[0,m] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
 property6_1 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
@@ -110,10 +110,10 @@ for n in range(5):
     ubs6[n] = (ubs6[n] - means[n]) / ranges[n]
 input_domain = [lbs6, ubs6]
 unsafe_domains = []
-for nn in [1,2,3,4]:
+for m in [1,2,3,4]:
     A_unsafe = torch.tensor([[-1.0, 0, 0, 0, 0], ])
     d_unsafe = torch.tensor([[0.0]])
-    A_unsafe[0,nn] = 1.0
+    A_unsafe[0,m] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
 property6_2 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
@@ -189,10 +189,10 @@ for n in range(5):
     ubs9[n] = (ubs9[n] - means[n]) / ranges[n]
 input_domain = [lbs9, ubs9]
 unsafe_domains = []
-for nn in [0,1,2,4]:
+for m in [0,1,2,4]:
     A_unsafe = torch.tensor([[0, 0, 0, -1.0, 0], ])
     d_unsafe = torch.tensor([[0.0]])
-    A_unsafe[0,nn] = 1.0
+    A_unsafe[0,m] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
 property9 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)
@@ -206,10 +206,10 @@ for n in range(5):
     ubs10[n] = (ubs10[n] - means[n]) / ranges[n]
 input_domain = [lbs10, ubs10]
 unsafe_domains = []
-for nn in [1,2,3,4]:
+for m in [1,2,3,4]:
     A_unsafe = torch.tensor([[-1.0, 0, 0, 0, 0], ])
     d_unsafe = torch.tensor([[0.0]])
-    A_unsafe[0,nn] = 1.0
+    A_unsafe[0,m] = 1.0
     unsafe_domains.append([A_unsafe, d_unsafe])
 
 property10 = Property(input_domain, unsafe_domains, input_ranges=input_ranges)

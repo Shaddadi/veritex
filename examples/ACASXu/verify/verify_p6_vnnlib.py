@@ -1,27 +1,25 @@
+import sys
 import copy as cp
+from veritex.networks.ffnn import FFNN
+from acasxu_properties_vnnlib import *
 import multiprocessing as mp
+from veritex.methods.worker import Worker
+from veritex.methods.shared import SharedState
+from veritex.utils.load_onnx import load_ffnn_onnx
 import multiprocessing
 import logging
 import time
 import pickle
 
-from veritex.networks.ffnn import FFNN
-from veritex.methods.worker import Worker
-from veritex.methods.shared import SharedState
-from veritex.utils.load_onnx import load_ffnn_onnx
-
-from acasxu_properties import *
-
 
 if __name__ == "__main__":
     all_times = []
     all_results = []
-
     # Creating and Configuring Logger
     logger = logging.getLogger()
     Log_Format = logging.Formatter('%(levelname)s %(asctime)s - %(message)s')
     logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler('verify_p9.log', 'w+')
+    file_handler = logging.FileHandler('verify_p6.log', 'w+')
     file_handler.setFormatter(Log_Format)
     logger.addHandler(file_handler)
     console_handler = logging.StreamHandler()
@@ -30,9 +28,9 @@ if __name__ == "__main__":
 
     num_processors = multiprocessing.cpu_count()
     print('num_processors: ', num_processors)
-    properties = [property9]
-    for n, prop in enumerate(properties):
-        i, j = 3, 3
+
+    for n, prop in enumerate(properties[5:7]):
+        i, j = 1, 1
         nn_path = "../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
         torch_sequential = load_ffnn_onnx(nn_path)
         dnn0 = FFNN(torch_sequential, verify=True, relu_linear=True)
@@ -57,13 +55,13 @@ if __name__ == "__main__":
             unsafe = shared_state.outputs.get()
 
         logging.info('')
-        logging.info(f'Network {i}{j} on property 9')
+        logging.info(f'Network {i} {j} on property 6')
         logging.info(f'Unsafe: {unsafe}')
         logging.info(f'Running Time: {time.time() - t0} sec')
         all_times.append(time.time()-t0)
         all_results.append(unsafe)
 
-    with open('verification_p9.pkl', 'wb') as f:
+    with open('verification_p6.pkl', 'wb') as f:
         pickle.dump([all_times, all_results], f)
 
 

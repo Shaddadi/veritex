@@ -1,7 +1,9 @@
 
 import torch
 from veritex.utils.sfproperty import Property
-from vnnlib import read_vnnlib_simple
+from veritex.utils.vnnlib import read_vnnlib_simple
+
+import time
 
 properties = []
 for n in range(1,11):
