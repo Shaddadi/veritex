@@ -57,6 +57,8 @@ This tool is confirmed with only Python3.7.
 
     ```bash
     export PYTHONPATH='<YOUR_REPO_PATH>/veritex/veritex'
+    export OPENBLAS_NUM_THREADS=1
+    export OMP_NUM_THREADS=1
     ```
 
 ## Run experiments
