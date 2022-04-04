@@ -1,7 +1,7 @@
 /tbxmanager
 /__pycache__
 logs/
-verify/*.log
+**/verify/*.log
 venv/
 *.onnx
 *.odg
