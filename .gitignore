@@ -4,6 +4,8 @@ logs/
 **/verify/*.log
 venv/
 *.onnx
+*.png
+*.txt
 *.odg
 *.pdf
 *.pt
