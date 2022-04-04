@@ -179,8 +179,6 @@ def repair_property8(unsafe_data):
     return original_Xs, corrected_Ys
 
 
-
-
 # create neural networks that need to be repaired and their properties
 repair_list = []
 for i in range(1,6):

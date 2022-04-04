@@ -6,24 +6,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 import multiprocessing
 import argparse
-from nnet_file import NNet
+from veritex.utils.load_nnet import NNet
 
 from veritex.networks.ffnn import FFNN
 from veritex.utils.plot_poly import plot_polytope2d
 from veritex.methods.worker import Worker
 from veritex.methods.shared import SharedState
 from veritex.utils.load_onnx import load_ffnn_onnx
-
-from acasxu_properties import *
+from examples.ACASXu.repair.acasxu_properties import *
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Verification Settings')
-    parser.add_argument('--property', type=str, required=False, help='It supports 1,2,3,4,5,6,7,8,9,10')
+    parser = argparse.ArgumentParser(description='Plotting of reachable domains')
+    parser.add_argument('--property', type=str, required=False)
     parser.add_argument('--network_path', type=str, required=False)
+    parser.add_argument('--savename', type=str, required=False)
     parser.add_argument('--dims', nargs='+', type=int, default=(0, 1))
     args = parser.parse_args()
-    args.property = '3,4'
     prop_indx = np.fromstring(args.property, dtype=int, sep=',')
     props = []
     for n in prop_indx:
@@ -31,10 +30,9 @@ if __name__ == "__main__":
         assert prop_name in all_properties
         props.append(all_properties[prop_name])
     assert props
-    network_path = '../nets/ACASXU_run2a_2_1_batch_2000.onnx' #args.network_path
-    # network_path = 'logs/acasxu_epoch24_safe.pt'
-    # network_path = "logs/art_repaired_network_21_safe.nnet"
-    dim0, dim1 = (0, 2)  # tuple(args.dims)
+
+    network_path = args.network_path
+    dim0, dim1 = args.dims
 
     try:
         if network_path[-4:] == 'onnx':
@@ -91,13 +89,9 @@ if __name__ == "__main__":
     ax.autoscale()
     ax.set_xlabel('$y_' + str(dim0) + '$', fontsize=16)
     ax.set_ylabel('$y_' + str(dim1) + '$', fontsize=16)
-    # plt.title('Exact output reachable domain (blue) & Unsafe domain (red) on'+' Property '+args.property, fontsize=18, pad=20)
-    if not os.path.exists('images'):
-        os.mkdir('images')
+    #plt.title('Exact output reachable domain (blue) & Unsafe domain (red) on'+' Property '+args.property, fontsize=18, pad=20)
 
-    plt.savefig(
-        'images/reachable_domain_' + 'property_' + args.property + '_dims' + str(dim0) + '_' + str(dim1) + '.png',
-        bbox_inches='tight')
+    plt.savefig(args.savename + '.png', bbox_inches='tight')
     plt.close()
 
 

@@ -1,13 +1,15 @@
 import sys
 import copy as cp
 from veritex.networks.ffnn import FFNN
-from acasxu_properties_vnnlib import *
 import multiprocessing as mp
 from veritex.methods.worker import Worker
 from veritex.methods.shared import SharedState
 from veritex.utils.load_onnx import load_ffnn_onnx
+from veritex.utils.sfproperty import Property
+from veritex.utils.vnnlib import read_vnnlib_simple
 import multiprocessing
 import logging
+import torch
 import time
 import pickle
 
@@ -29,7 +31,21 @@ if __name__ == "__main__":
 
     num_processors = multiprocessing.cpu_count()
     print('num_processors: ', num_processors)
-    for n, prop in enumerate(properties[:4]):
+
+    # extract safety properties from vnnlib files
+    properties = []
+    for n in range(1, 5):
+        vnnlib_specs = read_vnnlib_simple('../nets/prop_' + str(n) + '.vnnlib', num_inputs=5, num_outputs=5)
+        for spec in vnnlib_specs:
+            lbs = [item[0] for item in spec[0]]
+            ubs = [item[1] for item in spec[0]]
+            input_domain = [lbs, ubs]
+
+            unsafe_domains = [[torch.tensor(item[0]), torch.tensor([-item[1]]).T] for item in spec[1]]
+            properties.append(Property(input_domain, unsafe_domains))
+
+    # run safety verification
+    for n, prop in enumerate(properties):
         for i in range(1,6):
             for j in range(1,10):
                 nn_path = "../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
@@ -62,8 +78,8 @@ if __name__ == "__main__":
                 all_times.append(time.time()-t0)
                 all_results.append(unsafe)
 
-    with open('verification_p1_p4.pkl', 'wb') as f:
-        pickle.dump([all_times, all_results], f)
+    # with open('verification_p1_p4.pkl', 'wb') as f:
+    #     pickle.dump([all_times, all_results], f)
 
 
 

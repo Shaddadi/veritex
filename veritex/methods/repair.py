@@ -158,7 +158,7 @@ class REPAIR:
             if np.all([len(sub)==0 for sub in unsafe_data]):
                 logging.info('The accurate and safe candidate model is found? True')
                 logging.info(f'Total running time: {time.time()-t0 :.2f} sec')
-                torch.save(self.torch_model, savepath + "/epoch" + str(num) + ".pt")
+                torch.save(self.torch_model, savepath + "/repaired_model.pt")
                 repaired = True
                 break
 
@@ -200,7 +200,7 @@ class REPAIR:
         if not repaired:
             logging.info('The accurate and safe candidate model is found? False')
             logging.info(f'Total running time: {time.time() - t0 :.2f} sec')
-            torch.save(self.torch_model, savepath + "/epoch" + str(num) + ".pt")
+            torch.save(self.torch_model, savepath + "/unrepaired_model.pt")
 
 
     def repair_model_classification(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=2000, epochs=200):
@@ -232,7 +232,7 @@ class REPAIR:
                 if np.all([len(sub)==0 for sub in unsafe_data]):
                     logging.info('The accurate and safe candidate model is found? True')
                     logging.info(f'Total running time: {time.time()-t0 :.2f} sec')
-                    torch.save(self.torch_model, savepath + "/epoch" + str(num) + ".pt")
+                    torch.save(self.torch_model, savepath + "/repaired_model.pt")
                     repaired = True
                     break
 
@@ -274,7 +274,7 @@ class REPAIR:
         if not repaired:
             logging.info('The accurate and safe candidate model is found? False')
             logging.info(f'Total running time: {time.time() - t0 :.2f} sec')
-            torch.save(self.torch_model, savepath + "/epoch" + str(num) + ".pt")
+            torch.save(self.torch_model, savepath + "/unrepaired_model.pt")
 
 
 class DATA:
