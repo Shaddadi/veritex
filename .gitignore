@@ -1,6 +1,7 @@
 /tbxmanager
 /__pycache__
 logs/
+verify/*.log
 venv/
 *.onnx
 *.odg
@@ -8,7 +9,6 @@ venv/
 *.pt
 *.py[cod]
 # Log files
-*.log
 *.pkl
 # Package files
 *.jar
