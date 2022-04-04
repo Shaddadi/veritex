@@ -1,0 +1,1052 @@
+[2020-05-12 09:30:30,251][INFO] 
+===== test_all-Collision-2020-05-12-09-30-30 configuration =====
+  benchmark: Collision
+  exp_fn: test_all
+  seed: 42
+  dom: <module 'src.deeppoly' from '/home/xlin/Dropbox/workspace/ART/src/deeppoly.py'>
+  start_abs_cnt: 5000
+  max_abs_cnt: 10000
+  refine_top_k: 200
+  tiny_width: 0.001
+  lr: 0.001
+  batch_size: 32
+  min_epochs: 20
+  max_epochs: 100
+  use_scheduler: True
+  no_pts: False
+  no_abs: False
+  no_refine: False
+  quiet: False
+  debug: False
+  reset_params: False
+  n_props: 100
+  safe_lambda: 1.0
+  grad_clip: 1.0
+  accu_bar: None
+  scheduler_fn: <function ExpArgParser.setup_rest.<locals>.<lambda> at 0x7f3eb334a050>
+  net_fn: <function CollisionArgParser.setup_rest.<locals>.<lambda> at 0x7f3eb334a170>
+  accuracy_loss_fn: <function CollisionArgParser.setup_rest.<locals>.ce_loss at 0x7f3eb334a200>
+===== end of test_all-Collision-2020-05-12-09-30-30 configuration =====
+
+[2020-05-12 09:30:31,774][INFO] Sequential(
+  (0): Linear(in_features=6, out_features=50, bias=True)
+  (1): ReLU()
+  (2): Linear(in_features=50, out_features=128, bias=True)
+  (3): ReLU()
+  (4): Linear(in_features=128, out_features=50, bias=True)
+  (5): ReLU()
+  (6): Linear(in_features=50, out_features=2, bias=True)
+)
+[2020-05-12 09:30:33,433][INFO] Using 100 largest properties.
+[2020-05-12 09:30:34,848][INFO] [0m 1s (1.406 seconds)] After epoch 0:
+[2020-05-12 09:30:34,848][INFO] Loaded 3000 points for training.
+[2020-05-12 09:30:34,849][INFO] Loaded 1183 abstractions for training.
+[2020-05-12 09:30:34,904][INFO] min loss 0.0, max loss 0.12566423416137695.
+[2020-05-12 09:30:34,905][INFO] Max loss at LB: tensor([ 0.2788,  0.5169,  0.1204,  0.3837, -0.0553, -0.3352], device='cuda:0'), UB: tensor([ 0.3538,  0.5919,  0.1954,  0.4587, -0.0178, -0.2602], device='cuda:0').
+[2020-05-12 09:30:34,906][INFO] Test set accuracy 0.5.
+[2020-05-12 09:30:34,907][INFO] 
+[0m 1s (1.465 seconds)] Starting epoch 1:
+[2020-05-12 09:30:36,452][INFO] [0m 3s (3.009 seconds)] At epoch 1: avg accuracy training loss 0.6910068409310447, safe training loss 0.0035417360874513784.
+[2020-05-12 09:30:37,283][INFO] [0m 3s (3.840 seconds)] After epoch 1:
+[2020-05-12 09:30:37,283][INFO] Loaded 3000 points for training.
+[2020-05-12 09:30:37,283][INFO] Loaded 1421 abstractions for training.
+[2020-05-12 09:30:37,339][INFO] min loss 0.0, max loss 0.10123297572135925.
+[2020-05-12 09:30:37,341][INFO] Max loss at LB: tensor([ 0.3821,  0.0333,  0.0955,  0.5354, -0.1340, -0.2946], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:30:37,341][INFO] Test set accuracy 0.49866666666666665.
+[2020-05-12 09:30:37,342][INFO] 
+[0m 3s (3.899 seconds)] Starting epoch 2:
+[2020-05-12 09:30:39,400][INFO] [0m 5s (5.958 seconds)] At epoch 2: avg accuracy training loss 0.6801970628174868, safe training loss 0.003408623483582315.
+[2020-05-12 09:30:40,084][INFO] [0m 6s (6.642 seconds)] After epoch 2:
+[2020-05-12 09:30:40,084][INFO] Loaded 3000 points for training.
+[2020-05-12 09:30:40,085][INFO] Loaded 1422 abstractions for training.
+[2020-05-12 09:30:40,138][INFO] min loss 0.0, max loss 0.3714355230331421.
+[2020-05-12 09:30:40,140][INFO] Max loss at LB: tensor([ 0.3821,  0.0333,  0.0955,  0.5354, -0.1340, -0.2946], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:30:40,140][INFO] Test set accuracy 0.5.
+[2020-05-12 09:30:40,141][INFO] 
+[0m 6s (6.698 seconds)] Starting epoch 3:
+[2020-05-12 09:30:42,178][INFO] [0m 8s (8.736 seconds)] At epoch 3: avg accuracy training loss 0.6362480751492761, safe training loss 0.0048517296467748975.
+[2020-05-12 09:30:43,008][INFO] [0m 9s (9.565 seconds)] After epoch 3:
+[2020-05-12 09:30:43,008][INFO] Loaded 3000 points for training.
+[2020-05-12 09:30:43,008][INFO] Loaded 1622 abstractions for training.
+[2020-05-12 09:30:43,065][INFO] min loss 0.0, max loss 1.5150688886642456.
+[2020-05-12 09:30:43,066][INFO] Max loss at LB: tensor([ 0.3821,  0.0333,  0.0955,  0.5354, -0.1340, -0.2946], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:30:43,066][INFO] Test set accuracy 0.7706666666666667.
+[2020-05-12 09:30:43,067][INFO] 
+[0m 9s (9.625 seconds)] Starting epoch 4:
+[2020-05-12 09:30:45,425][INFO] [0m 11s (11.982 seconds)] At epoch 4: avg accuracy training loss 0.5960360324382782, safe training loss 0.0067144650140835435.
+[2020-05-12 09:30:46,315][INFO] [0m 12s (12.873 seconds)] After epoch 4:
+[2020-05-12 09:30:46,315][INFO] Loaded 3000 points for training.
+[2020-05-12 09:30:46,315][INFO] Loaded 1822 abstractions for training.
+[2020-05-12 09:30:46,373][INFO] min loss 0.0, max loss 2.453282356262207.
+[2020-05-12 09:30:46,374][INFO] Max loss at LB: tensor([ 0.3821,  0.0333,  0.0955,  0.5354, -0.1340, -0.2946], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:30:46,375][INFO] Test set accuracy 0.8466666666666667.
+[2020-05-12 09:30:46,375][INFO] 
+[0m 12s (12.933 seconds)] Starting epoch 5:
+[2020-05-12 09:30:49,079][INFO] [0m 15s (15.637 seconds)] At epoch 5: avg accuracy training loss 0.5843428373336792, safe training loss 0.006395238205836254.
+[2020-05-12 09:30:50,298][INFO] [0m 16s (16.856 seconds)] After epoch 5:
+[2020-05-12 09:30:50,299][INFO] Loaded 3000 points for training.
+[2020-05-12 09:30:50,299][INFO] Loaded 2202 abstractions for training.
+[2020-05-12 09:30:50,356][INFO] min loss 0.0, max loss 3.143172264099121.
+[2020-05-12 09:30:50,358][INFO] Max loss at LB: tensor([ 0.3821,  0.0333,  0.0955,  0.5354, -0.1340, -0.2946], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:30:50,358][INFO] Test set accuracy 0.811.
+[2020-05-12 09:30:50,358][INFO] 
+[0m 16s (16.916 seconds)] Starting epoch 6:
+[2020-05-12 09:30:53,791][INFO] [0m 20s (20.349 seconds)] At epoch 6: avg accuracy training loss 0.5744224339723587, safe training loss 0.006350080141975709.
+[2020-05-12 09:30:54,824][INFO] [0m 21s (21.382 seconds)] After epoch 6:
+[2020-05-12 09:30:54,824][INFO] Loaded 3000 points for training.
+[2020-05-12 09:30:54,824][INFO] Loaded 2402 abstractions for training.
+[2020-05-12 09:30:54,882][INFO] min loss 0.0, max loss 2.8938658237457275.
+[2020-05-12 09:30:54,883][INFO] Max loss at LB: tensor([ 0.3821,  0.0333,  0.0955,  0.5354, -0.1340, -0.2946], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:30:54,884][INFO] Test set accuracy 0.8846666666666667.
+[2020-05-12 09:30:54,885][INFO] 
+[0m 21s (21.442 seconds)] Starting epoch 7:
+[2020-05-12 09:30:58,663][INFO] [0m 25s (25.221 seconds)] At epoch 7: avg accuracy training loss 0.5652764630317688, safe training loss 0.00812743741630887.
+[2020-05-12 09:30:59,779][INFO] [0m 26s (26.337 seconds)] After epoch 7:
+[2020-05-12 09:30:59,779][INFO] Loaded 3000 points for training.
+[2020-05-12 09:30:59,779][INFO] Loaded 2602 abstractions for training.
+[2020-05-12 09:30:59,839][INFO] min loss 0.0, max loss 3.7080307006835938.
+[2020-05-12 09:30:59,840][INFO] Max loss at LB: tensor([ 0.3821,  0.0333,  0.0955,  0.5354, -0.1340, -0.2946], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:30:59,841][INFO] Test set accuracy 0.8853333333333333.
+[2020-05-12 09:30:59,841][INFO] 
+[0m 26s (26.399 seconds)] Starting epoch 8:
+[2020-05-12 09:31:03,988][INFO] [0m 30s (30.545 seconds)] At epoch 8: avg accuracy training loss 0.5529520449079113, safe training loss 0.010075906136383614.
+[2020-05-12 09:31:05,100][INFO] [0m 31s (31.658 seconds)] After epoch 8:
+[2020-05-12 09:31:05,100][INFO] Loaded 3000 points for training.
+[2020-05-12 09:31:05,100][INFO] Loaded 2802 abstractions for training.
+[2020-05-12 09:31:05,158][INFO] min loss 0.0, max loss 3.4277193546295166.
+[2020-05-12 09:31:05,160][INFO] Max loss at LB: tensor([ 0.3821,  0.0333,  0.0955,  0.5354, -0.1340, -0.2946], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:31:05,161][INFO] Test set accuracy 0.8996666666666666.
+[2020-05-12 09:31:05,161][INFO] 
+[0m 31s (31.719 seconds)] Starting epoch 9:
+[2020-05-12 09:31:09,628][INFO] [0m 36s (36.186 seconds)] At epoch 9: avg accuracy training loss 0.52329545391017, safe training loss 0.010857270667918197.
+[2020-05-12 09:31:10,834][INFO] [0m 37s (37.391 seconds)] After epoch 9:
+[2020-05-12 09:31:10,834][INFO] Loaded 3000 points for training.
+[2020-05-12 09:31:10,834][INFO] Loaded 3002 abstractions for training.
+[2020-05-12 09:31:10,893][INFO] min loss 0.0, max loss 4.378011226654053.
+[2020-05-12 09:31:10,895][INFO] Max loss at LB: tensor([ 0.3821,  0.0333,  0.0955,  0.5354, -0.1340, -0.2946], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:31:10,896][INFO] Test set accuracy 0.9146666666666666.
+[2020-05-12 09:31:10,896][INFO] 
+[0m 37s (37.454 seconds)] Starting epoch 10:
+[2020-05-12 09:31:15,693][INFO] [0m 42s (42.251 seconds)] At epoch 10: avg accuracy training loss 0.4726920791210667, safe training loss 0.016681301164671137.
+[2020-05-12 09:31:17,019][INFO] [0m 43s (43.576 seconds)] After epoch 10:
+[2020-05-12 09:31:17,019][INFO] Loaded 3000 points for training.
+[2020-05-12 09:31:17,019][INFO] Loaded 3202 abstractions for training.
+[2020-05-12 09:31:17,077][INFO] min loss 0.0, max loss 4.866289138793945.
+[2020-05-12 09:31:17,079][INFO] Max loss at LB: tensor([ 0.4071,  0.0333,  0.0955,  0.5354, -0.1340, -0.2946], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:31:17,080][INFO] Test set accuracy 0.921.
+[2020-05-12 09:31:17,080][INFO] 
+[0m 43s (43.638 seconds)] Starting epoch 11:
+[2020-05-12 09:31:21,831][INFO] [0m 48s (48.389 seconds)] At epoch 11: avg accuracy training loss 0.43832816135498787, safe training loss 0.02220997401583259.
+[2020-05-12 09:31:23,241][INFO] [0m 49s (49.798 seconds)] After epoch 11:
+[2020-05-12 09:31:23,241][INFO] Loaded 3000 points for training.
+[2020-05-12 09:31:23,241][INFO] Loaded 3402 abstractions for training.
+[2020-05-12 09:31:23,301][INFO] min loss 0.0, max loss 4.265272617340088.
+[2020-05-12 09:31:23,302][INFO] Max loss at LB: tensor([ 0.4071,  0.0333,  0.0955,  0.5354, -0.1340, -0.2696], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:31:23,303][INFO] Test set accuracy 0.9293333333333333.
+[2020-05-12 09:31:23,304][INFO] 
+[0m 49s (49.861 seconds)] Starting epoch 12:
+[2020-05-12 09:31:28,018][INFO] [0m 54s (54.576 seconds)] At epoch 12: avg accuracy training loss 0.42161286037455326, safe training loss 0.027537530473363336.
+[2020-05-12 09:31:29,466][INFO] [0m 56s (56.023 seconds)] After epoch 12:
+[2020-05-12 09:31:29,466][INFO] Loaded 3000 points for training.
+[2020-05-12 09:31:29,466][INFO] Loaded 3602 abstractions for training.
+[2020-05-12 09:31:29,525][INFO] min loss 0.0, max loss 2.9462058544158936.
+[2020-05-12 09:31:29,526][INFO] Max loss at LB: tensor([ 0.4071,  0.0333,  0.1205,  0.5354, -0.1340, -0.2696], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:31:29,527][INFO] Test set accuracy 0.9313333333333333.
+[2020-05-12 09:31:29,528][INFO] 
+[0m 56s (56.085 seconds)] Starting epoch 13:
+[2020-05-12 09:31:34,173][INFO] [1m 0s (60.730 seconds)] At epoch 13: avg accuracy training loss 0.4111141578484607, safe training loss 0.029117439295195283.
+[2020-05-12 09:31:35,677][INFO] [1m 2s (62.235 seconds)] After epoch 13:
+[2020-05-12 09:31:35,678][INFO] Loaded 3000 points for training.
+[2020-05-12 09:31:35,678][INFO] Loaded 3802 abstractions for training.
+[2020-05-12 09:31:35,737][INFO] min loss 0.0, max loss 1.9158575534820557.
+[2020-05-12 09:31:35,739][INFO] Max loss at LB: tensor([ 0.4196,  0.0333,  0.1205,  0.5354, -0.1340, -0.2696], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:31:35,739][INFO] Test set accuracy 0.9403333333333334.
+[2020-05-12 09:31:35,740][INFO] 
+[1m 2s (62.297 seconds)] Starting epoch 14:
+[2020-05-12 09:31:40,336][INFO] [1m 6s (66.894 seconds)] At epoch 14: avg accuracy training loss 0.4043329136986886, safe training loss 0.027551145688380286.
+[2020-05-12 09:31:41,948][INFO] [1m 8s (68.506 seconds)] After epoch 14:
+[2020-05-12 09:31:41,949][INFO] Loaded 3000 points for training.
+[2020-05-12 09:31:41,949][INFO] Loaded 4002 abstractions for training.
+[2020-05-12 09:31:42,008][INFO] min loss 0.0, max loss 1.5189168453216553.
+[2020-05-12 09:31:42,010][INFO] Max loss at LB: tensor([ 0.4196,  0.0333,  0.1330,  0.5354, -0.1340, -0.2696], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:31:42,011][INFO] Test set accuracy 0.942.
+[2020-05-12 09:31:42,011][INFO] 
+[1m 8s (68.569 seconds)] Starting epoch 15:
+[2020-05-12 09:31:46,541][INFO] [1m 13s (73.099 seconds)] At epoch 15: avg accuracy training loss 0.39932291321857, safe training loss 0.029363873890370772.
+[2020-05-12 09:31:48,212][INFO] [1m 14s (74.770 seconds)] After epoch 15:
+[2020-05-12 09:31:48,212][INFO] Loaded 3000 points for training.
+[2020-05-12 09:31:48,213][INFO] Loaded 4202 abstractions for training.
+[2020-05-12 09:31:48,274][INFO] min loss 0.0, max loss 1.01431143283844.
+[2020-05-12 09:31:48,276][INFO] Max loss at LB: tensor([ 0.4735,  0.9332,  0.2448,  0.4835, -0.2706, -0.1439], device='cuda:0'), UB: tensor([ 0.4856,  0.9392,  0.2691,  0.5077, -0.2221, -0.0955], device='cuda:0').
+[2020-05-12 09:31:48,276][INFO] Test set accuracy 0.9336666666666666.
+[2020-05-12 09:31:48,276][INFO] 
+[1m 14s (74.834 seconds)] Starting epoch 16:
+[2020-05-12 09:31:52,621][INFO] [1m 19s (79.179 seconds)] At epoch 16: avg accuracy training loss 0.3969543223739952, safe training loss 0.02941095371610455.
+[2020-05-12 09:31:54,277][INFO] [1m 20s (80.835 seconds)] After epoch 16:
+[2020-05-12 09:31:54,278][INFO] Loaded 3000 points for training.
+[2020-05-12 09:31:54,278][INFO] Loaded 4402 abstractions for training.
+[2020-05-12 09:31:54,339][INFO] min loss 0.0, max loss 0.8257509469985962.
+[2020-05-12 09:31:54,341][INFO] Max loss at LB: tensor([ 0.4196,  0.0333,  0.1330,  0.5604, -0.1340, -0.2571], device='cuda:0'), UB: tensor([ 0.4321,  0.0833,  0.1455,  0.5854, -0.0840, -0.2446], device='cuda:0').
+[2020-05-12 09:31:54,342][INFO] Test set accuracy 0.94.
+[2020-05-12 09:31:54,342][INFO] 
+[1m 20s (80.900 seconds)] Starting epoch 17:
+[2020-05-12 09:31:58,634][INFO] [1m 25s (85.191 seconds)] At epoch 17: avg accuracy training loss 0.3935814150559005, safe training loss 0.02743927833263672.
+[2020-05-12 09:32:00,396][INFO] [1m 26s (86.954 seconds)] After epoch 17:
+[2020-05-12 09:32:00,396][INFO] Loaded 3000 points for training.
+[2020-05-12 09:32:00,397][INFO] Loaded 4602 abstractions for training.
+[2020-05-12 09:32:00,457][INFO] min loss 0.0, max loss 1.2105517387390137.
+[2020-05-12 09:32:00,459][INFO] Max loss at LB: tensor([ 0.3076,  0.7258,  0.2025,  0.4033,  0.1205, -0.0082], device='cuda:0'), UB: tensor([0.3201, 0.7383, 0.2275, 0.4283, 0.1455, 0.0418], device='cuda:0').
+[2020-05-12 09:32:00,460][INFO] Test set accuracy 0.9406666666666667.
+[2020-05-12 09:32:00,460][INFO] 
+[1m 27s (87.018 seconds)] Starting epoch 18:
+[2020-05-12 09:32:04,631][INFO] [1m 31s (91.188 seconds)] At epoch 18: avg accuracy training loss 0.392075434166898, safe training loss 0.024844006214651368.
+[2020-05-12 09:32:06,423][INFO] [1m 32s (92.980 seconds)] After epoch 18:
+[2020-05-12 09:32:06,423][INFO] Loaded 3000 points for training.
+[2020-05-12 09:32:06,423][INFO] Loaded 4802 abstractions for training.
+[2020-05-12 09:32:06,484][INFO] min loss 0.0, max loss 0.8233636617660522.
+[2020-05-12 09:32:06,486][INFO] Max loss at LB: tensor([ 0.2938,  0.4170,  0.1727,  0.4359, -0.1826,  0.0499], device='cuda:0'), UB: tensor([ 0.2989,  0.4214,  0.1821,  0.4547, -0.1451,  0.0686], device='cuda:0').
+[2020-05-12 09:32:06,487][INFO] Test set accuracy 0.9323333333333333.
+[2020-05-12 09:32:06,487][INFO] 
+[1m 33s (93.044 seconds)] Starting epoch 19:
+[2020-05-12 09:32:10,546][INFO] [1m 37s (97.104 seconds)] At epoch 19: avg accuracy training loss 0.39247383097166655, safe training loss 0.027700268082641144.
+[2020-05-12 09:32:12,333][INFO] [1m 38s (98.890 seconds)] After epoch 19:
+[2020-05-12 09:32:12,333][INFO] Loaded 3000 points for training.
+[2020-05-12 09:32:12,333][INFO] Loaded 5002 abstractions for training.
+[2020-05-12 09:32:12,394][INFO] min loss 0.0, max loss 0.9663642644882202.
+[2020-05-12 09:32:12,396][INFO] Max loss at LB: tensor([ 0.4976,  0.7779,  0.2251,  0.5872,  0.2292, -0.0416], device='cuda:0'), UB: tensor([0.5101, 0.8029, 0.2501, 0.6122, 0.2792, 0.0084], device='cuda:0').
+[2020-05-12 09:32:12,396][INFO] Test set accuracy 0.9396666666666667.
+[2020-05-12 09:32:12,397][INFO] 
+[1m 38s (98.954 seconds)] Starting epoch 20:
+[2020-05-12 09:32:16,428][INFO] [1m 42s (102.986 seconds)] At epoch 20: avg accuracy training loss 0.3920209225147001, safe training loss 0.027596610172661722.
+[2020-05-12 09:32:18,307][INFO] [1m 44s (104.865 seconds)] After epoch 20:
+[2020-05-12 09:32:18,308][INFO] Loaded 3000 points for training.
+[2020-05-12 09:32:18,308][INFO] Loaded 5202 abstractions for training.
+[2020-05-12 09:32:18,370][INFO] min loss 0.0, max loss 0.5260737538337708.
+[2020-05-12 09:32:18,372][INFO] Max loss at LB: tensor([ 0.0464,  0.5501,  0.1751,  0.5537, -0.0311, -0.0538], device='cuda:0'), UB: tensor([ 0.0526,  0.5564,  0.1876,  0.5599, -0.0186, -0.0288], device='cuda:0').
+[2020-05-12 09:32:18,373][INFO] Test set accuracy 0.941.
+[2020-05-12 09:32:18,373][INFO] 
+[1m 44s (104.931 seconds)] Starting epoch 21:
+[2020-05-12 09:32:22,440][INFO] [1m 48s (108.998 seconds)] At epoch 21: avg accuracy training loss 0.3903505722040771, safe training loss 0.021842266638232494.
+[2020-05-12 09:32:24,393][INFO] [1m 50s (110.950 seconds)] After epoch 21:
+[2020-05-12 09:32:24,393][INFO] Loaded 3000 points for training.
+[2020-05-12 09:32:24,393][INFO] Loaded 5402 abstractions for training.
+[2020-05-12 09:32:24,456][INFO] min loss 0.0, max loss 0.4730547070503235.
+[2020-05-12 09:32:24,457][INFO] Max loss at LB: tensor([0.1657, 0.3871, 0.2334, 0.4817, 0.0079, 0.0424], device='cuda:0'), UB: tensor([0.1778, 0.3992, 0.2455, 0.5059, 0.0321, 0.0667], device='cuda:0').
+[2020-05-12 09:32:24,458][INFO] Test set accuracy 0.9386666666666666.
+[2020-05-12 09:32:24,458][INFO] 
+[1m 51s (111.015 seconds)] Starting epoch 22:
+[2020-05-12 09:32:28,438][INFO] [1m 54s (114.995 seconds)] At epoch 22: avg accuracy training loss 0.389856263514488, safe training loss 0.022954311377058428.
+[2020-05-12 09:32:30,385][INFO] [1m 56s (116.943 seconds)] After epoch 22:
+[2020-05-12 09:32:30,385][INFO] Loaded 3000 points for training.
+[2020-05-12 09:32:30,385][INFO] Loaded 5602 abstractions for training.
+[2020-05-12 09:32:30,448][INFO] min loss 0.0, max loss 0.542299747467041.
+[2020-05-12 09:32:30,449][INFO] Max loss at LB: tensor([ 0.3102,  0.1831,  0.2036,  0.5415, -0.1836, -0.3476], device='cuda:0'), UB: tensor([ 0.3182,  0.2073,  0.2096,  0.5657, -0.1594, -0.3233], device='cuda:0').
+[2020-05-12 09:32:30,450][INFO] Test set accuracy 0.9393333333333334.
+[2020-05-12 09:32:30,450][INFO] 
+[1m 57s (117.008 seconds)] Starting epoch 23:
+[2020-05-12 09:32:34,335][INFO] [2m 0s (120.893 seconds)] At epoch 23: avg accuracy training loss 0.3891793595206353, safe training loss 0.02736982293627275.
+[2020-05-12 09:32:36,353][INFO] [2m 2s (122.911 seconds)] After epoch 23:
+[2020-05-12 09:32:36,354][INFO] Loaded 3000 points for training.
+[2020-05-12 09:32:36,354][INFO] Loaded 5802 abstractions for training.
+[2020-05-12 09:32:36,414][INFO] min loss 0.0, max loss 0.4094296097755432.
+[2020-05-12 09:32:36,416][INFO] Max loss at LB: tensor([ 0.3741,  0.0403,  0.1866,  0.5037, -0.1699, -0.2804], device='cuda:0'), UB: tensor([ 0.4071,  0.0754,  0.1987,  0.5522, -0.1215, -0.2320], device='cuda:0').
+[2020-05-12 09:32:36,416][INFO] Test set accuracy 0.9373333333333334.
+[2020-05-12 09:32:36,416][INFO] 
+[2m 2s (122.974 seconds)] Starting epoch 24:
+[2020-05-12 09:32:40,240][INFO] [2m 6s (126.797 seconds)] At epoch 24: avg accuracy training loss 0.38824826062366524, safe training loss 0.023609833809376885.
+[2020-05-12 09:32:42,266][INFO] [2m 8s (128.824 seconds)] After epoch 24:
+[2020-05-12 09:32:42,266][INFO] Loaded 3000 points for training.
+[2020-05-12 09:32:42,266][INFO] Loaded 6002 abstractions for training.
+[2020-05-12 09:32:42,330][INFO] min loss 0.0, max loss 0.8509300947189331.
+[2020-05-12 09:32:42,332][INFO] Max loss at LB: tensor([0.1241, 0.7293, 0.2441, 0.5350, 0.2600, 0.1795], device='cuda:0'), UB: tensor([0.1335, 0.7340, 0.2534, 0.5443, 0.2788, 0.2170], device='cuda:0').
+[2020-05-12 09:32:42,333][INFO] Test set accuracy 0.9356666666666666.
+[2020-05-12 09:32:42,333][INFO] 
+[2m 8s (128.891 seconds)] Starting epoch 25:
+[2020-05-12 09:32:46,147][INFO] [2m 12s (132.705 seconds)] At epoch 25: avg accuracy training loss 0.3871609591027742, safe training loss 0.026232539341905184.
+[2020-05-12 09:32:48,255][INFO] [2m 14s (134.812 seconds)] After epoch 25:
+[2020-05-12 09:32:48,255][INFO] Loaded 3000 points for training.
+[2020-05-12 09:32:48,255][INFO] Loaded 6202 abstractions for training.
+[2020-05-12 09:32:48,319][INFO] min loss 0.0, max loss 0.623591423034668.
+[2020-05-12 09:32:48,321][INFO] Max loss at LB: tensor([ 0.5038,  0.7779,  0.2251,  0.5872,  0.2292, -0.0416], device='cuda:0'), UB: tensor([0.5101, 0.7904, 0.2501, 0.6122, 0.2792, 0.0084], device='cuda:0').
+[2020-05-12 09:32:48,322][INFO] Test set accuracy 0.9436666666666667.
+[2020-05-12 09:32:48,322][INFO] 
+[2m 14s (134.880 seconds)] Starting epoch 26:
+[2020-05-12 09:32:52,162][INFO] [2m 18s (138.719 seconds)] At epoch 26: avg accuracy training loss 0.3859613425629113, safe training loss 0.019857811771573558.
+[2020-05-12 09:32:54,306][INFO] [2m 20s (140.864 seconds)] After epoch 26:
+[2020-05-12 09:32:54,306][INFO] Loaded 3000 points for training.
+[2020-05-12 09:32:54,306][INFO] Loaded 6402 abstractions for training.
+[2020-05-12 09:32:54,372][INFO] min loss 0.0, max loss 0.34697532653808594.
+[2020-05-12 09:32:54,374][INFO] Max loss at LB: tensor([ 0.2938,  0.4192,  0.1727,  0.4359, -0.1826,  0.0499], device='cuda:0'), UB: tensor([ 0.2989,  0.4214,  0.1774,  0.4453, -0.1639,  0.0592], device='cuda:0').
+[2020-05-12 09:32:54,374][INFO] Test set accuracy 0.941.
+[2020-05-12 09:32:54,374][INFO] 
+[2m 20s (140.932 seconds)] Starting epoch 27:
+[2020-05-12 09:32:58,235][INFO] [2m 24s (144.793 seconds)] At epoch 27: avg accuracy training loss 0.3851910393725159, safe training loss 0.01813811623686624.
+[2020-05-12 09:33:00,429][INFO] [2m 26s (146.987 seconds)] After epoch 27:
+[2020-05-12 09:33:00,429][INFO] Loaded 3000 points for training.
+[2020-05-12 09:33:00,430][INFO] Loaded 6602 abstractions for training.
+[2020-05-12 09:33:00,496][INFO] min loss 0.0, max loss 0.4020988345146179.
+[2020-05-12 09:33:00,498][INFO] Max loss at LB: tensor([ 0.1605,  0.3852,  0.2438,  0.4192,  0.1022, -0.0813], device='cuda:0'), UB: tensor([ 0.1667,  0.3867,  0.2469,  0.4317,  0.1085, -0.0688], device='cuda:0').
+[2020-05-12 09:33:00,498][INFO] Test set accuracy 0.9413333333333334.
+[2020-05-12 09:33:00,498][INFO] 
+[2m 27s (147.056 seconds)] Starting epoch 28:
+[2020-05-12 09:33:04,170][INFO] [2m 30s (150.727 seconds)] At epoch 28: avg accuracy training loss 0.38465515964774677, safe training loss 0.015111939989090446.
+[2020-05-12 09:33:06,409][INFO] [2m 32s (152.967 seconds)] After epoch 28:
+[2020-05-12 09:33:06,409][INFO] Loaded 3000 points for training.
+[2020-05-12 09:33:06,409][INFO] Loaded 6802 abstractions for training.
+[2020-05-12 09:33:06,473][INFO] min loss 0.0, max loss 0.8188698291778564.
+[2020-05-12 09:33:06,475][INFO] Max loss at LB: tensor([ 0.2792,  0.7627,  0.2584,  0.5586,  0.0181, -0.1657], device='cuda:0'), UB: tensor([ 0.2854,  0.7690,  0.2709,  0.5711,  0.0431, -0.1407], device='cuda:0').
+[2020-05-12 09:33:06,476][INFO] Test set accuracy 0.9403333333333334.
+[2020-05-12 09:33:06,476][INFO] 
+[2m 33s (153.033 seconds)] Starting epoch 29:
+[2020-05-12 09:33:10,250][INFO] [2m 36s (156.808 seconds)] At epoch 29: avg accuracy training loss 0.38366114260047995, safe training loss 0.01774861822054992.
+[2020-05-12 09:33:12,481][INFO] [2m 39s (159.039 seconds)] After epoch 29:
+[2020-05-12 09:33:12,481][INFO] Loaded 3000 points for training.
+[2020-05-12 09:33:12,481][INFO] Loaded 7002 abstractions for training.
+[2020-05-12 09:33:12,546][INFO] min loss 0.0, max loss 0.5055668354034424.
+[2020-05-12 09:33:12,548][INFO] Max loss at LB: tensor([0.1260, 0.4305, 0.1724, 0.4144, 0.0799, 0.1767], device='cuda:0'), UB: tensor([0.1510, 0.4430, 0.1974, 0.4394, 0.1049, 0.2017], device='cuda:0').
+[2020-05-12 09:33:12,548][INFO] Test set accuracy 0.9433333333333334.
+[2020-05-12 09:33:12,548][INFO] 
+[2m 39s (159.106 seconds)] Starting epoch 30:
+[2020-05-12 09:33:16,197][INFO] [2m 42s (162.755 seconds)] At epoch 30: avg accuracy training loss 0.38280933358336006, safe training loss 0.01727110061729427.
+[2020-05-12 09:33:18,387][INFO] [2m 44s (164.945 seconds)] After epoch 30:
+[2020-05-12 09:33:18,387][INFO] Loaded 3000 points for training.
+[2020-05-12 09:33:18,387][INFO] Loaded 7202 abstractions for training.
+[2020-05-12 09:33:18,453][INFO] min loss 0.0, max loss 0.4990209937095642.
+[2020-05-12 09:33:18,455][INFO] Max loss at LB: tensor([ 0.0319,  0.6613,  0.2492,  0.5215,  0.2894, -0.2154], device='cuda:0'), UB: tensor([ 0.0444,  0.6676,  0.2617,  0.5340,  0.3019, -0.2029], device='cuda:0').
+[2020-05-12 09:33:18,455][INFO] Test set accuracy 0.9426666666666667.
+[2020-05-12 09:33:18,455][INFO] 
+[2m 45s (165.013 seconds)] Starting epoch 31:
+[2020-05-12 09:33:22,105][INFO] [2m 48s (168.663 seconds)] At epoch 31: avg accuracy training loss 0.3821579176251606, safe training loss 0.01430116537257388.
+[2020-05-12 09:33:24,424][INFO] [2m 50s (170.982 seconds)] After epoch 31:
+[2020-05-12 09:33:24,424][INFO] Loaded 3000 points for training.
+[2020-05-12 09:33:24,424][INFO] Loaded 7402 abstractions for training.
+[2020-05-12 09:33:24,490][INFO] min loss 0.0, max loss 0.6873354911804199.
+[2020-05-12 09:33:24,491][INFO] Max loss at LB: tensor([0.3076, 0.7352, 0.2025, 0.4033, 0.1455, 0.0168], device='cuda:0'), UB: tensor([0.3107, 0.7383, 0.2275, 0.4158, 0.1705, 0.0418], device='cuda:0').
+[2020-05-12 09:33:24,492][INFO] Test set accuracy 0.941.
+[2020-05-12 09:33:24,492][INFO] 
+[2m 51s (171.049 seconds)] Starting epoch 32:
+[2020-05-12 09:33:28,065][INFO] [2m 54s (174.623 seconds)] At epoch 32: avg accuracy training loss 0.3823034779358936, safe training loss 0.013488701982824232.
+[2020-05-12 09:33:30,373][INFO] [2m 56s (176.931 seconds)] After epoch 32:
+[2020-05-12 09:33:30,373][INFO] Loaded 3000 points for training.
+[2020-05-12 09:33:30,373][INFO] Loaded 7602 abstractions for training.
+[2020-05-12 09:33:30,440][INFO] min loss 0.0, max loss 0.6929583549499512.
+[2020-05-12 09:33:30,441][INFO] Max loss at LB: tensor([ 0.5038,  0.7779,  0.2376,  0.5872,  0.2292, -0.0416], device='cuda:0'), UB: tensor([0.5101, 0.7904, 0.2501, 0.6122, 0.2792, 0.0084], device='cuda:0').
+[2020-05-12 09:33:30,442][INFO] Test set accuracy 0.9403333333333334.
+[2020-05-12 09:33:30,442][INFO] 
+[2m 56s (177.000 seconds)] Starting epoch 33:
+[2020-05-12 09:33:34,104][INFO] [3m 0s (180.662 seconds)] At epoch 33: avg accuracy training loss 0.38155494806587054, safe training loss 0.013011366642150347.
+[2020-05-12 09:33:36,485][INFO] [3m 3s (183.043 seconds)] After epoch 33:
+[2020-05-12 09:33:36,486][INFO] Loaded 3000 points for training.
+[2020-05-12 09:33:36,486][INFO] Loaded 7802 abstractions for training.
+[2020-05-12 09:33:36,552][INFO] min loss 0.0, max loss 0.2768179178237915.
+[2020-05-12 09:33:36,554][INFO] Max loss at LB: tensor([ 0.5131,  0.7809,  0.2437,  0.4887, -0.1983,  0.0554], device='cuda:0'), UB: tensor([ 0.5194,  0.8059,  0.2687,  0.5137, -0.1483,  0.1054], device='cuda:0').
+[2020-05-12 09:33:36,554][INFO] Test set accuracy 0.9446666666666667.
+[2020-05-12 09:33:36,555][INFO] 
+[3m 3s (183.113 seconds)] Starting epoch 34:
+[2020-05-12 09:33:40,114][INFO] [3m 6s (186.672 seconds)] At epoch 34: avg accuracy training loss 0.37900919106698805, safe training loss 0.011142865037395349.
+[2020-05-12 09:33:42,553][INFO] [3m 9s (189.111 seconds)] After epoch 34:
+[2020-05-12 09:33:42,553][INFO] Loaded 3000 points for training.
+[2020-05-12 09:33:42,553][INFO] Loaded 8002 abstractions for training.
+[2020-05-12 09:33:42,622][INFO] min loss 0.0, max loss 0.28497469425201416.
+[2020-05-12 09:33:42,623][INFO] Max loss at LB: tensor([ 0.5038,  0.7779,  0.2376,  0.5872,  0.2542, -0.0416], device='cuda:0'), UB: tensor([0.5101, 0.7904, 0.2501, 0.6122, 0.2792, 0.0084], device='cuda:0').
+[2020-05-12 09:33:42,624][INFO] Test set accuracy 0.9433333333333334.
+[2020-05-12 09:33:42,624][INFO] 
+[3m 9s (189.182 seconds)] Starting epoch 35:
+[2020-05-12 09:33:46,054][INFO] [3m 12s (192.612 seconds)] At epoch 35: avg accuracy training loss 0.37976583774371814, safe training loss 0.01024374750290086.
+[2020-05-12 09:33:48,533][INFO] [3m 15s (195.090 seconds)] After epoch 35:
+[2020-05-12 09:33:48,533][INFO] Loaded 3000 points for training.
+[2020-05-12 09:33:48,533][INFO] Loaded 8202 abstractions for training.
+[2020-05-12 09:33:48,601][INFO] min loss 0.0, max loss 0.6729310750961304.
+[2020-05-12 09:33:48,603][INFO] Max loss at LB: tensor([ 0.2792,  0.7627,  0.2584,  0.5586,  0.0181, -0.1657], device='cuda:0'), UB: tensor([ 0.2823,  0.7690,  0.2709,  0.5711,  0.0431, -0.1407], device='cuda:0').
+[2020-05-12 09:33:48,603][INFO] Test set accuracy 0.9446666666666667.
+[2020-05-12 09:33:48,604][INFO] 
+[3m 15s (195.161 seconds)] Starting epoch 36:
+[2020-05-12 09:33:52,114][INFO] [3m 18s (198.672 seconds)] At epoch 36: avg accuracy training loss 0.3776172675112242, safe training loss 0.009527935543828595.
+[2020-05-12 09:33:54,747][INFO] [3m 21s (201.305 seconds)] After epoch 36:
+[2020-05-12 09:33:54,748][INFO] Loaded 3000 points for training.
+[2020-05-12 09:33:54,748][INFO] Loaded 8600 abstractions for training.
+[2020-05-12 09:33:54,819][INFO] min loss 0.0, max loss 0.30126136541366577.
+[2020-05-12 09:33:54,821][INFO] Max loss at LB: tensor([ 0.1443,  0.2278,  0.2013,  0.5159, -0.1259, -0.0430], device='cuda:0'), UB: tensor([ 0.1506,  0.2403,  0.2075,  0.5284, -0.1134, -0.0367], device='cuda:0').
+[2020-05-12 09:33:54,821][INFO] Test set accuracy 0.944.
+[2020-05-12 09:33:54,821][INFO] 
+[3m 21s (201.379 seconds)] Starting epoch 37:
+[2020-05-12 09:33:58,378][INFO] [3m 24s (204.936 seconds)] At epoch 37: avg accuracy training loss 0.3758902024197322, safe training loss 0.010103849966394445.
+[2020-05-12 09:34:01,009][INFO] [3m 27s (207.566 seconds)] After epoch 37:
+[2020-05-12 09:34:01,009][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:01,009][INFO] Loaded 8800 abstractions for training.
+[2020-05-12 09:34:01,079][INFO] min loss 0.0, max loss 0.8191679120063782.
+[2020-05-12 09:34:01,081][INFO] Max loss at LB: tensor([ 0.4134,  0.5064,  0.1325,  0.4090,  0.1706, -0.2845], device='cuda:0'), UB: tensor([ 0.4244,  0.5283,  0.1763,  0.4965,  0.2144, -0.2407], device='cuda:0').
+[2020-05-12 09:34:01,082][INFO] Test set accuracy 0.9453333333333334.
+[2020-05-12 09:34:01,082][INFO] 
+[3m 27s (207.640 seconds)] Starting epoch 38:
+[2020-05-12 09:34:04,673][INFO] [3m 31s (211.231 seconds)] At epoch 38: avg accuracy training loss 0.3761172534958009, safe training loss 0.01277624677130652.
+[2020-05-12 09:34:07,268][INFO] [3m 33s (213.825 seconds)] After epoch 38:
+[2020-05-12 09:34:07,268][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:07,268][INFO] Loaded 9000 abstractions for training.
+[2020-05-12 09:34:07,338][INFO] min loss 0.0, max loss 0.5087175965309143.
+[2020-05-12 09:34:07,339][INFO] Max loss at LB: tensor([ 0.2266,  0.3453,  0.1433,  0.4992, -0.1701,  0.0677], device='cuda:0'), UB: tensor([ 0.2287,  0.3508,  0.1447,  0.5019, -0.1647,  0.0705], device='cuda:0').
+[2020-05-12 09:34:07,340][INFO] Test set accuracy 0.9453333333333334.
+[2020-05-12 09:34:07,340][INFO] 
+[3m 33s (213.898 seconds)] Starting epoch 39:
+[2020-05-12 09:34:10,832][INFO] [3m 37s (217.390 seconds)] At epoch 39: avg accuracy training loss 0.37728990758619, safe training loss 0.012021476305865994.
+[2020-05-12 09:34:13,627][INFO] [3m 40s (220.184 seconds)] After epoch 39:
+[2020-05-12 09:34:13,627][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:13,627][INFO] Loaded 9372 abstractions for training.
+[2020-05-12 09:34:13,697][INFO] min loss 0.0, max loss 0.6563782095909119.
+[2020-05-12 09:34:13,698][INFO] Max loss at LB: tensor([ 0.4997,  0.7330,  0.2750,  0.4252,  0.1509, -0.2176], device='cuda:0'), UB: tensor([ 0.5060,  0.7455,  0.2875,  0.4502,  0.2009, -0.1926], device='cuda:0').
+[2020-05-12 09:34:13,699][INFO] Test set accuracy 0.9443333333333334.
+[2020-05-12 09:34:13,699][INFO] 
+[3m 40s (220.257 seconds)] Starting epoch 40:
+[2020-05-12 09:34:17,299][INFO] [3m 43s (223.857 seconds)] At epoch 40: avg accuracy training loss 0.37550608413193814, safe training loss 0.007088461439550844.
+[2020-05-12 09:34:20,132][INFO] [3m 46s (226.690 seconds)] After epoch 40:
+[2020-05-12 09:34:20,132][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:20,132][INFO] Loaded 9572 abstractions for training.
+[2020-05-12 09:34:20,202][INFO] min loss 0.0, max loss 0.6527172327041626.
+[2020-05-12 09:34:20,204][INFO] Max loss at LB: tensor([ 0.5028,  0.7330,  0.2750,  0.4252,  0.1509, -0.2176], device='cuda:0'), UB: tensor([ 0.5060,  0.7455,  0.2875,  0.4502,  0.2009, -0.1926], device='cuda:0').
+[2020-05-12 09:34:20,205][INFO] Test set accuracy 0.9463333333333334.
+[2020-05-12 09:34:20,205][INFO] 
+[3m 46s (226.763 seconds)] Starting epoch 41:
+[2020-05-12 09:34:23,828][INFO] [3m 50s (230.386 seconds)] At epoch 41: avg accuracy training loss 0.3747200478789627, safe training loss 0.01580714083637201.
+[2020-05-12 09:34:26,660][INFO] [3m 53s (233.217 seconds)] After epoch 41:
+[2020-05-12 09:34:26,660][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:26,660][INFO] Loaded 9772 abstractions for training.
+[2020-05-12 09:34:26,731][INFO] min loss 0.0, max loss 0.7853236794471741.
+[2020-05-12 09:34:26,732][INFO] Max loss at LB: tensor([ 0.0645,  0.2770,  0.1852,  0.4633, -0.1474,  0.2091], device='cuda:0'), UB: tensor([ 0.0707,  0.2832,  0.1915,  0.4696, -0.1349,  0.2216], device='cuda:0').
+[2020-05-12 09:34:26,733][INFO] Test set accuracy 0.9473333333333334.
+[2020-05-12 09:34:26,733][INFO] 
+[3m 53s (233.291 seconds)] Starting epoch 42:
+[2020-05-12 09:34:30,346][INFO] [3m 56s (236.904 seconds)] At epoch 42: avg accuracy training loss 0.37419835566192544, safe training loss 0.006895944437322517.
+[2020-05-12 09:34:33,177][INFO] [3m 59s (239.735 seconds)] After epoch 42:
+[2020-05-12 09:34:33,178][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:33,178][INFO] Loaded 9972 abstractions for training.
+[2020-05-12 09:34:33,248][INFO] min loss 0.0, max loss 0.36893463134765625.
+[2020-05-12 09:34:33,250][INFO] Max loss at LB: tensor([ 0.2770,  0.7693,  0.1583,  0.5247, -0.0952, -0.1778], device='cuda:0'), UB: tensor([ 0.2891,  0.7814,  0.2068,  0.5489, -0.0468, -0.1293], device='cuda:0').
+[2020-05-12 09:34:33,251][INFO] Test set accuracy 0.9456666666666667.
+[2020-05-12 09:34:33,251][INFO] 
+[3m 59s (239.808 seconds)] Starting epoch 43:
+[2020-05-12 09:34:36,797][INFO] [4m 3s (243.354 seconds)] At epoch 43: avg accuracy training loss 0.37283589250297955, safe training loss 0.011529504459211103.
+[2020-05-12 09:34:39,711][INFO] [4m 6s (246.268 seconds)] After epoch 43:
+[2020-05-12 09:34:39,711][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:39,711][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:34:39,782][INFO] min loss 0.0, max loss 2.243152379989624.
+[2020-05-12 09:34:39,784][INFO] Max loss at LB: tensor([0.3157, 0.7785, 0.2630, 0.5632, 0.1533, 0.0643], device='cuda:0'), UB: tensor([0.3407, 0.7910, 0.3130, 0.6132, 0.1783, 0.1143], device='cuda:0').
+[2020-05-12 09:34:39,785][INFO] Test set accuracy 0.9493333333333334.
+[2020-05-12 09:34:39,785][INFO] 
+[4m 6s (246.343 seconds)] Starting epoch 44:
+[2020-05-12 09:34:43,479][INFO] [4m 10s (250.037 seconds)] At epoch 44: avg accuracy training loss 0.3728701366532233, safe training loss 0.009856532429224782.
+[2020-05-12 09:34:43,479][INFO] [4m 10s (250.037 seconds)] After epoch 44:
+[2020-05-12 09:34:43,480][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:43,480][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:34:43,550][INFO] min loss 0.0, max loss 0.4142654538154602.
+[2020-05-12 09:34:43,552][INFO] Max loss at LB: tensor([ 0.2004,  0.6386,  0.1982,  0.4844, -0.2619,  0.0493], device='cuda:0'), UB: tensor([ 0.2066,  0.6449,  0.2232,  0.5094, -0.2119,  0.0743], device='cuda:0').
+[2020-05-12 09:34:43,552][INFO] Test set accuracy 0.9486666666666667.
+[2020-05-12 09:34:43,553][INFO] 
+[4m 10s (250.111 seconds)] Starting epoch 45:
+[2020-05-12 09:34:47,260][INFO] [4m 13s (253.818 seconds)] At epoch 45: avg accuracy training loss 0.37109050731505117, safe training loss 0.006033096898106798.
+[2020-05-12 09:34:47,261][INFO] [4m 13s (253.818 seconds)] After epoch 45:
+[2020-05-12 09:34:47,261][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:47,261][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:34:47,332][INFO] min loss 0.0, max loss 0.404411256313324.
+[2020-05-12 09:34:47,333][INFO] Max loss at LB: tensor([ 0.0645,  0.2770,  0.1852,  0.4633, -0.1474,  0.2091], device='cuda:0'), UB: tensor([ 0.0707,  0.2832,  0.1915,  0.4696, -0.1349,  0.2216], device='cuda:0').
+[2020-05-12 09:34:47,334][INFO] Test set accuracy 0.949.
+[2020-05-12 09:34:47,334][INFO] 
+[4m 13s (253.892 seconds)] Starting epoch 46:
+[2020-05-12 09:34:51,031][INFO] [4m 17s (257.589 seconds)] At epoch 46: avg accuracy training loss 0.3711346929432243, safe training loss 0.013048426903438784.
+[2020-05-12 09:34:51,032][INFO] [4m 17s (257.589 seconds)] After epoch 46:
+[2020-05-12 09:34:51,032][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:51,032][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:34:51,105][INFO] min loss 0.0, max loss 0.5201927423477173.
+[2020-05-12 09:34:51,107][INFO] Max loss at LB: tensor([0.3157, 0.7785, 0.2630, 0.5632, 0.1783, 0.0643], device='cuda:0'), UB: tensor([0.3407, 0.7910, 0.3130, 0.6132, 0.2033, 0.1143], device='cuda:0').
+[2020-05-12 09:34:51,107][INFO] Test set accuracy 0.9493333333333334.
+[2020-05-12 09:34:51,108][INFO] 
+[4m 17s (257.666 seconds)] Starting epoch 47:
+[2020-05-12 09:34:54,857][INFO] [4m 21s (261.415 seconds)] At epoch 47: avg accuracy training loss 0.3689936415482593, safe training loss 0.008508651418441166.
+[2020-05-12 09:34:54,857][INFO] [4m 21s (261.415 seconds)] After epoch 47:
+[2020-05-12 09:34:54,857][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:54,857][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:34:54,928][INFO] min loss 0.0, max loss 0.5681734085083008.
+[2020-05-12 09:34:54,930][INFO] Max loss at LB: tensor([ 0.2830,  0.7693,  0.1825,  0.5247, -0.0468, -0.1778], device='cuda:0'), UB: tensor([ 0.2891,  0.7754,  0.2068,  0.5489,  0.0017, -0.1293], device='cuda:0').
+[2020-05-12 09:34:54,931][INFO] Test set accuracy 0.946.
+[2020-05-12 09:34:54,931][INFO] 
+[4m 21s (261.489 seconds)] Starting epoch 48:
+[2020-05-12 09:34:58,631][INFO] [4m 25s (265.188 seconds)] At epoch 48: avg accuracy training loss 0.3696158207872862, safe training loss 0.006960687133037956.
+[2020-05-12 09:34:58,631][INFO] [4m 25s (265.189 seconds)] After epoch 48:
+[2020-05-12 09:34:58,631][INFO] Loaded 3000 points for training.
+[2020-05-12 09:34:58,631][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:34:58,703][INFO] min loss 0.0, max loss 0.918237566947937.
+[2020-05-12 09:34:58,705][INFO] Max loss at LB: tensor([ 0.2546,  0.2284,  0.1541,  0.5682,  0.1921, -0.0804], device='cuda:0'), UB: tensor([ 0.2921,  0.2659,  0.2291,  0.6057,  0.2296, -0.0054], device='cuda:0').
+[2020-05-12 09:34:58,706][INFO] Test set accuracy 0.9456666666666667.
+[2020-05-12 09:34:58,706][INFO] 
+[4m 25s (265.264 seconds)] Starting epoch 49:
+[2020-05-12 09:35:02,414][INFO] [4m 28s (268.971 seconds)] At epoch 49: avg accuracy training loss 0.3694019106126601, safe training loss 0.005493037276200309.
+[2020-05-12 09:35:02,414][INFO] [4m 28s (268.972 seconds)] After epoch 49:
+[2020-05-12 09:35:02,414][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:02,414][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:02,488][INFO] min loss 0.0, max loss 1.4282419681549072.
+[2020-05-12 09:35:02,489][INFO] Max loss at LB: tensor([0.3157, 0.7785, 0.2630, 0.5632, 0.1533, 0.0643], device='cuda:0'), UB: tensor([0.3407, 0.7910, 0.3130, 0.6132, 0.1783, 0.1143], device='cuda:0').
+[2020-05-12 09:35:02,490][INFO] Test set accuracy 0.9513333333333334.
+[2020-05-12 09:35:02,491][INFO] 
+[4m 29s (269.048 seconds)] Starting epoch 50:
+[2020-05-12 09:35:06,205][INFO] [4m 32s (272.763 seconds)] At epoch 50: avg accuracy training loss 0.36864537641566286, safe training loss 0.008350495148890762.
+[2020-05-12 09:35:06,206][INFO] [4m 32s (272.763 seconds)] After epoch 50:
+[2020-05-12 09:35:06,206][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:06,206][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:06,279][INFO] min loss 0.0, max loss 0.9049104452133179.
+[2020-05-12 09:35:06,281][INFO] Max loss at LB: tensor([ 0.0645,  0.2770,  0.1852,  0.4633, -0.1474,  0.2091], device='cuda:0'), UB: tensor([ 0.0707,  0.2832,  0.1915,  0.4696, -0.1349,  0.2216], device='cuda:0').
+[2020-05-12 09:35:06,282][INFO] Test set accuracy 0.9503333333333334.
+[2020-05-12 09:35:06,282][INFO] 
+[4m 32s (272.840 seconds)] Starting epoch 51:
+[2020-05-12 09:35:10,010][INFO] [4m 36s (276.567 seconds)] At epoch 51: avg accuracy training loss 0.36811312520375816, safe training loss 0.009180428306271712.
+[2020-05-12 09:35:10,010][INFO] [4m 36s (276.568 seconds)] After epoch 51:
+[2020-05-12 09:35:10,010][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:10,010][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:10,082][INFO] min loss 0.0, max loss 1.0147511959075928.
+[2020-05-12 09:35:10,084][INFO] Max loss at LB: tensor([ 0.2792,  0.7658,  0.2584,  0.5586,  0.0181, -0.1657], device='cuda:0'), UB: tensor([ 0.2823,  0.7690,  0.2646,  0.5711,  0.0431, -0.1407], device='cuda:0').
+[2020-05-12 09:35:10,084][INFO] Test set accuracy 0.9486666666666667.
+[2020-05-12 09:35:10,085][INFO] 
+[4m 36s (276.642 seconds)] Starting epoch 52:
+[2020-05-12 09:35:13,784][INFO] [4m 40s (280.342 seconds)] At epoch 52: avg accuracy training loss 0.36701366048987194, safe training loss 0.006622165407715065.
+[2020-05-12 09:35:13,784][INFO] [4m 40s (280.342 seconds)] After epoch 52:
+[2020-05-12 09:35:13,784][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:13,784][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:13,855][INFO] min loss 0.0, max loss 1.3371899127960205.
+[2020-05-12 09:35:13,857][INFO] Max loss at LB: tensor([ 0.5069,  0.7779,  0.2376,  0.5872,  0.2542, -0.0166], device='cuda:0'), UB: tensor([0.5101, 0.7904, 0.2501, 0.6122, 0.2792, 0.0084], device='cuda:0').
+[2020-05-12 09:35:13,858][INFO] Test set accuracy 0.95.
+[2020-05-12 09:35:13,858][INFO] 
+[4m 40s (280.416 seconds)] Starting epoch 53:
+[2020-05-12 09:35:17,510][INFO] [4m 44s (284.068 seconds)] At epoch 53: avg accuracy training loss 0.36832667262323443, safe training loss 0.005207112011742548.
+[2020-05-12 09:35:17,510][INFO] [4m 44s (284.068 seconds)] After epoch 53:
+[2020-05-12 09:35:17,510][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:17,511][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:17,582][INFO] min loss 0.0, max loss 0.9793244004249573.
+[2020-05-12 09:35:17,584][INFO] Max loss at LB: tensor([ 0.4073,  0.6964,  0.0837,  0.5505, -0.1473,  0.0642], device='cuda:0'), UB: tensor([ 0.4448,  0.7339,  0.1587,  0.6255, -0.0723,  0.1392], device='cuda:0').
+[2020-05-12 09:35:17,585][INFO] Test set accuracy 0.9506666666666667.
+[2020-05-12 09:35:17,585][INFO] 
+[4m 44s (284.142 seconds)] Starting epoch 54:
+[2020-05-12 09:35:21,295][INFO] [4m 47s (287.853 seconds)] At epoch 54: avg accuracy training loss 0.36697413011263774, safe training loss 0.006723548462163777.
+[2020-05-12 09:35:21,295][INFO] [4m 47s (287.853 seconds)] After epoch 54:
+[2020-05-12 09:35:21,295][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:21,296][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:21,366][INFO] min loss 0.0, max loss 1.5525567531585693.
+[2020-05-12 09:35:21,368][INFO] Max loss at LB: tensor([ 0.3698,  0.7527,  0.0837,  0.5505, -0.1473,  0.0642], device='cuda:0'), UB: tensor([ 0.3886,  0.7714,  0.1587,  0.6255, -0.0723,  0.1017], device='cuda:0').
+[2020-05-12 09:35:21,369][INFO] Test set accuracy 0.9526666666666667.
+[2020-05-12 09:35:21,370][INFO] 
+[4m 47s (287.927 seconds)] Starting epoch 55:
+[2020-05-12 09:35:25,075][INFO] [4m 51s (291.633 seconds)] At epoch 55: avg accuracy training loss 0.36538068293243325, safe training loss 0.011236131807128269.
+[2020-05-12 09:35:25,075][INFO] [4m 51s (291.633 seconds)] After epoch 55:
+[2020-05-12 09:35:25,076][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:25,076][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:25,149][INFO] min loss 0.0, max loss 1.1881693601608276.
+[2020-05-12 09:35:25,151][INFO] Max loss at LB: tensor([ 0.0645,  0.2770,  0.1852,  0.4633, -0.1474,  0.2091], device='cuda:0'), UB: tensor([ 0.0707,  0.2832,  0.1915,  0.4696, -0.1349,  0.2216], device='cuda:0').
+[2020-05-12 09:35:25,151][INFO] Test set accuracy 0.945.
+[2020-05-12 09:35:25,152][INFO] 
+[4m 51s (291.709 seconds)] Starting epoch 56:
+[2020-05-12 09:35:28,841][INFO] [4m 55s (295.398 seconds)] At epoch 56: avg accuracy training loss 0.3657720012049521, safe training loss 0.00873278416893495.
+[2020-05-12 09:35:28,841][INFO] [4m 55s (295.398 seconds)] After epoch 56:
+[2020-05-12 09:35:28,841][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:28,841][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:28,913][INFO] min loss 0.0, max loss 0.6943976879119873.
+[2020-05-12 09:35:28,915][INFO] Max loss at LB: tensor([ 0.0645,  0.2770,  0.1852,  0.4633, -0.1474,  0.2091], device='cuda:0'), UB: tensor([ 0.0707,  0.2832,  0.1915,  0.4696, -0.1349,  0.2216], device='cuda:0').
+[2020-05-12 09:35:28,916][INFO] Test set accuracy 0.9516666666666667.
+[2020-05-12 09:35:28,916][INFO] 
+[4m 55s (295.473 seconds)] Starting epoch 57:
+[2020-05-12 09:35:32,609][INFO] [4m 59s (299.167 seconds)] At epoch 57: avg accuracy training loss 0.3664448014510575, safe training loss 0.010479716266134894.
+[2020-05-12 09:35:32,609][INFO] [4m 59s (299.167 seconds)] After epoch 57:
+[2020-05-12 09:35:32,609][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:32,610][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:32,680][INFO] min loss 0.0, max loss 2.1260299682617188.
+[2020-05-12 09:35:32,682][INFO] Max loss at LB: tensor([ 0.3698,  0.7527,  0.0837,  0.5505, -0.1473,  0.0642], device='cuda:0'), UB: tensor([ 0.3886,  0.7714,  0.1587,  0.6255, -0.0723,  0.1017], device='cuda:0').
+[2020-05-12 09:35:32,683][INFO] Test set accuracy 0.9503333333333334.
+[2020-05-12 09:35:32,683][INFO] 
+[4m 59s (299.241 seconds)] Starting epoch 58:
+[2020-05-12 09:35:36,362][INFO] [5m 2s (302.920 seconds)] At epoch 58: avg accuracy training loss 0.36729033820090756, safe training loss 0.009515820470418261.
+[2020-05-12 09:35:36,362][INFO] [5m 2s (302.920 seconds)] After epoch 58:
+[2020-05-12 09:35:36,362][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:36,363][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:36,433][INFO] min loss 0.0, max loss 2.686809539794922.
+[2020-05-12 09:35:36,435][INFO] Max loss at LB: tensor([ 0.4073,  0.6964,  0.0837,  0.5505, -0.1473,  0.0642], device='cuda:0'), UB: tensor([ 0.4448,  0.7339,  0.1587,  0.6255, -0.0723,  0.1392], device='cuda:0').
+[2020-05-12 09:35:36,435][INFO] Test set accuracy 0.953.
+[2020-05-12 09:35:36,436][INFO] 
+[5m 2s (302.994 seconds)] Starting epoch 59:
+[2020-05-12 09:35:40,130][INFO] [5m 6s (306.688 seconds)] At epoch 59: avg accuracy training loss 0.3642541977667039, safe training loss 0.00694418270942024.
+[2020-05-12 09:35:40,130][INFO] [5m 6s (306.688 seconds)] After epoch 59:
+[2020-05-12 09:35:40,131][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:40,131][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:40,203][INFO] min loss 0.0, max loss 1.9065132141113281.
+[2020-05-12 09:35:40,205][INFO] Max loss at LB: tensor([0.1288, 0.7293, 0.2347, 0.5350, 0.2600, 0.1420], device='cuda:0'), UB: tensor([0.1335, 0.7340, 0.2534, 0.5443, 0.2788, 0.1795], device='cuda:0').
+[2020-05-12 09:35:40,206][INFO] Test set accuracy 0.9496666666666667.
+[2020-05-12 09:35:40,206][INFO] 
+[5m 6s (306.764 seconds)] Starting epoch 60:
+[2020-05-12 09:35:43,916][INFO] [5m 10s (310.474 seconds)] At epoch 60: avg accuracy training loss 0.36357663171265714, safe training loss 0.00563670715857898.
+[2020-05-12 09:35:43,916][INFO] [5m 10s (310.474 seconds)] After epoch 60:
+[2020-05-12 09:35:43,916][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:43,917][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:43,987][INFO] min loss 0.0, max loss 0.8689067363739014.
+[2020-05-12 09:35:43,989][INFO] Max loss at LB: tensor([ 0.4073,  0.6964,  0.0837,  0.5505, -0.1473,  0.0642], device='cuda:0'), UB: tensor([ 0.4448,  0.7339,  0.1587,  0.6255, -0.0723,  0.1392], device='cuda:0').
+[2020-05-12 09:35:43,990][INFO] Test set accuracy 0.9493333333333334.
+[2020-05-12 09:35:43,990][INFO] 
+[5m 10s (310.548 seconds)] Starting epoch 61:
+[2020-05-12 09:35:47,692][INFO] [5m 14s (314.249 seconds)] At epoch 61: avg accuracy training loss 0.36475052083692244, safe training loss 0.006128976032668624.
+[2020-05-12 09:35:47,692][INFO] [5m 14s (314.249 seconds)] After epoch 61:
+[2020-05-12 09:35:47,692][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:47,692][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:47,761][INFO] min loss 0.0, max loss 1.2683906555175781.
+[2020-05-12 09:35:47,763][INFO] Max loss at LB: tensor([ 0.4073,  0.6964,  0.0837,  0.5505, -0.1473,  0.0642], device='cuda:0'), UB: tensor([ 0.4448,  0.7339,  0.1587,  0.6255, -0.0723,  0.1392], device='cuda:0').
+[2020-05-12 09:35:47,764][INFO] Test set accuracy 0.953.
+[2020-05-12 09:35:47,764][INFO] 
+[5m 14s (314.322 seconds)] Starting epoch 62:
+[2020-05-12 09:35:51,491][INFO] [5m 18s (318.048 seconds)] At epoch 62: avg accuracy training loss 0.3645497374637153, safe training loss 0.010244887869214259.
+[2020-05-12 09:35:51,491][INFO] [5m 18s (318.049 seconds)] After epoch 62:
+[2020-05-12 09:35:51,491][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:51,491][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:51,561][INFO] min loss 0.0, max loss 3.7732818126678467.
+[2020-05-12 09:35:51,563][INFO] Max loss at LB: tensor([ 0.4073,  0.6964,  0.0837,  0.5505, -0.1473,  0.0642], device='cuda:0'), UB: tensor([ 0.4448,  0.7339,  0.1587,  0.6255, -0.0723,  0.1392], device='cuda:0').
+[2020-05-12 09:35:51,564][INFO] Test set accuracy 0.9516666666666667.
+[2020-05-12 09:35:51,564][INFO] 
+[5m 18s (318.121 seconds)] Starting epoch 63:
+[2020-05-12 09:35:55,290][INFO] [5m 21s (321.847 seconds)] At epoch 63: avg accuracy training loss 0.36395881252904094, safe training loss 0.010456093818560162.
+[2020-05-12 09:35:55,290][INFO] [5m 21s (321.847 seconds)] After epoch 63:
+[2020-05-12 09:35:55,290][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:55,290][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:55,361][INFO] min loss 0.0, max loss 1.7744746208190918.
+[2020-05-12 09:35:55,363][INFO] Max loss at LB: tensor([ 0.4073,  0.6964,  0.0837,  0.5505, -0.1473,  0.0642], device='cuda:0'), UB: tensor([ 0.4448,  0.7339,  0.1587,  0.6255, -0.0723,  0.1392], device='cuda:0').
+[2020-05-12 09:35:55,363][INFO] Test set accuracy 0.9523333333333334.
+[2020-05-12 09:35:55,363][INFO] 
+[5m 21s (321.921 seconds)] Starting epoch 64:
+[2020-05-12 09:35:59,077][INFO] [5m 25s (325.634 seconds)] At epoch 64: avg accuracy training loss 0.3633580916030433, safe training loss 0.00578212490122545.
+[2020-05-12 09:35:59,077][INFO] [5m 25s (325.635 seconds)] After epoch 64:
+[2020-05-12 09:35:59,077][INFO] Loaded 3000 points for training.
+[2020-05-12 09:35:59,078][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:35:59,148][INFO] min loss 0.0, max loss 1.331929326057434.
+[2020-05-12 09:35:59,150][INFO] Max loss at LB: tensor([ 0.4073,  0.6964,  0.0837,  0.5505, -0.1473,  0.0642], device='cuda:0'), UB: tensor([ 0.4448,  0.7339,  0.1587,  0.6255, -0.0723,  0.1392], device='cuda:0').
+[2020-05-12 09:35:59,151][INFO] Test set accuracy 0.954.
+[2020-05-12 09:35:59,152][INFO] 
+[5m 25s (325.709 seconds)] Starting epoch 65:
+[2020-05-12 09:36:02,881][INFO] [5m 29s (329.439 seconds)] At epoch 65: avg accuracy training loss 0.3630335520031632, safe training loss 0.008271563587890517.
+[2020-05-12 09:36:02,881][INFO] [5m 29s (329.439 seconds)] After epoch 65:
+[2020-05-12 09:36:02,882][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:02,882][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:02,952][INFO] min loss 0.0, max loss 1.2942708730697632.
+[2020-05-12 09:36:02,954][INFO] Max loss at LB: tensor([ 0.2004,  0.6386,  0.1982,  0.4844, -0.2619,  0.0493], device='cuda:0'), UB: tensor([ 0.2066,  0.6449,  0.2232,  0.5094, -0.2119,  0.0743], device='cuda:0').
+[2020-05-12 09:36:02,955][INFO] Test set accuracy 0.9516666666666667.
+[2020-05-12 09:36:02,955][INFO] 
+[5m 29s (329.512 seconds)] Starting epoch 66:
+[2020-05-12 09:36:06,685][INFO] [5m 33s (333.243 seconds)] At epoch 66: avg accuracy training loss 0.36265274465724984, safe training loss 0.010379554702579894.
+[2020-05-12 09:36:06,685][INFO] [5m 33s (333.243 seconds)] After epoch 66:
+[2020-05-12 09:36:06,685][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:06,685][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:06,756][INFO] min loss 0.0, max loss 0.7458245754241943.
+[2020-05-12 09:36:06,758][INFO] Max loss at LB: tensor([ 0.2546,  0.2284,  0.1541,  0.5307,  0.1921, -0.0804], device='cuda:0'), UB: tensor([ 0.2921,  0.2659,  0.1729,  0.5682,  0.2296, -0.0429], device='cuda:0').
+[2020-05-12 09:36:06,759][INFO] Test set accuracy 0.951.
+[2020-05-12 09:36:06,759][INFO] 
+[5m 33s (333.317 seconds)] Starting epoch 67:
+[2020-05-12 09:36:10,489][INFO] [5m 37s (337.047 seconds)] At epoch 67: avg accuracy training loss 0.3619505240712115, safe training loss 0.007019012683241438.
+[2020-05-12 09:36:10,489][INFO] [5m 37s (337.047 seconds)] After epoch 67:
+[2020-05-12 09:36:10,489][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:10,489][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:10,560][INFO] min loss 0.0, max loss 1.715240716934204.
+[2020-05-12 09:36:10,562][INFO] Max loss at LB: tensor([ 0.4333,  0.8232,  0.0960,  0.5527,  0.0865, -0.0093], device='cuda:0'), UB: tensor([0.4583, 0.8482, 0.1460, 0.6027, 0.1365, 0.0407], device='cuda:0').
+[2020-05-12 09:36:10,562][INFO] Test set accuracy 0.9536666666666667.
+[2020-05-12 09:36:10,562][INFO] 
+[5m 37s (337.120 seconds)] Starting epoch 68:
+[2020-05-12 09:36:14,279][INFO] [5m 40s (340.837 seconds)] At epoch 68: avg accuracy training loss 0.3609020466445595, safe training loss 0.01125163054631983.
+[2020-05-12 09:36:14,280][INFO] [5m 40s (340.837 seconds)] After epoch 68:
+[2020-05-12 09:36:14,280][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:14,280][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:14,352][INFO] min loss 0.0, max loss 1.6511259078979492.
+[2020-05-12 09:36:14,353][INFO] Max loss at LB: tensor([ 0.4073,  0.6964,  0.0837,  0.5505, -0.1473,  0.0642], device='cuda:0'), UB: tensor([ 0.4448,  0.7339,  0.1587,  0.6255, -0.0723,  0.1392], device='cuda:0').
+[2020-05-12 09:36:14,354][INFO] Test set accuracy 0.9536666666666667.
+[2020-05-12 09:36:14,354][INFO] 
+[5m 40s (340.912 seconds)] Starting epoch 69:
+[2020-05-12 09:36:18,048][INFO] [5m 44s (344.606 seconds)] At epoch 69: avg accuracy training loss 0.3614200148531186, safe training loss 0.007589631375946825.
+[2020-05-12 09:36:18,049][INFO] [5m 44s (344.606 seconds)] After epoch 69:
+[2020-05-12 09:36:18,049][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:18,049][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:18,120][INFO] min loss 0.0, max loss 2.0995709896087646.
+[2020-05-12 09:36:18,122][INFO] Max loss at LB: tensor([0.1013, 0.5367, 0.2557, 0.3973, 0.0466, 0.2507], device='cuda:0'), UB: tensor([0.1263, 0.5617, 0.2807, 0.4473, 0.0966, 0.3007], device='cuda:0').
+[2020-05-12 09:36:18,122][INFO] Test set accuracy 0.9576666666666667.
+[2020-05-12 09:36:18,123][INFO] 
+[5m 44s (344.680 seconds)] Starting epoch 70:
+[2020-05-12 09:36:21,820][INFO] [5m 48s (348.378 seconds)] At epoch 70: avg accuracy training loss 0.36185977824272647, safe training loss 0.00652534875177568.
+[2020-05-12 09:36:21,820][INFO] [5m 48s (348.378 seconds)] After epoch 70:
+[2020-05-12 09:36:21,821][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:21,821][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:21,892][INFO] min loss 0.0, max loss 2.5468571186065674.
+[2020-05-12 09:36:21,894][INFO] Max loss at LB: tensor([ 0.0180,  0.2411,  0.1544,  0.4793, -0.3036,  0.1389], device='cuda:0'), UB: tensor([ 0.0430,  0.2661,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:36:21,894][INFO] Test set accuracy 0.9573333333333334.
+[2020-05-12 09:36:21,894][INFO] 
+[5m 48s (348.452 seconds)] Starting epoch 71:
+[2020-05-12 09:36:25,634][INFO] [5m 52s (352.192 seconds)] At epoch 71: avg accuracy training loss 0.36036714558960287, safe training loss 0.011556568530498332.
+[2020-05-12 09:36:25,634][INFO] [5m 52s (352.192 seconds)] After epoch 71:
+[2020-05-12 09:36:25,634][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:25,634][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:25,705][INFO] min loss 0.0, max loss 1.786067008972168.
+[2020-05-12 09:36:25,707][INFO] Max loss at LB: tensor([ 0.0158,  0.1727,  0.1935,  0.6066, -0.0118, -0.0976], device='cuda:0'), UB: tensor([ 0.0283,  0.1977,  0.1966,  0.6191,  0.0132, -0.0851], device='cuda:0').
+[2020-05-12 09:36:25,708][INFO] Test set accuracy 0.9556666666666667.
+[2020-05-12 09:36:25,708][INFO] 
+[5m 52s (352.266 seconds)] Starting epoch 72:
+[2020-05-12 09:36:29,408][INFO] [5m 55s (355.966 seconds)] At epoch 72: avg accuracy training loss 0.36109506667301217, safe training loss 0.009968888382577607.
+[2020-05-12 09:36:29,408][INFO] [5m 55s (355.966 seconds)] After epoch 72:
+[2020-05-12 09:36:29,408][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:29,409][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:29,483][INFO] min loss 0.0, max loss 1.942392110824585.
+[2020-05-12 09:36:29,485][INFO] Max loss at LB: tensor([0.1013, 0.5367, 0.2807, 0.3973, 0.0466, 0.2507], device='cuda:0'), UB: tensor([0.1263, 0.5617, 0.3057, 0.4473, 0.0966, 0.3007], device='cuda:0').
+[2020-05-12 09:36:29,485][INFO] Test set accuracy 0.9543333333333334.
+[2020-05-12 09:36:29,485][INFO] 
+[5m 56s (356.043 seconds)] Starting epoch 73:
+[2020-05-12 09:36:33,202][INFO] [5m 59s (359.760 seconds)] At epoch 73: avg accuracy training loss 0.3598667485739595, safe training loss 0.005594142642553135.
+[2020-05-12 09:36:33,202][INFO] [5m 59s (359.760 seconds)] After epoch 73:
+[2020-05-12 09:36:33,203][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:33,203][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:33,273][INFO] min loss 0.0, max loss 1.2610702514648438.
+[2020-05-12 09:36:33,275][INFO] Max loss at LB: tensor([ 0.4073,  0.6964,  0.0837,  0.5505, -0.1473,  0.0642], device='cuda:0'), UB: tensor([ 0.4448,  0.7339,  0.1587,  0.6255, -0.0723,  0.1392], device='cuda:0').
+[2020-05-12 09:36:33,275][INFO] Test set accuracy 0.9556666666666667.
+[2020-05-12 09:36:33,276][INFO] 
+[5m 59s (359.833 seconds)] Starting epoch 74:
+[2020-05-12 09:36:36,948][INFO] [6m 3s (363.506 seconds)] At epoch 74: avg accuracy training loss 0.35800948835188345, safe training loss 0.006163350439139752.
+[2020-05-12 09:36:36,948][INFO] [6m 3s (363.506 seconds)] After epoch 74:
+[2020-05-12 09:36:36,949][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:36,949][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:37,020][INFO] min loss 0.0, max loss 3.114654302597046.
+[2020-05-12 09:36:37,022][INFO] Max loss at LB: tensor([ 0.3698,  0.7527,  0.0837,  0.5505, -0.1473,  0.1017], device='cuda:0'), UB: tensor([ 0.3886,  0.7714,  0.1587,  0.6255, -0.0723,  0.1392], device='cuda:0').
+[2020-05-12 09:36:37,022][INFO] Test set accuracy 0.9556666666666667.
+[2020-05-12 09:36:37,022][INFO] 
+[6m 3s (363.580 seconds)] Starting epoch 75:
+[2020-05-12 09:36:40,719][INFO] [6m 7s (367.276 seconds)] At epoch 75: avg accuracy training loss 0.3589251813709095, safe training loss 0.012708475878362054.
+[2020-05-12 09:36:40,719][INFO] [6m 7s (367.277 seconds)] After epoch 75:
+[2020-05-12 09:36:40,719][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:40,719][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:40,790][INFO] min loss 0.0, max loss 3.032268762588501.
+[2020-05-12 09:36:40,791][INFO] Max loss at LB: tensor([0.1013, 0.5367, 0.2557, 0.3973, 0.0466, 0.2507], device='cuda:0'), UB: tensor([0.1263, 0.5617, 0.2807, 0.4473, 0.0966, 0.3007], device='cuda:0').
+[2020-05-12 09:36:40,792][INFO] Test set accuracy 0.9576666666666667.
+[2020-05-12 09:36:40,792][INFO] 
+[6m 7s (367.350 seconds)] Starting epoch 76:
+[2020-05-12 09:36:44,498][INFO] [6m 11s (371.055 seconds)] At epoch 76: avg accuracy training loss 0.35871390181203044, safe training loss 0.013694776282195122.
+[2020-05-12 09:36:44,498][INFO] [6m 11s (371.056 seconds)] After epoch 76:
+[2020-05-12 09:36:44,498][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:44,498][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:44,569][INFO] min loss 0.0, max loss 5.0878682136535645.
+[2020-05-12 09:36:44,570][INFO] Max loss at LB: tensor([ 0.4708,  0.7982,  0.0960,  0.5527,  0.0865, -0.0093], device='cuda:0'), UB: tensor([0.4833, 0.8482, 0.1460, 0.6027, 0.1365, 0.0407], device='cuda:0').
+[2020-05-12 09:36:44,571][INFO] Test set accuracy 0.954.
+[2020-05-12 09:36:44,571][INFO] 
+[6m 11s (371.129 seconds)] Starting epoch 77:
+[2020-05-12 09:36:48,300][INFO] [6m 14s (374.857 seconds)] At epoch 77: avg accuracy training loss 0.3607011120165548, safe training loss 0.006683834535520404.
+[2020-05-12 09:36:48,300][INFO] [6m 14s (374.857 seconds)] After epoch 77:
+[2020-05-12 09:36:48,300][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:48,300][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:48,371][INFO] min loss 0.0, max loss 4.453178405761719.
+[2020-05-12 09:36:48,373][INFO] Max loss at LB: tensor([0.1013, 0.5367, 0.2557, 0.3973, 0.0466, 0.2507], device='cuda:0'), UB: tensor([0.1263, 0.5617, 0.2807, 0.4473, 0.0966, 0.3007], device='cuda:0').
+[2020-05-12 09:36:48,374][INFO] Test set accuracy 0.9573333333333334.
+[2020-05-12 09:36:48,374][INFO] 
+[6m 14s (374.932 seconds)] Starting epoch 78:
+[2020-05-12 09:36:52,082][INFO] [6m 18s (378.640 seconds)] At epoch 78: avg accuracy training loss 0.35751327904321817, safe training loss 0.007616988926505049.
+[2020-05-12 09:36:52,083][INFO] [6m 18s (378.640 seconds)] After epoch 78:
+[2020-05-12 09:36:52,083][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:52,083][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:52,154][INFO] min loss 0.0, max loss 2.2568111419677734.
+[2020-05-12 09:36:52,156][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:36:52,157][INFO] Test set accuracy 0.9566666666666667.
+[2020-05-12 09:36:52,157][INFO] 
+[6m 18s (378.714 seconds)] Starting epoch 79:
+[2020-05-12 09:36:55,881][INFO] [6m 22s (382.438 seconds)] At epoch 79: avg accuracy training loss 0.3568080291953138, safe training loss 0.0057301026260760685.
+[2020-05-12 09:36:55,881][INFO] [6m 22s (382.439 seconds)] After epoch 79:
+[2020-05-12 09:36:55,881][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:55,881][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:55,952][INFO] min loss 0.0, max loss 6.031075954437256.
+[2020-05-12 09:36:55,954][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:36:55,954][INFO] Test set accuracy 0.9626666666666667.
+[2020-05-12 09:36:55,955][INFO] 
+[6m 22s (382.513 seconds)] Starting epoch 80:
+[2020-05-12 09:36:59,651][INFO] [6m 26s (386.209 seconds)] At epoch 80: avg accuracy training loss 0.35748530011023244, safe training loss 0.007681648631239691.
+[2020-05-12 09:36:59,651][INFO] [6m 26s (386.209 seconds)] After epoch 80:
+[2020-05-12 09:36:59,651][INFO] Loaded 3000 points for training.
+[2020-05-12 09:36:59,651][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:36:59,722][INFO] min loss 0.0, max loss 3.2997541427612305.
+[2020-05-12 09:36:59,724][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:36:59,725][INFO] Test set accuracy 0.9596666666666667.
+[2020-05-12 09:36:59,725][INFO] 
+[6m 26s (386.282 seconds)] Starting epoch 81:
+[2020-05-12 09:37:03,387][INFO] [6m 29s (389.945 seconds)] At epoch 81: avg accuracy training loss 0.35654401426674215, safe training loss 0.007873643199682877.
+[2020-05-12 09:37:03,388][INFO] [6m 29s (389.945 seconds)] After epoch 81:
+[2020-05-12 09:37:03,388][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:03,388][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:03,458][INFO] min loss 0.0, max loss 3.732715129852295.
+[2020-05-12 09:37:03,460][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:03,461][INFO] Test set accuracy 0.9563333333333334.
+[2020-05-12 09:37:03,461][INFO] 
+[6m 30s (390.019 seconds)] Starting epoch 82:
+[2020-05-12 09:37:07,217][INFO] [6m 33s (393.775 seconds)] At epoch 82: avg accuracy training loss 0.35499248036774256, safe training loss 0.007416011009525548.
+[2020-05-12 09:37:07,217][INFO] [6m 33s (393.775 seconds)] After epoch 82:
+[2020-05-12 09:37:07,218][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:07,218][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:07,289][INFO] min loss 0.0, max loss 6.036263942718506.
+[2020-05-12 09:37:07,291][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:07,291][INFO] Test set accuracy 0.9636666666666667.
+[2020-05-12 09:37:07,292][INFO] 
+[6m 33s (393.849 seconds)] Starting epoch 83:
+[2020-05-12 09:37:11,024][INFO] [6m 37s (397.582 seconds)] At epoch 83: avg accuracy training loss 0.3538998653811793, safe training loss 0.009218122935303117.
+[2020-05-12 09:37:11,024][INFO] [6m 37s (397.582 seconds)] After epoch 83:
+[2020-05-12 09:37:11,024][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:11,025][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:11,096][INFO] min loss 0.0, max loss 5.024988651275635.
+[2020-05-12 09:37:11,098][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:11,098][INFO] Test set accuracy 0.9603333333333334.
+[2020-05-12 09:37:11,098][INFO] 
+[6m 37s (397.656 seconds)] Starting epoch 84:
+[2020-05-12 09:37:14,804][INFO] [6m 41s (401.362 seconds)] At epoch 84: avg accuracy training loss 0.3548586147446786, safe training loss 0.006346931375603201.
+[2020-05-12 09:37:14,805][INFO] [6m 41s (401.362 seconds)] After epoch 84:
+[2020-05-12 09:37:14,805][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:14,805][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:14,876][INFO] min loss 0.0, max loss 5.705817699432373.
+[2020-05-12 09:37:14,878][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:14,878][INFO] Test set accuracy 0.9603333333333334.
+[2020-05-12 09:37:14,878][INFO] 
+[6m 41s (401.436 seconds)] Starting epoch 85:
+[2020-05-12 09:37:18,579][INFO] [6m 45s (405.137 seconds)] At epoch 85: avg accuracy training loss 0.35418915908823734, safe training loss 0.00889880367134127.
+[2020-05-12 09:37:18,579][INFO] [6m 45s (405.137 seconds)] After epoch 85:
+[2020-05-12 09:37:18,579][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:18,580][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:18,650][INFO] min loss 0.0, max loss 8.720619201660156.
+[2020-05-12 09:37:18,652][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:18,652][INFO] Test set accuracy 0.9613333333333334.
+[2020-05-12 09:37:18,652][INFO] 
+[6m 45s (405.210 seconds)] Starting epoch 86:
+[2020-05-12 09:37:22,328][INFO] [6m 48s (408.885 seconds)] At epoch 86: avg accuracy training loss 0.354183788581561, safe training loss 0.009840335739496093.
+[2020-05-12 09:37:22,328][INFO] [6m 48s (408.885 seconds)] After epoch 86:
+[2020-05-12 09:37:22,328][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:22,328][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:22,399][INFO] min loss 0.0, max loss 5.166531562805176.
+[2020-05-12 09:37:22,401][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:22,401][INFO] Test set accuracy 0.9583333333333334.
+[2020-05-12 09:37:22,401][INFO] 
+[6m 48s (408.959 seconds)] Starting epoch 87:
+[2020-05-12 09:37:26,098][INFO] [6m 52s (412.656 seconds)] At epoch 87: avg accuracy training loss 0.35385060566727833, safe training loss 0.00545006878523817.
+[2020-05-12 09:37:26,098][INFO] [6m 52s (412.656 seconds)] After epoch 87:
+[2020-05-12 09:37:26,098][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:26,098][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:26,170][INFO] min loss 0.0, max loss 7.3610358238220215.
+[2020-05-12 09:37:26,171][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:26,172][INFO] Test set accuracy 0.9626666666666667.
+[2020-05-12 09:37:26,172][INFO] 
+[6m 52s (412.730 seconds)] Starting epoch 88:
+[2020-05-12 09:37:29,833][INFO] [6m 56s (416.391 seconds)] At epoch 88: avg accuracy training loss 0.35259791503670396, safe training loss 0.008276131394649706.
+[2020-05-12 09:37:29,833][INFO] [6m 56s (416.391 seconds)] After epoch 88:
+[2020-05-12 09:37:29,833][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:29,833][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:29,905][INFO] min loss 0.0, max loss 8.718607902526855.
+[2020-05-12 09:37:29,907][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:29,907][INFO] Test set accuracy 0.9633333333333334.
+[2020-05-12 09:37:29,908][INFO] 
+[6m 56s (416.466 seconds)] Starting epoch 89:
+[2020-05-12 09:37:33,576][INFO] [7m 0s (420.133 seconds)] At epoch 89: avg accuracy training loss 0.3532962529889999, safe training loss 0.010597149678756313.
+[2020-05-12 09:37:33,576][INFO] [7m 0s (420.134 seconds)] After epoch 89:
+[2020-05-12 09:37:33,576][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:33,576][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:33,647][INFO] min loss 0.0, max loss 12.027043342590332.
+[2020-05-12 09:37:33,649][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:33,649][INFO] Test set accuracy 0.9636666666666667.
+[2020-05-12 09:37:33,650][INFO] 
+[7m 0s (420.207 seconds)] Starting epoch 90:
+[2020-05-12 09:37:37,355][INFO] [7m 3s (423.913 seconds)] At epoch 90: avg accuracy training loss 0.3527353021406358, safe training loss 0.014597227376314902.
+[2020-05-12 09:37:37,356][INFO] [7m 3s (423.913 seconds)] After epoch 90:
+[2020-05-12 09:37:37,356][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:37,356][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:37,427][INFO] min loss 0.0, max loss 10.150705337524414.
+[2020-05-12 09:37:37,429][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:37,429][INFO] Test set accuracy 0.9643333333333334.
+[2020-05-12 09:37:37,430][INFO] 
+[7m 3s (423.988 seconds)] Starting epoch 91:
+[2020-05-12 09:37:41,126][INFO] [7m 7s (427.683 seconds)] At epoch 91: avg accuracy training loss 0.35271852791950264, safe training loss 0.0064863681515318255.
+[2020-05-12 09:37:41,126][INFO] [7m 7s (427.683 seconds)] After epoch 91:
+[2020-05-12 09:37:41,126][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:41,126][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:41,197][INFO] min loss 0.0, max loss 7.2205071449279785.
+[2020-05-12 09:37:41,199][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:41,199][INFO] Test set accuracy 0.963.
+[2020-05-12 09:37:41,200][INFO] 
+[7m 7s (427.757 seconds)] Starting epoch 92:
+[2020-05-12 09:37:44,933][INFO] [7m 11s (431.490 seconds)] At epoch 92: avg accuracy training loss 0.35231139390699323, safe training loss 0.00639930667145358.
+[2020-05-12 09:37:44,933][INFO] [7m 11s (431.490 seconds)] After epoch 92:
+[2020-05-12 09:37:44,933][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:44,933][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:45,005][INFO] min loss 0.0, max loss 8.437002182006836.
+[2020-05-12 09:37:45,007][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:45,007][INFO] Test set accuracy 0.965.
+[2020-05-12 09:37:45,008][INFO] 
+[7m 11s (431.565 seconds)] Starting epoch 93:
+[2020-05-12 09:37:48,749][INFO] [7m 15s (435.307 seconds)] At epoch 93: avg accuracy training loss 0.3512270357660068, safe training loss 0.005714955953105043.
+[2020-05-12 09:37:48,749][INFO] [7m 15s (435.307 seconds)] After epoch 93:
+[2020-05-12 09:37:48,750][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:48,750][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:48,821][INFO] min loss 0.0, max loss 10.968273162841797.
+[2020-05-12 09:37:48,823][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:48,823][INFO] Test set accuracy 0.9646666666666667.
+[2020-05-12 09:37:48,823][INFO] 
+[7m 15s (435.381 seconds)] Starting epoch 94:
+[2020-05-12 09:37:52,533][INFO] [7m 19s (439.090 seconds)] At epoch 94: avg accuracy training loss 0.3513062750139544, safe training loss 0.009432994610985481.
+[2020-05-12 09:37:52,533][INFO] [7m 19s (439.090 seconds)] After epoch 94:
+[2020-05-12 09:37:52,533][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:52,533][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:52,605][INFO] min loss 0.0, max loss 12.195358276367188.
+[2020-05-12 09:37:52,607][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:52,607][INFO] Test set accuracy 0.964.
+[2020-05-12 09:37:52,607][INFO] 
+[7m 19s (439.165 seconds)] Starting epoch 95:
+[2020-05-12 09:37:56,288][INFO] [7m 22s (442.845 seconds)] At epoch 95: avg accuracy training loss 0.3501972479204978, safe training loss 0.005576205696480008.
+[2020-05-12 09:37:56,288][INFO] [7m 22s (442.846 seconds)] After epoch 95:
+[2020-05-12 09:37:56,288][INFO] Loaded 3000 points for training.
+[2020-05-12 09:37:56,288][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:37:56,359][INFO] min loss 0.0, max loss 11.488873481750488.
+[2020-05-12 09:37:56,360][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:37:56,361][INFO] Test set accuracy 0.9656666666666667.
+[2020-05-12 09:37:56,362][INFO] 
+[7m 22s (442.919 seconds)] Starting epoch 96:
+[2020-05-12 09:38:00,088][INFO] [7m 26s (446.646 seconds)] At epoch 96: avg accuracy training loss 0.34991257549614035, safe training loss 0.00881963386388135.
+[2020-05-12 09:38:00,089][INFO] [7m 26s (446.646 seconds)] After epoch 96:
+[2020-05-12 09:38:00,089][INFO] Loaded 3000 points for training.
+[2020-05-12 09:38:00,089][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:38:00,160][INFO] min loss 0.0, max loss 12.595398902893066.
+[2020-05-12 09:38:00,162][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:38:00,163][INFO] Test set accuracy 0.966.
+[2020-05-12 09:38:00,163][INFO] 
+[7m 26s (446.721 seconds)] Starting epoch 97:
+[2020-05-12 09:38:03,867][INFO] [7m 30s (450.425 seconds)] At epoch 97: avg accuracy training loss 0.352291254907526, safe training loss 0.006211228782601494.
+[2020-05-12 09:38:03,867][INFO] [7m 30s (450.425 seconds)] After epoch 97:
+[2020-05-12 09:38:03,867][INFO] Loaded 3000 points for training.
+[2020-05-12 09:38:03,867][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:38:03,940][INFO] min loss 0.0, max loss 12.235020637512207.
+[2020-05-12 09:38:03,942][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:38:03,942][INFO] Test set accuracy 0.9636666666666667.
+[2020-05-12 09:38:03,943][INFO] 
+[7m 30s (450.500 seconds)] Starting epoch 98:
+[2020-05-12 09:38:07,634][INFO] [7m 34s (454.192 seconds)] At epoch 98: avg accuracy training loss 0.34938155066582466, safe training loss 0.0070637860710942935.
+[2020-05-12 09:38:07,635][INFO] [7m 34s (454.192 seconds)] After epoch 98:
+[2020-05-12 09:38:07,635][INFO] Loaded 3000 points for training.
+[2020-05-12 09:38:07,635][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:38:07,705][INFO] min loss 0.0, max loss 13.215551376342773.
+[2020-05-12 09:38:07,707][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:38:07,708][INFO] Test set accuracy 0.9656666666666667.
+[2020-05-12 09:38:07,708][INFO] 
+[7m 34s (454.266 seconds)] Starting epoch 99:
+[2020-05-12 09:38:11,432][INFO] [7m 37s (457.990 seconds)] At epoch 99: avg accuracy training loss 0.35034586248859284, safe training loss 0.007719050073916073.
+[2020-05-12 09:38:11,432][INFO] [7m 37s (457.990 seconds)] After epoch 99:
+[2020-05-12 09:38:11,433][INFO] Loaded 3000 points for training.
+[2020-05-12 09:38:11,433][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:38:11,503][INFO] min loss 0.0, max loss 12.159771919250488.
+[2020-05-12 09:38:11,505][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:38:11,506][INFO] Test set accuracy 0.9653333333333334.
+[2020-05-12 09:38:11,506][INFO] 
+[7m 38s (458.063 seconds)] Starting epoch 100:
+[2020-05-12 09:38:15,149][INFO] [7m 41s (461.707 seconds)] At epoch 100: avg accuracy training loss 0.3502551519101666, safe training loss 0.004245290963319681.
+[2020-05-12 09:38:15,149][INFO] [7m 41s (461.707 seconds)] After epoch 100:
+[2020-05-12 09:38:15,150][INFO] Loaded 3000 points for training.
+[2020-05-12 09:38:15,150][INFO] Loaded 10172 abstractions for training.
+[2020-05-12 09:38:15,221][INFO] min loss 0.0, max loss 9.997543334960938.
+[2020-05-12 09:38:15,223][INFO] Max loss at LB: tensor([-0.0070,  0.2661,  0.1544,  0.4793, -0.3036,  0.1139], device='cuda:0'), UB: tensor([ 0.0180,  0.2911,  0.2044,  0.5293, -0.2536,  0.1639], device='cuda:0').
+[2020-05-12 09:38:15,224][INFO] Test set accuracy 0.9683333333333334.
+[2020-05-12 09:38:15,367][INFO] Certified prop based at tensor([ 0.2845,  0.3511,  0.2066,  0.5385,  0.0384, -0.1668]) using 0th eps, now 5/5.
+[2020-05-12 09:38:15,378][INFO] Certified prop based at tensor([ 0.8923,  0.3161,  0.1048,  0.5506, -0.1836,  0.0016]) using 0th eps, now 10/10.
+[2020-05-12 09:38:44,941][INFO] Certified prop based at tensor([ 0.2628,  0.4940,  0.1791,  0.4497, -0.2046,  0.1706]) using 0th eps, now 15/20.
+[2020-05-12 09:38:45,205][INFO] Certified prop based at tensor([ 0.2467,  0.4408,  0.1596,  0.5771,  0.1958, -0.1645]) using 0th eps, now 20/25.
+[2020-05-12 09:38:45,245][INFO] Certified prop based at tensor([0.1171, 0.8338, 0.1088, 0.5841, 0.1131, 0.1051]) using 0th eps, now 25/30.
+[2020-05-12 09:38:45,255][INFO] Certified prop based at tensor([ 0.5892,  0.3169,  0.2946,  0.4627, -0.1624,  0.0218]) using 0th eps, now 30/35.
+[2020-05-12 09:38:51,285][INFO] Certified prop based at tensor([0.1260, 0.4555, 0.1724, 0.4144, 0.0799, 0.1767]) using 1th eps, now 34/40.
+[2020-05-12 09:38:57,301][INFO] Certified prop based at tensor([0.1263, 0.5367, 0.2807, 0.4223, 0.0716, 0.2757]) using 1th eps, now 38/45.
+[2020-05-12 09:38:57,363][INFO] Certified prop based at tensor([ 0.2546,  0.2284,  0.1916,  0.5682,  0.1921, -0.0429]) using 0th eps, now 43/50.
+[2020-05-12 09:38:57,374][INFO] Certified prop based at tensor([ 0.4371,  0.9816,  0.2206,  0.4593, -0.2221, -0.1439]) using 0th eps, now 48/55.
+[2020-05-12 09:39:03,566][INFO] Certified prop based at tensor([ 0.1256,  0.2528,  0.1825,  0.5034, -0.1384, -0.0617]) using 1th eps, now 52/60.
+[2020-05-12 09:39:03,666][INFO] Certified prop based at tensor([ 0.0403,  0.4127,  0.2535,  0.5963, -0.1595, -0.2891]) using 0th eps, now 57/65.
+[2020-05-12 09:39:03,677][INFO] Certified prop based at tensor([ 0.7011,  0.2367,  0.1807,  0.5966,  0.2604, -0.0657]) using 0th eps, now 62/70.
+[2020-05-12 09:39:09,698][INFO] Certified prop based at tensor([ 0.0018,  0.4172,  0.2368,  0.4740, -0.0621,  0.0734]) using 1th eps, now 66/75.
+[2020-05-12 09:39:09,747][INFO] Certified prop based at tensor([ 0.0194,  0.6863,  0.2367,  0.5090,  0.2769, -0.2279]) using 0th eps, now 71/80.
+[2020-05-12 09:39:09,757][INFO] Certified prop based at tensor([0.3316, 0.3106, 0.2472, 0.5459, 0.0550, 0.1016]) using 0th eps, now 76/85.
+[2020-05-12 09:39:15,867][INFO] Certified prop based at tensor([ 0.3511,  0.5603,  0.1852,  0.4403, -0.0833, -0.1584]) using 1th eps, now 80/90.
+[2020-05-12 09:39:15,888][INFO] Certified prop based at tensor([ 0.2572,  0.3256,  0.1528,  0.4552, -0.1236, -0.1408]) using 0th eps, now 85/95.
+[2020-05-12 09:39:15,898][INFO] Certified prop based at tensor([ 0.7676,  0.8311,  0.2326,  0.5141,  0.0980, -0.1638]) using 0th eps, now 90/100.
+[2020-05-12 09:39:15,908][INFO] Certified prop based at tensor([0.7238, 0.5948, 0.1180, 0.4964, 0.0105, 0.1820]) using 0th eps, now 95/105.
+[2020-05-12 09:39:21,990][INFO] Certified prop based at tensor([ 0.0714,  0.5314,  0.2001,  0.5787, -0.0061, -0.0288]) using 1th eps, now 99/110.
+[2020-05-12 09:39:22,000][INFO] Certified prop based at tensor([ 0.9707,  0.8325,  0.2294,  0.5122, -0.1780, -0.0908]) using 0th eps, now 104/115.
+[2020-05-12 09:39:22,120][INFO] Certified prop based at tensor([ 0.0579,  0.4882,  0.2457,  0.4880,  0.1531, -0.2028]) using 0th eps, now 109/120.
+[2020-05-12 09:39:22,200][INFO] Certified prop based at tensor([ 0.4225,  0.0888,  0.2351,  0.5522, -0.1699, -0.2320]) using 0th eps, now 114/125.
+[2020-05-12 09:39:22,271][INFO] Certified prop based at tensor([ 0.4624,  0.7558,  0.1954,  0.4276,  0.0518, -0.0629]) using 0th eps, now 119/130.
+[2020-05-12 09:39:22,361][INFO] Certified prop based at tensor([ 0.4810,  0.7580,  0.2625,  0.4252,  0.1759, -0.1926]) using 0th eps, now 124/135.
+[2020-05-12 09:39:22,371][INFO] Certified prop based at tensor([ 0.0151,  0.9321,  0.1308,  0.5741, -0.0842, -0.1962]) using 0th eps, now 129/140.
+[2020-05-12 09:39:22,491][INFO] Certified prop based at tensor([ 0.3163,  0.5544,  0.1579,  0.4212, -0.0178, -0.2977]) using 0th eps, now 134/145.
+[2020-05-12 09:39:22,562][INFO] Certified prop based at tensor([ 0.2651,  0.6088,  0.2448,  0.4979,  0.2409, -0.1682]) using 0th eps, now 139/150.
+[2020-05-12 09:39:22,672][INFO] Certified prop based at tensor([ 0.0881,  0.6046,  0.2178,  0.4835, -0.0591, -0.1539]) using 0th eps, now 144/155.
+[2020-05-12 09:39:22,753][INFO] Certified prop based at tensor([ 0.4135,  0.7258,  0.2062,  0.4128,  0.2809, -0.1083]) using 0th eps, now 149/160.
+[2020-05-12 09:39:22,763][INFO] Certified prop based at tensor([ 0.2833,  0.1129,  0.2717,  0.4023, -0.0922,  0.1239]) using 0th eps, now 154/165.
+[2020-05-12 09:39:22,773][INFO] Certified prop based at tensor([ 0.5159,  0.2009,  0.2285,  0.5121,  0.1848, -0.0160]) using 0th eps, now 159/170.
+[2020-05-12 09:39:34,602][INFO] Certified prop based at tensor([ 0.2254,  0.6199,  0.2232,  0.5094, -0.2369,  0.0743]) using 2th eps, now 162/175.
+[2020-05-12 09:39:34,612][INFO] Certified prop based at tensor([ 0.1032,  0.8467,  0.2544,  0.4870, -0.1191,  0.0527]) using 0th eps, now 167/180.
+[2020-05-12 09:39:34,622][INFO] Certified prop based at tensor([ 0.4493,  0.2924,  0.1095,  0.4537,  0.0630, -0.0348]) using 0th eps, now 172/185.
+[2020-05-12 09:39:34,632][INFO] Certified prop based at tensor([ 0.8415,  0.6032,  0.2924,  0.4024, -0.1845, -0.0140]) using 0th eps, now 177/190.
+[2020-05-12 09:39:34,642][INFO] Certified prop based at tensor([ 0.8747,  0.3421,  0.2664,  0.5920, -0.1161, -0.1439]) using 0th eps, now 182/195.
+[2020-05-12 09:39:34,772][INFO] Certified prop based at tensor([ 0.4073,  0.7339,  0.1212,  0.5880, -0.1098,  0.1017]) using 0th eps, now 187/200.
+[2020-05-12 09:39:34,782][INFO] Certified prop based at tensor([ 0.9226,  0.8354,  0.1143,  0.4773, -0.1917, -0.2779]) using 0th eps, now 192/205.
+[2020-05-12 09:39:34,873][INFO] Certified prop based at tensor([ 0.2467,  0.4020,  0.2104,  0.4105, -0.1962, -0.0476]) using 0th eps, now 197/210.
+[2020-05-12 09:39:34,883][INFO] Certified prop based at tensor([ 0.9711,  0.3975,  0.2354,  0.5669,  0.0942, -0.2549]) using 0th eps, now 202/215.
+[2020-05-12 09:39:34,893][INFO] Certified prop based at tensor([ 0.0027,  0.0865,  0.2979,  0.4425,  0.1747, -0.1917]) using 0th eps, now 207/220.
+[2020-05-12 09:39:34,903][INFO] Certified prop based at tensor([ 0.8246,  0.8338,  0.2275,  0.5062, -0.0013,  0.0614]) using 0th eps, now 212/225.
+[2020-05-12 09:39:34,943][INFO] Certified prop based at tensor([ 0.2492,  0.3777,  0.2916,  0.4150,  0.2189, -0.0360]) using 0th eps, now 217/230.
+[2020-05-12 09:39:34,985][INFO] Certified prop based at tensor([ 0.4851,  0.8029,  0.2251,  0.5872,  0.2542, -0.0166]) using 0th eps, now 222/235.
+[2020-05-12 09:39:35,005][INFO] Certified prop based at tensor([0.0836, 0.5079, 0.2653, 0.4952, 0.1126, 0.0035]) using 0th eps, now 227/240.
+[2020-05-12 09:39:35,065][INFO] Certified prop based at tensor([ 0.0941,  0.5722,  0.2586,  0.5845, -0.1331,  0.1924]) using 0th eps, now 232/245.
+[2020-05-12 09:39:35,076][INFO] Certified prop based at tensor([0.1536, 0.7480, 0.2709, 0.4498, 0.0112, 0.2281]) using 0th eps, now 237/250.
+[2020-05-12 09:39:41,212][INFO] Certified prop based at tensor([ 0.2337,  0.5632,  0.2855,  0.4085, -0.2291,  0.0845]) using 1th eps, now 241/255.
+[2020-05-12 09:39:41,252][INFO] Certified prop based at tensor([ 0.3264,  0.5073,  0.1066,  0.4181, -0.2170,  0.0930]) using 0th eps, now 246/260.
+[2020-05-12 09:39:47,187][INFO] Certified prop based at tensor([0.3476, 0.7449, 0.2237, 0.5039, 0.0210, 0.1112]) using 1th eps, now 250/265.
+[2020-05-12 09:39:53,226][INFO] Certified prop based at tensor([ 0.3042,  0.7440,  0.2834,  0.5836,  0.0431, -0.1407]) using 1th eps, now 254/270.
+[2020-05-12 09:39:53,236][INFO] Certified prop based at tensor([ 0.4071,  0.0583,  0.1205,  0.5604, -0.1090, -0.2696]) using 0th eps, now 259/275.
+[2020-05-12 09:39:59,364][INFO] Certified prop based at tensor([ 0.0033,  0.1977,  0.1716,  0.5941, -0.0118, -0.1101]) using 1th eps, now 263/280.
+[2020-05-12 09:39:59,375][INFO] Certified prop based at tensor([ 0.2000,  0.1978,  0.1586,  0.5049, -0.1598, -0.1593]) using 0th eps, now 268/285.
+[2020-05-12 09:39:59,385][INFO] Certified prop based at tensor([ 0.3612,  0.3079,  0.1192,  0.5362, -0.0968, -0.2936]) using 0th eps, now 273/290.
+[2020-05-12 09:39:59,395][INFO] Certified prop based at tensor([ 0.9754,  0.3031,  0.1327,  0.4620, -0.0518,  0.1734]) using 0th eps, now 278/295.
+[2020-05-12 09:39:59,404][INFO] Certified prop based at tensor([ 0.7892,  0.0522,  0.1487,  0.4137,  0.0643, -0.0167]) using 0th eps, now 283/300.
+[2020-05-12 09:40:05,425][INFO] Certified prop based at tensor([0.4583, 0.8232, 0.1210, 0.5777, 0.1115, 0.0157]) using 1th eps, now 287/305.
+[2020-05-12 09:40:05,455][INFO] Certified prop based at tensor([0.3204, 0.5566, 0.1388, 0.4175, 0.0736, 0.0313]) using 0th eps, now 292/310.
+[2020-05-12 09:40:05,485][INFO] Certified prop based at tensor([ 0.4825,  0.7492,  0.2105,  0.4108,  0.0574, -0.2176]) using 0th eps, now 297/315.
+[2020-05-12 09:40:05,603][INFO] Certified prop based at tensor([ 0.0287,  0.5504,  0.2091,  0.5615,  0.1959, -0.0099]) using 0th eps, now 302/320.
+[2020-05-12 09:40:05,613][INFO] Certified prop based at tensor([ 0.3587,  0.1589,  0.2520,  0.5899, -0.1352, -0.2991]) using 0th eps, now 307/325.
+[2020-05-12 09:40:05,654][INFO] Certified prop based at tensor([ 0.4373,  0.7739,  0.1789,  0.4810, -0.2205,  0.1768]) using 0th eps, now 312/330.
+[2020-05-12 09:40:05,664][INFO] Certified prop based at tensor([ 0.6305,  0.4972,  0.2319,  0.5192, -0.1699,  0.2444]) using 0th eps, now 317/335.
+[2020-05-12 09:40:05,714][INFO] Certified prop based at tensor([ 0.4196,  0.3721,  0.1167,  0.4240, -0.2274, -0.2688]) using 0th eps, now 322/340.
+[2020-05-12 09:40:05,724][INFO] Certified prop based at tensor([0.6851, 0.5652, 0.2392, 0.4526, 0.2667, 0.2123]) using 0th eps, now 327/345.
+[2020-05-12 09:40:05,912][INFO] Certified prop based at tensor([ 0.1417,  0.4102,  0.2219,  0.4067,  0.0835, -0.0938]) using 0th eps, now 332/350.
+[2020-05-12 09:40:05,922][INFO] Certified prop based at tensor([ 0.9373,  0.2160,  0.2665,  0.5505,  0.2196, -0.2951]) using 0th eps, now 337/355.
+[2020-05-12 09:40:06,080][INFO] Certified prop based at tensor([ 0.2012,  0.3339,  0.1661,  0.4810,  0.0023, -0.1883]) using 0th eps, now 342/360.
+[2020-05-12 09:40:06,227][INFO] Certified prop based at tensor([ 0.2704,  0.3070,  0.1871,  0.5429, -0.1264,  0.1115]) using 0th eps, now 347/365.
+[2020-05-12 09:40:06,308][INFO] Certified prop based at tensor([0.2907, 0.6539, 0.1618, 0.5877, 0.1130, 0.1649]) using 0th eps, now 352/370.
+[2020-05-12 09:40:06,318][INFO] Certified prop based at tensor([ 0.3097,  0.2096,  0.1156,  0.4547,  0.0993, -0.2124]) using 0th eps, now 357/375.
+[2020-05-12 09:40:06,328][INFO] Certified prop based at tensor([7.8620e-05, 9.6535e-01, 1.9266e-01, 4.7821e-01, 8.7692e-03, 1.2052e-01]) using 0th eps, now 362/380.
+[2020-05-12 09:40:06,337][INFO] Certified prop based at tensor([0.9337, 0.6571, 0.2529, 0.5835, 0.0791, 0.1779]) using 0th eps, now 367/385.
+[2020-05-12 09:40:06,419][INFO] Certified prop based at tensor([ 0.4944,  0.8059,  0.2437,  0.4887, -0.1733,  0.0804]) using 0th eps, now 372/390.
+[2020-05-12 09:40:06,489][INFO] Certified prop based at tensor([ 0.2320,  0.6332,  0.2429,  0.5849, -0.0717, -0.0764]) using 0th eps, now 377/395.
+[2020-05-12 09:40:06,500][INFO] Certified prop based at tensor([ 0.7483,  0.8297,  0.2461,  0.4681, -0.2852,  0.0703]) using 0th eps, now 382/400.
+[2020-05-12 09:40:06,530][INFO] Certified prop based at tensor([0.0960, 0.7668, 0.2159, 0.5068, 0.2413, 0.1795]) using 0th eps, now 387/405.
+[2020-05-12 09:40:06,540][INFO] Certified prop based at tensor([0.8327, 0.1858, 0.1410, 0.4443, 0.0668, 0.2536]) using 0th eps, now 392/410.
+[2020-05-12 09:40:06,611][INFO] Certified prop based at tensor([ 0.2735,  0.4419,  0.1601,  0.4627, -0.1081, -0.0426]) using 0th eps, now 397/415.
+[2020-05-12 09:40:06,621][INFO] Certified prop based at tensor([0.9058, 0.1240, 0.1645, 0.4632, 0.1047, 0.2417]) using 0th eps, now 402/420.
+[2020-05-12 09:40:06,693][INFO] Certified prop based at tensor([ 0.2406,  0.8178,  0.1583,  0.5005, -0.0468, -0.1778]) using 0th eps, now 407/425.
+[2020-05-12 09:40:06,814][INFO] Certified prop based at tensor([ 0.3806,  0.5502,  0.1325,  0.4527,  0.2144, -0.2845]) using 0th eps, now 412/430.
+[2020-05-12 09:40:06,834][INFO] Certified prop based at tensor([ 0.3166,  0.5543,  0.1433,  0.5504,  0.2140, -0.2656]) using 0th eps, now 417/435.
+[2020-05-12 09:40:06,844][INFO] Certified prop based at tensor([ 0.3313,  0.3839,  0.2102,  0.4734, -0.1451,  0.0874]) using 0th eps, now 422/440.
+[2020-05-12 09:40:06,855][INFO] Certified prop based at tensor([ 0.7263,  0.4460,  0.1843,  0.5174,  0.2972, -0.2925]) using 0th eps, now 427/445.
+[2020-05-12 09:40:06,915][INFO] Certified prop based at tensor([0.2141, 0.3508, 0.2819, 0.5301, 0.0563, 0.0909]) using 0th eps, now 432/450.
+[2020-05-12 09:40:06,935][INFO] Certified prop based at tensor([ 0.3950,  0.6707,  0.1557,  0.4689, -0.2509,  0.0366]) using 0th eps, now 437/455.
+[2020-05-12 09:40:06,985][INFO] Certified prop based at tensor([0.3407, 0.7660, 0.2880, 0.5882, 0.1783, 0.0893]) using 0th eps, now 442/460.
+[2020-05-12 09:40:06,995][INFO] Certified prop based at tensor([ 0.3346,  0.1807,  0.2620,  0.4638,  0.1953, -0.0891]) using 0th eps, now 447/465.
+[2020-05-12 09:40:07,006][INFO] Certified prop based at tensor([ 0.9239,  0.6044,  0.1930,  0.5436, -0.1480,  0.1305]) using 0th eps, now 452/470.
+[2020-05-12 09:40:07,066][INFO] Certified prop based at tensor([ 0.2487,  0.6278,  0.2073,  0.5441, -0.1019,  0.1405]) using 0th eps, now 457/475.
+[2020-05-12 09:40:07,076][INFO] Certified prop based at tensor([ 0.5293,  0.4240,  0.1250,  0.5066, -0.1173,  0.2221]) using 0th eps, now 462/480.
+[2020-05-12 09:40:13,125][INFO] Certified prop based at tensor([0.3326, 0.7133, 0.2275, 0.4283, 0.1455, 0.0168]) using 1th eps, now 466/485.
+[2020-05-12 09:40:13,264][INFO] Certified prop based at tensor([ 0.4623,  0.2784,  0.1988,  0.4409, -0.2665, -0.2480]) using 0th eps, now 471/490.
+[2020-05-12 09:40:13,284][INFO] Certified prop based at tensor([ 0.0895,  0.2582,  0.2102,  0.4883, -0.1224,  0.2341]) using 0th eps, now 476/495.
+[2020-05-12 09:40:13,468][INFO] Certified prop based at tensor([ 0.1982,  0.2925,  0.2225,  0.5334,  0.1076, -0.0563]) using 0th eps, now 481/500.
+[2020-05-12 09:40:13,477][INFO] Accuracy at every epoch: ['0.5000', '0.4987', '0.5000', '0.7707', '0.8467', '0.8110', '0.8847', '0.8853', '0.8997', '0.9147', '0.9210', '0.9293', '0.9313', '0.9403', '0.9420', '0.9337', '0.9400', '0.9407', '0.9323', '0.9397', '0.9410', '0.9387', '0.9393', '0.9373', '0.9357', '0.9437', '0.9410', '0.9413', '0.9403', '0.9433', '0.9427', '0.9410', '0.9403', '0.9447', '0.9433', '0.9447', '0.9440', '0.9453', '0.9453', '0.9443', '0.9463', '0.9473', '0.9457', '0.9493', '0.9487', '0.9490', '0.9493', '0.9460', '0.9457', '0.9513', '0.9503', '0.9487', '0.9500', '0.9507', '0.9527', '0.9450', '0.9517', '0.9503', '0.9530', '0.9497', '0.9493', '0.9530', '0.9517', '0.9523', '0.9540', '0.9517', '0.9510', '0.9537', '0.9537', '0.9577', '0.9573', '0.9557', '0.9543', '0.9557', '0.9557', '0.9577', '0.9540', '0.9573', '0.9567', '0.9627', '0.9597', '0.9563', '0.9637', '0.9603', '0.9603', '0.9613', '0.9583', '0.9627', '0.9633', '0.9637', '0.9643', '0.9630', '0.9650', '0.9647', '0.9640', '0.9657', '0.9660', '0.9637', '0.9657', '0.9653', '0.9683']
+[2020-05-12 09:40:13,477][INFO] After 100 epochs / 7m 41s (461.782 seconds), eventually the trained network got certified at 481 / 500 props, with 0.9683 accuracy on test set.
+[2020-05-12 09:40:13,478][INFO] Final Summary -- Avg <epochs, train_time, certified, accuracy>: (100, 461.78232713701436, 481, 0.9683333333333334)
+[2020-05-12 09:40:13,478][INFO] Total Cost Time: 583.2283306739992s.
+
+
+
