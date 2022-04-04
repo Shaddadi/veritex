@@ -1,0 +1,138 @@
+cifar10_2_255_simplified-cifar10_spec_idx_0_eps_0.00784_n1, timeout, timeout, 1.0 (v), 14.2 (v), 1.0 (v), 4.4 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_1_eps_0.00784_n1, timeout, 30.9 (h), 8.5 (h), 10.2 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_2_eps_0.00784_n1, timeout, timeout, 35.7 (h), 28.4 (h), 1.9 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_3_eps_0.00784_n1, timeout, 252.4 (h), 8.5 (h), 10.5 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_4_eps_0.00784_n1, timeout, timeout, 51.0 (h), 223.0 (h), 8.9 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_5_eps_0.00784_n1, timeout, timeout, 11.2 (h), 15.7 (h), 1.8 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_6_eps_0.00784_n1, timeout, 267.2 (h), 8.7 (h), 11.7 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_8_eps_0.00784_n1, timeout, timeout, timeout, timeout, timeout, timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_9_eps_0.00784_n1, timeout, timeout, 36.2 (h), 35.8 (h), 2.1 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_10_eps_0.00784_n1, timeout, 228.3 (h), 8.8 (h), 10.7 (h), 1.0 (h), 4.1 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_11_eps_0.00784_n1, timeout, 31.8 (h), 8.7 (h), 13.8 (h), 1.0 (h), 4.4 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_12_eps_0.00784_n1, timeout, timeout, 1.0 (v), 13.5 (v), 1.0 (v), 4.2 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_13_eps_0.00784_n1, timeout, 31.6 (h), 8.7 (h), 10.5 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_14_eps_0.00784_n1, timeout, 33.9 (h), 8.6 (h), 14.6 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_15_eps_0.00784_n1, timeout, 32.6 (h), 8.6 (h), 13.5 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_16_eps_0.00784_n1, timeout, timeout, 41.2 (h), 41.4 (h), 4.0 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_17_eps_0.00784_n1, timeout, 33.2 (h), 8.6 (h), 14.3 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_18_eps_0.00784_n1, timeout, 31.1 (h), 8.6 (h), 10.4 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_19_eps_0.00784_n1, timeout, 34.5 (h), 8.5 (h), 14.0 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_20_eps_0.00784_n1, timeout, 270.3 (h), 8.5 (h), 11.4 (h), 1.1 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_21_eps_0.00784_n1, 244.9 (h), 25.5 (h), 8.6 (h), 3.3 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_23_eps_0.00784_n1, timeout, 32.6 (h), 8.6 (h), 13.8 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_25_eps_0.00784_n1, timeout, timeout, 29.9 (h), 15.6 (h), 1.1 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_26_eps_0.00784_n1, timeout, timeout, 1.0 (v), 14.0 (v), 1.0 (v), 4.1 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_27_eps_0.00784_n1, timeout, timeout, timeout, timeout, timeout, timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_28_eps_0.00784_n1, timeout, timeout, 1.0 (v), 13.5 (v), 1.0 (v), 4.3 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_29_eps_0.00784_n1, timeout, 36.8 (h), 8.6 (h), 14.1 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_30_eps_0.00784_n1, timeout, timeout, 55.8 (h), timeout, 16.5 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_31_eps_0.00784_n1, timeout, timeout, 1.0 (v), 12.0 (v), 1.0 (v), 4.3 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_32_eps_0.00784_n1, timeout, timeout, 1.0 (v), 15.0 (v), 1.0 (v), 4.3 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_33_eps_0.00784_n1, timeout, timeout, timeout, timeout, timeout, timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_34_eps_0.00784_n1, timeout, 33.2 (h), 8.7 (h), 12.5 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_36_eps_0.00784_n1, timeout, timeout, 1.0 (v), 13.6 (v), 1.0 (v), 4.2 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_37_eps_0.00784_n1, timeout, 273.6 (v), 1.0 (v), 11.0 (v), 1.0 (v), 4.4 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_38_eps_0.00784_n1, timeout, 32.5 (h), 8.7 (h), 14.3 (h), 1.0 (h), 4.1 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_39_eps_0.00784_n1, timeout, timeout, 11.5 (h), 14.2 (h), 1.3 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_40_eps_0.00784_n1, timeout, 32.4 (h), 8.7 (h), 12.4 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_41_eps_0.00784_n1, timeout, 32.1 (h), 8.7 (h), 11.6 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_42_eps_0.00784_n1, timeout, timeout, 30.5 (h), 17.2 (h), 1.0 (h), 251.0 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_43_eps_0.00784_n1, timeout, 37.2 (h), 8.6 (h), 13.7 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_44_eps_0.00784_n1, timeout, 30.3 (h), 8.6 (h), 8.6 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_45_eps_0.00784_n1, timeout, 30.1 (h), 8.6 (h), 11.7 (h), 1.0 (h), 4.1 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_46_eps_0.00784_n1, timeout, timeout, 8.6 (h), 12.0 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_48_eps_0.00784_n1, timeout, timeout, 45.9 (h), 79.4 (h), 5.0 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_50_eps_0.00784_n1, timeout, timeout, 52.5 (h), 155.5 (h), 10.2 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_51_eps_0.00784_n1, timeout, timeout, 31.7 (h), 25.8 (h), 1.8 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_53_eps_0.00784_n1, timeout, timeout, timeout, timeout, timeout, timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_54_eps_0.00784_n1, timeout, 30.7 (h), 8.5 (h), 10.0 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_55_eps_0.00784_n1, timeout, 29.9 (h), 8.5 (h), 9.1 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_60_eps_0.00784_n1, timeout, 33.7 (h), 8.5 (h), 12.1 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_62_eps_0.00784_n1, timeout, 31.7 (h), 8.5 (h), 10.6 (h), 1.0 (h), 4.0 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_64_eps_0.00784_n1, timeout, timeout, 39.4 (h), 58.5 (h), 3.0 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_65_eps_0.00784_n1, timeout, timeout, 1.0 (v), 14.8 (v), 1.0 (v), 4.4 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_66_eps_0.00784_n1, timeout, timeout, 37.2 (h), 30.7 (h), 2.1 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_67_eps_0.00784_n1, timeout, 29.2 (h), 9.0 (h), 8.3 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_68_eps_0.00784_n1, timeout, timeout, 47.3 (h), 69.3 (h), 5.8 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_71_eps_0.00784_n1, timeout, timeout, 44.6 (h), 108.6 (h), 6.3 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_72_eps_0.00784_n1, timeout, 28.0 (h), 9.0 (h), 8.2 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_73_eps_0.00784_n1, timeout, 32.8 (h), 9.0 (h), 11.4 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_74_eps_0.00784_n1, timeout, timeout, 1.0 (v), 11.7 (v), 1.0 (v), 4.1 (v), 1.1 (v)
+cifar10_2_255_simplified-cifar10_spec_idx_75_eps_0.00784_n1, timeout, 31.9 (h), 8.6 (h), 9.9 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_76_eps_0.00784_n1, timeout, timeout, 2.1 (v), 13.3 (v), 1.0 (v), 4.3 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_77_eps_0.00784_n1, timeout, timeout, 30.2 (h), 19.4 (h), 1.4 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_78_eps_0.00784_n1, timeout, 300.5 (h), 8.6 (h), 12.0 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_79_eps_0.00784_n1, timeout, 28.8 (h), 8.6 (h), 6.7 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_80_eps_0.00784_n1, timeout, 31.4 (h), 8.5 (h), 10.6 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_81_eps_0.00784_n1, timeout, 29.2 (h), 8.6 (h), 8.6 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_82_eps_0.00784_n1, timeout, 32.1 (h), 8.6 (h), 11.3 (h), 1.0 (h), 4.1 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_83_eps_0.00784_n1, timeout, 30.0 (h), 8.6 (h), 9.1 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_84_eps_0.00784_n1, timeout, 30.3 (h), 8.6 (h), 8.4 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_86_eps_0.00784_n1, timeout, timeout, 1.0 (v), 12.2 (v), 1.0 (v), 4.3 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_88_eps_0.00784_n1, timeout, 32.3 (h), 8.8 (h), 11.5 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_89_eps_0.00784_n1, timeout, 32.6 (h), 8.8 (h), 14.0 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_90_eps_0.00784_n1, timeout, 29.6 (h), 8.8 (h), 11.0 (h), 1.0 (h), 4.3 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_92_eps_0.00784_n1, timeout, 31.6 (h), 8.8 (h), 9.1 (h), 1.0 (h), 4.1 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_93_eps_0.00784_n1, timeout, timeout, 11.4 (h), 13.0 (h), 1.3 (h), timeout, -
+cifar10_2_255_simplified-cifar10_spec_idx_94_eps_0.00784_n1, timeout, 294.0 (h), 8.6 (h), 12.3 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_95_eps_0.00784_n1, timeout, timeout, 1.0 (v), 15.7 (v), 1.0 (v), 4.4 (v), -
+cifar10_2_255_simplified-cifar10_spec_idx_96_eps_0.00784_n1, timeout, 34.9 (h), 8.6 (h), 16.2 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_97_eps_0.00784_n1, timeout, 194.1 (h), 8.7 (h), 6.9 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_98_eps_0.00784_n1, timeout, 26.9 (h), 8.6 (h), 5.1 (h), 1.0 (h), 4.2 (h), -
+cifar10_2_255_simplified-cifar10_spec_idx_99_eps_0.00784_n1, timeout, 31.9 (h), 8.6 (h), 10.6 (h), 1.0 (h), 4.3 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_1_eps_0.03137_n1, timeout, 108.4 (h), 7.0 (h), 1.5 (h), 1.0 (h), 118.4 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_2_eps_0.03137_n1, timeout, timeout, 17.9 (h), 7.1 (h), 1.4 (h), timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_4_eps_0.03137_n1, timeout, timeout, 1.0 (v), 2.1 (v), 31.1 (v), 4.5 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_5_eps_0.03137_n1, timeout, timeout, 15.3 (h), 9.2 (h), 2.6 (h), timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_9_eps_0.03137_n1, timeout, 122.6 (v), 1.0 (v), 1.9 (v), 1.0 (v), 4.2 (v), 1.0 (v)
+cifar10_8_255_simplified-cifar10_spec_idx_10_eps_0.03137_n1, timeout, timeout, timeout, timeout, error, timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_11_eps_0.03137_n1, timeout, timeout, 7.7 (h), 2.1 (h), 1.0 (h), 249.9 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_13_eps_0.03137_n1, timeout, 104.4 (h), 5.1 (h), 1.2 (h), 1.0 (h), 4.0 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_14_eps_0.03137_n1, timeout, timeout, 39.3 (h), 222.4 (h), 21.8 (h), timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_15_eps_0.03137_n1, timeout, timeout, 32.9 (h), 54.2 (h), 21.1 (h), timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_16_eps_0.03137_n1, timeout, 13.6 (h), 5.1 (h), 1.6 (h), 1.0 (h), 4.1 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_18_eps_0.03137_n1, timeout, 13.4 (h), 5.1 (h), 1.2 (h), 1.0 (h), 4.2 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_19_eps_0.03137_n1, timeout, 135.2 (v), 1.0 (v), 2.0 (v), 1.0 (v), 4.1 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_21_eps_0.03137_n1, 139.6 (h), 12.2 (h), 5.0 (h), 1.0 (h), 1.0 (h), 4.3 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_23_eps_0.03137_n1, timeout, 128.0 (v), 1.0 (v), 1.8 (v), 1.0 (v), 4.3 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_28_eps_0.03137_n1, timeout, timeout, timeout, timeout, timeout, -, -
+cifar10_8_255_simplified-cifar10_spec_idx_29_eps_0.03137_n1, timeout, 120.6 (h), 7.1 (h), 1.6 (h), 1.3 (h), 137.5 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_30_eps_0.03137_n1, timeout, 119.9 (v), 1.0 (v), 1.7 (v), 1.0 (v), 4.1 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_32_eps_0.03137_n1, timeout, timeout, 1.0 (v), 2.3 (v), 1.0 (v), 4.2 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_33_eps_0.03137_n1, timeout, 121.7 (v), 1.0 (v), 1.7 (v), 1.0 (v), 4.1 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_34_eps_0.03137_n1, timeout, 128.2 (h), 6.8 (h), 1.8 (h), 1.0 (h), 144.5 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_38_eps_0.03137_n1, timeout, 125.4 (v), 1.0 (v), 1.9 (v), 1.2 (v), 9.5 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_39_eps_0.03137_n1, timeout, timeout, 1.0 (v), 1.9 (v), 1.0 (v), 4.2 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_41_eps_0.03137_n1, timeout, 13.9 (h), 5.1 (h), 1.2 (h), 1.0 (h), 4.1 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_44_eps_0.03137_n1, timeout, timeout, 1.0 (v), 1.7 (v), 1.0 (v), 4.2 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_45_eps_0.03137_n1, timeout, timeout, 28.3 (h), 20.2 (h), 8.1 (h), timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_49_eps_0.03137_n1, timeout, 122.7 (h), 7.0 (h), 2.0 (h), 1.0 (h), 132.6 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_50_eps_0.03137_n1, timeout, 14.0 (h), 5.1 (h), 1.5 (h), 1.0 (h), 4.1 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_51_eps_0.03137_n1, timeout, timeout, 68.2 (h), timeout, 26.9 (h), timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_54_eps_0.03137_n1, timeout, 110.4 (h), 5.1 (h), 1.8 (h), 1.0 (h), 4.1 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_55_eps_0.03137_n1, timeout, 153.9 (h), 7.0 (h), 2.1 (h), 1.0 (h), 214.2 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_60_eps_0.03137_n1, timeout, 124.4 (v), 1.0 (v), 2.0 (v), 1.0 (v), 4.1 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_64_eps_0.03137_n1, timeout, timeout, timeout, timeout, error, timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_66_eps_0.03137_n1, timeout, timeout, 20.6 (h), 7.1 (h), 2.5 (h), timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_67_eps_0.03137_n1, timeout, 106.5 (v), 1.0 (v), 1.6 (v), 1.0 (v), 3.9 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_71_eps_0.03137_n1, timeout, timeout, 50.9 (h), timeout, 190.2 (h), -, -
+cifar10_8_255_simplified-cifar10_spec_idx_72_eps_0.03137_n1, timeout, timeout, 28.0 (h), 17.7 (h), 4.0 (h), timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_73_eps_0.03137_n1, timeout, timeout, 23.0 (h), 52.7 (h), 4.3 (h), timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_74_eps_0.03137_n1, timeout, 110.4 (v), 1.0 (v), 1.5 (v), 1.0 (v), 4.2 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_76_eps_0.03137_n1, timeout, timeout, 61.2 (h), timeout, 37.2 (h), timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_79_eps_0.03137_n1, timeout, 96.6 (v), 1.0 (v), 1.1 (v), 1.0 (v), 4.2 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_80_eps_0.03137_n1, timeout, timeout, 43.8 (h), 78.6 (h), 5.4 (h), timeout, -
+cifar10_8_255_simplified-cifar10_spec_idx_81_eps_0.03137_n1, timeout, 13.2 (h), 5.1 (h), 1.2 (h), 1.0 (h), 4.2 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_82_eps_0.03137_n1, timeout, 14.1 (h), 5.0 (h), 1.8 (h), 1.0 (h), 4.2 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_83_eps_0.03137_n1, timeout, 107.3 (v), 1.0 (v), 1.7 (v), 1.0 (v), 4.1 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_84_eps_0.03137_n1, timeout, timeout, timeout, timeout, timeout, -, -
+cifar10_8_255_simplified-cifar10_spec_idx_86_eps_0.03137_n1, timeout, timeout, 1.0 (v), 1.9 (v), 1.0 (v), 4.2 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_88_eps_0.03137_n1, timeout, timeout, 7.4 (h), 3.2 (h), 1.0 (h), 234.1 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_89_eps_0.03137_n1, timeout, timeout, 1.0 (v), 2.1 (v), 1.0 (v), 4.5 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_90_eps_0.03137_n1, timeout, 131.4 (v), 1.0 (v), 2.0 (v), 1.0 (v), 4.2 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_92_eps_0.03137_n1, timeout, 13.0 (h), 5.0 (h), 1.3 (h), 1.0 (h), 4.2 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_95_eps_0.03137_n1, timeout, timeout, 1.0 (v), 2.1 (v), 1.0 (v), 4.1 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_96_eps_0.03137_n1, timeout, timeout, 1.0 (v), 130.7 (v), error, 9.7 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_97_eps_0.03137_n1, timeout, timeout, timeout, timeout, timeout, 12.5 (v), -
+cifar10_8_255_simplified-cifar10_spec_idx_98_eps_0.03137_n1, 272.4 (h), 12.4 (h), 5.1 (h), 1.0 (h), 1.0 (h), 4.0 (h), -
+cifar10_8_255_simplified-cifar10_spec_idx_99_eps_0.03137_n1, timeout, timeout, 1.0 (v), 1.8 (v), 1.0 (v), 4.3 (v), -
