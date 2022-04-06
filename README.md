@@ -74,20 +74,25 @@ There are two versions for the artifact evaluation.
    * repair of unsafe instaces (33/35)
    * implementation of the related work ART for the repair comparison.
    
+   
    ```bash
    cd cav22_artifact
    sudo chmod +x reproduce_results1.sh
    ./reproduce_results1.sh
    ```
 
-2. This one reproduces all the results in the paper, including the safety verification of all instances, the repair of unsafe instaces (35/35) and the implementation of the related work ART for the repair comparison. The hardware requirement for this version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
+2. This one reproduces all the results in the paper, including. 
+   * safety verification of all instances, 
+   * repair of all unsafe instaces (35/35)
+   * implementation of the related work ART for the repair comparison.
+
 
    ```bash
    cd cav22_artifact
    sudo chmod +x reproduce_results2.sh
    ./reproduce_results2.sh
    ```
-
+**The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.**
 
 ### Demo
 
