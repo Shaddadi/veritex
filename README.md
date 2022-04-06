@@ -20,7 +20,7 @@ git clone https://github.com/Shaddadi/veritex.git
 cd veritex
 ```
 
-### Docker installing as a User (recommend)
+### Docker installing as a User (recommend for CAV'22 artifact)
 
 1. Build the image from the dockerfile.
 
@@ -62,6 +62,8 @@ This tool is confirmed with only Python3.7.
     ```
 
 ## Run experiments
+
+### CAV'22 Artifact
 
 ### Demo
 
