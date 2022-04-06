@@ -75,6 +75,7 @@ There are two versions for the artifact evaluation.
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables.<br/>
      
+       
    ```bash
    cd cav22_artifact
    ./reproduce_results1.sh
@@ -86,6 +87,8 @@ There are two versions for the artifact evaluation.
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables.    <br/>
      
+       
+         
    ```bash
    cd cav22_artifact
    ./reproduce_results2.sh
