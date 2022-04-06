@@ -1,11 +1,9 @@
 # Tool for Reachability Analysis and Repair of Neural Networks
 
-Veritex is an object-oriented software programmed in Python.
-It takes in two inputs, the network model and safety properties.
-Veritex supports the standardized format ONNX and PyTorch for the network and the unified format Vnnnlib for the safety property.
-With the network model and its safety properties, Veritex can compute the exact or over-approximated output reachable domain and also the entire unsafe input space if exists.
-It supports the plotting of 2 or 3-dimensional polytopes.
-When the repair option is enabled, it will produce a provable safe network in ONNX or PyTorch format.
+Veritex is an object-oriented software programmed in Python. It takes in two inputs, the network model and safety properties.
+
+Veritex supports the standardized format ONNX and PyTorch for the network and the unified format Vnnnlib for the safety property. With the network model and its safety properties, Veritex can compute the exact or over-approximated output reachable domain and also the entire unsafe input space if exists. It supports the plotting of 2 or 3-dimensional polytopes. When the repair option is enabled, it will produce a provable safe network in ONNX or PyTorch format.
+
 <p align="center">
    <img src="veritex.png" style="width:80%">
 </p>
@@ -67,34 +65,33 @@ This tool is confirmed with only Python3.7.
 
 This section aims to reproduce results in the CAV'22 tool paper, inculding Figure 2&3&4 and Table 2&3. Results are stored in 'veritex/cav22_artifact'. (to do: requirement for the hardware)
 
-There are two versions for the artifact evaluation. 
+There are two versions for the artifact evaluation.
 
-1. This one reproduces most of the results in the paper (~160 mins), including 
-   * safety verification of all instances (Figure 2) (~2 mins), 
+1. This one reproduces most of the results in the paper (~160 mins), including
+   * safety verification of all instances (Figure 2) (~2 mins),
    * repair of 33/35 unsafe instances (Figure 3&4 and most of results in Table 2&3) (~40 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables (~30 mins, majority of time is spent on the plot of reachable domains).
-     
-   This version was tested on hardwares(to do).                   
-                                    
+
+   This version was tested on hardwares(to do).
+
    ```bash
    cd cav22_artifact
    ./reproduce_results1.sh
    ```
 
 2. This one reproduces all the results in the paper (~400 mins), including
-   * safety verification of all instances (Figure 2) (~2 mins),  
+   * safety verification of all instances (Figure 2) (~2 mins),
    * repair of all unsafe instances (35/35) (Figure 3&4 and Table 2&3) (~280 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables (~30 mins, majority of time is spent on the plot of reachable domains).
-     
+
    The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
-         
+
    ```bash
    cd cav22_artifact
    ./reproduce_results2.sh
    ```
-   
 
 ### Demo
 
