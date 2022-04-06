@@ -73,14 +73,14 @@ There are two versions for the artifact evaluation.
    ```bash
    cd cav22_artifact
    sudo chmod +x reproduce_results1.sh
-   ./reproduce_results.sh
+   ./reproduce_results1.sh
    ```
 
 2. This one reproduces all the results in the paper, including the safety verification of all instances, the repair of unsafe instaces (35/35) and the implementation of the related work ART for the repair comparison.
    ```bash
    cd cav22_artifact
    sudo chmod +x reproduce_results2.sh
-   ./reproduce_results.sh
+   ./reproduce_results2.sh
    ```
 
 
