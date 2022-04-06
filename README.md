@@ -19,7 +19,7 @@ git clone https://github.com/Shaddadi/veritex.git
 cd veritex
 ```
 
-### Docker installing as a User (recommend for CAV'22 artifact)
+### Option 1: docker installing as a User (recommend for CAV'22 artifact)
 
 1. Build the image from the dockerfile.
 
@@ -33,7 +33,7 @@ cd veritex
     sudo docker run --rm -it veritex_image bash
     ```
 
-### Installing as a User
+### Option 2: installing as a User
 
 This tool is confirmed with only Python3.7.
 Simply you may install veritex pkg with pip.
@@ -42,7 +42,7 @@ Simply you may install veritex pkg with pip.
 python3.7 -m pip install .
 ```
 
-### Installing as a Developer
+### Option 3: installing as a Developer
 
 This tool is confirmed with only Python3.7.
 
