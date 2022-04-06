@@ -3,7 +3,7 @@ import numpy as np
 from veritex.utils.load_onnx import load_ffnn_onnx
 # from acasxu_repair_list import *
 import scipy.io as sio
-from load_nnet import NNet
+from veritex.utils.load_nnet import NNet
 import copy as cp
 from veritex.networks.ffnn import FFNN
 import multiprocessing as mp

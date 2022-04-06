@@ -54,5 +54,5 @@ if __name__ == "__main__":
     plt.yticks(fontsize=10)
     plt.legend(ncol=3, fontsize=11)
     plt.title('Fig. 2: Cactus plot of the running time of the safety verification \n for ACAS Xu from VNN-COMP’21')
-    plt.show()
+    # plt.show()
     plt.savefig('Figure2.png')

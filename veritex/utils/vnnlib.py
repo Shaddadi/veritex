@@ -1,12 +1,12 @@
 '''
-vnnlib simple utilities (https://github.com/stanleybak/nnenum/blob/master/src/nnenum/vnnlib.py)
+heavily borrowed from vnnlib simple utilities (https://github.com/stanleybak/nnenum/blob/master/src/nnenum/vnnlib.py)
 '''
 
 from copy import deepcopy
 import re
-
+import torch
 import numpy as np
-
+from veritex.utils.sfproperty import Property
 import onnxruntime as ort
 import onnx
 
@@ -287,3 +287,17 @@ def read_vnnlib_simple(vnnlib_filename, num_inputs, num_outputs):
     #    print(f"-----\n{i+1}. {box}\nspec:{spec_list}")
 
     return final_rv
+
+
+def vnnlib_to_properties(vnnlib_path, num_inputs, num_outputs, input_ranges=None):
+    vnnlib_specs = read_vnnlib_simple(vnnlib_path, num_inputs, num_outputs)
+    properties = []
+    for spec in vnnlib_specs:
+        lbs = [item[0] for item in spec[0]]
+        ubs = [item[1] for item in spec[0]]
+        input_domain = [lbs, ubs]
+
+        unsafe_domains = [[item[0], np.array([-item[1]]).T] for item in spec[1]]
+        properties.append(Property(input_domain, unsafe_domains, input_ranges=input_ranges))
+
+    return properties

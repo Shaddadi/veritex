@@ -54,8 +54,8 @@ class FFNN:
     def backtrack(self, vfl_set, verify=False, unsafe_domain=None):
 
         if verify:
-            As_unsafe = unsafe_domain[0].numpy()
-            ds_unsafe = unsafe_domain[1].numpy()
+            As_unsafe = unsafe_domain[0]
+            ds_unsafe = unsafe_domain[1]
             elements = np.dot(np.dot(As_unsafe, vfl_set.M), vfl_set.vertices.T) + np.dot(As_unsafe, vfl_set.b) + ds_unsafe
             if np.any(np.all(elements >= 0, axis=1)):  # reachable set does not satisfy at least one linear constraint
                 return False
@@ -74,8 +74,8 @@ class FFNN:
         else:
             vfls = []
             for i in range(len(self.unsafe_domains)):
-                As_unsafe = self.unsafe_domains[i][0].numpy()
-                ds_unsafe = self.unsafe_domains[i][1].numpy()
+                As_unsafe = self.unsafe_domains[i][0]
+                ds_unsafe = self.unsafe_domains[i][1]
                 elements = np.dot(np.dot(As_unsafe,vfl_set.M), vfl_set.vertices.T) + np.dot(As_unsafe, vfl_set.b) +ds_unsafe
                 if np.any(np.all(elements>0, axis=1)): # reachable set does not satisfy at least one linear constraint
                     continue
@@ -210,8 +210,8 @@ class FFNN:
 
         safe = []
         for indx, ud in enumerate(self.unsafe_domains):
-            As_unsafe = ud[0].numpy()
-            ds_unsafe = ud[1].numpy()
+            As_unsafe = ud[0]
+            ds_unsafe = ud[1]
             safe.append(False)
             for n in range(len(As_unsafe)):
                 A = As_unsafe[[n]]
@@ -235,8 +235,8 @@ class FFNN:
     def verify(self, vfl_set):
         unsafe = False
         for ud in self.unsafe_domains:
-            A_unsafe = ud[0].numpy()
-            d_unsafe = ud[1].numpy()
+            A_unsafe = ud[0]
+            d_unsafe = ud[1]
             if len(A_unsafe) == 1:
                 vertices = np.dot(vfl_set.vertices, vfl_set.M.T) + vfl_set.b.T
                 vals = np.dot(A_unsafe, vertices.T) + d_unsafe

@@ -80,7 +80,7 @@ class REPAIR:
         for p in self.properties:
             lb, ub = p.lbs, p.ubs
             for ufd in p.unsafe_domains:
-                M, vec = ufd[0], ufd[1]
+                M, vec = torch.tensor(ufd[0], dtype=torch.float32), torch.tensor(ufd[1],dtype=torch.float32)
                 bools = torch.ones(len(data_x), dtype=torch.bool)
                 for n in range(len(lb)):
                     lbx, ubx = lb[n], ub[n]

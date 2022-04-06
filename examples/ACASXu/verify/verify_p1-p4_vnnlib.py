@@ -5,8 +5,7 @@ import multiprocessing as mp
 from veritex.methods.worker import Worker
 from veritex.methods.shared import SharedState
 from veritex.utils.load_onnx import load_ffnn_onnx
-from veritex.utils.sfproperty import Property
-from veritex.utils.vnnlib import read_vnnlib_simple
+from veritex.utils.vnnlib import vnnlib_to_properties
 import multiprocessing
 import logging
 import torch
@@ -35,14 +34,8 @@ if __name__ == "__main__":
     # extract safety properties from vnnlib files
     properties = []
     for n in range(1, 5):
-        vnnlib_specs = read_vnnlib_simple('../nets/prop_' + str(n) + '.vnnlib', num_inputs=5, num_outputs=5)
-        for spec in vnnlib_specs:
-            lbs = [item[0] for item in spec[0]]
-            ubs = [item[1] for item in spec[0]]
-            input_domain = [lbs, ubs]
-
-            unsafe_domains = [[torch.tensor(item[0]), torch.tensor([-item[1]]).T] for item in spec[1]]
-            properties.append(Property(input_domain, unsafe_domains))
+        prop = vnnlib_to_properties('../nets/prop_' + str(n) + '.vnnlib', num_inputs=5, num_outputs=5)
+        properties.extend(prop)
 
     # run safety verification
     for n, prop in enumerate(properties):
