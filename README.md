@@ -71,9 +71,9 @@ There are two versions for the artifact evaluation.
 
 1. This one reproduces a subset of the results in the paper, including 
    * safety verification of all instances (Figure 2) (~2 mins), 
-   * repair of 33/35 unsafe instaces (Figure 3&4 and subset results in Table 2&3) (~40 mins),
+   * repair of 33/35 unsafe instaces (Figure 3&4 and most of results in Table 2&3) (~40 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
-   * generation of figures and tables.<br/>
+   * generation of figures and tables.
      
    This version was tested on hardwares(to do).                   
                                     
@@ -86,7 +86,7 @@ There are two versions for the artifact evaluation.
    * safety verification of all instances (Figure 2) (~2 mins),  
    * repair of all unsafe instaces (35/35) (Figure 3&4 and Table 2&3) (~280 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
-   * generation of figures and tables.    <br/>
+   * generation of figures and tables.
      
    The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
          
