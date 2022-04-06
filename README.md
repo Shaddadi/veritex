@@ -92,7 +92,7 @@ There are two versions for the artifact evaluation.
    sudo chmod +x reproduce_results2.sh
    ./reproduce_results2.sh
    ```
-**The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.**
+   **The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.**
 
 ### Demo
 
