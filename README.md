@@ -27,7 +27,7 @@ cd veritex
     sudo docker build . -t veritex_image
     ```
 
-1. Create the docker container.
+1. Create and start the docker container.
 
     ```bash
     sudo docker run --rm -it veritex_image bash
