@@ -87,7 +87,7 @@ There are two versions for the artifact evaluation.
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables (~30 mins, majority of time is spent on the plot of reachable domains).
 
-   The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
+   The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU. (if not, memory error)
 
    ```bash
    cd cav22_artifact
