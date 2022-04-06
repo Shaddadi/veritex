@@ -65,12 +65,13 @@ This tool is confirmed with only Python3.7.
 
 ### CAV'22 Artifact
 
-This section aims to reproduce results in the CAV'22 tool paper, inculding Figure 2&3&4 and Table 2&3. (to do: requirement for the hardware)
+This section aims to reproduce results in the CAV'22 tool paper, inculding Figure 2&3&4 and Table 2&3. Results are stored in 'veritex/cav22_artifact'. (to do: requirement for the hardware)
+
 There are two versions for the artifact evaluation. 
 
-One reproduces a subset of the results in the paper, including the safety verification of all instances, the repair of unsafe instaces (33/35) and the implementation of the related work ART for the repair comparison.
+1. This one reproduces a subset of the results in the paper, including the safety verification of all instances, the repair of unsafe instaces (33/35) and the implementation of the related work ART for the repair comparison.
 
-The other one reproduces all the results in the paper, including the safety verification of all instances, the repair of unsafe instaces (35/35) and the implementation of the related work ART for the repair comparison.
+2. This one reproduces all the results in the paper, including the safety verification of all instances, the repair of unsafe instaces (35/35) and the implementation of the related work ART for the repair comparison.
 
 
 
