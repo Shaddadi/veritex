@@ -73,7 +73,7 @@ There are two versions for the artifact evaluation.
    * safety verification of all instances (Figure 2) (~2 mins), 
    * repair of 33/35 unsafe instances (Figure 3&4 and most of results in Table 2&3) (~40 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
-   * generation of figures and tables.
+   * generation of figures and tables (~30 mins, majority of time is spent on the plot of reachable domains).
      
    This version was tested on hardwares(to do).                   
                                     
@@ -86,7 +86,7 @@ There are two versions for the artifact evaluation.
    * safety verification of all instances (Figure 2) (~2 mins),  
    * repair of all unsafe instances (35/35) (Figure 3&4 and Table 2&3) (~280 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
-   * generation of figures and tables.
+   * generation of figures and tables (~30 mins, majority of time is spent on the plot of reachable domains).
      
    The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
          
