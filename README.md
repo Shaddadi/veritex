@@ -74,7 +74,7 @@ There are two versions for the artifact evaluation.
    * repair of 33/35 unsafe instaces (Figure 3&4 and subset results in Table 2&3) (~40 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables.<br/>
-   
+     
    ```bash
    cd cav22_artifact
    ./reproduce_results1.sh
@@ -85,7 +85,7 @@ There are two versions for the artifact evaluation.
    * repair of all unsafe instaces (35/35) (Figure 3&4 and Table 2&3) (~40 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables.    <br/>
-
+     
    ```bash
    cd cav22_artifact
    ./reproduce_results2.sh
