@@ -2,7 +2,10 @@
 
 Veritex is an object-oriented software programmed in Python. It takes in two inputs, the network model and safety properties.
 
-Veritex supports the standardized format ONNX and PyTorch for the network and the unified format Vnnnlib for the safety property. With the network model and its safety properties, Veritex can compute the exact or over-approximated output reachable domain and also the entire unsafe input space if exists. It supports the plotting of 2 or 3-dimensional polytopes. When the repair option is enabled, it will produce a provable safe network in ONNX or PyTorch format.
+Veritex supports the standardized format ONNX and PyTorch for the network and the unified format Vnnnlib for the safety property. With the network model and its safety properties, Veritex can  
+* compute the exact or over-approximated output reachable domain and also the entire unsafe input space if exists. 
+* plot 2 or 3-dimensional reachable domains. 
+* produce a provable safe network in ONNX or PyTorch format when the repair option is enabled
 
 <p align="center">
    <img src="veritex.png" style="width:80%">
