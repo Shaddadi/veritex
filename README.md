@@ -68,8 +68,8 @@ This section aims to reproduce results in the CAV'22 tool paper, inculding Figur
 There are two versions for the artifact evaluation.
 
 1. This one reproduces most of the results in the paper (~160 mins), including
-   * safety verification of all instances (Figure 2) (~2 mins),
-   * repair of 33/35 unsafe instances (Figure 3&4 and most of results in Table 2&3) (~40 mins),
+   * safety verification of all instances (data generation for Figure 2) (~2 mins),
+   * repair of 33/35 unsafe instances (data generation for Figure 3 and most of results in Table 2&3) (~40 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables (~30 mins, majority of time is spent on the plot of reachable domains).
 
@@ -81,8 +81,8 @@ There are two versions for the artifact evaluation.
    ```
 
 2. This one reproduces all the results in the paper (~400 mins), including
-   * safety verification of all instances (Figure 2) (~2 mins),
-   * repair of all unsafe instances (35/35) (Figure 3&4 and Table 2&3) (~280 mins),
+   * safety verification of all instances (data generation for Figure 2) (~2 mins),
+   * repair of all unsafe instances (35/35) (data generation for Figure 3 and Table 2&3) (~280 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables (~30 mins, majority of time is spent on the plot of reachable domains).
 
