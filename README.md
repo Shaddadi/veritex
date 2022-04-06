@@ -69,17 +69,17 @@ This section aims to reproduce results in the CAV'22 tool paper, inculding Figur
 
 There are two versions for the artifact evaluation. 
 
-* 1. This one reproduces a subset of the results in the paper, including 
-   I) the safety verification of all instances, 
-   II) the repair of unsafe instaces (33/35)
-   III) the implementation of the related work ART for the repair comparison.
+1. This one reproduces a subset of the results in the paper, including 
+   - I) the safety verification of all instances, 
+   - II) the repair of unsafe instaces (33/35)
+   - III) the implementation of the related work ART for the repair comparison.
    ```bash
    cd cav22_artifact
    sudo chmod +x reproduce_results1.sh
    ./reproduce_results1.sh
    ```
 
-* 2. This one reproduces all the results in the paper, including the safety verification of all instances, the repair of unsafe instaces (35/35) and the implementation of the related work ART for the repair comparison. The hardware requirement for this version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
+2. This one reproduces all the results in the paper, including the safety verification of all instances, the repair of unsafe instaces (35/35) and the implementation of the related work ART for the repair comparison. The hardware requirement for this version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
 
    ```bash
    cd cav22_artifact
