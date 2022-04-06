@@ -23,6 +23,7 @@ setup(
         'numpy==1.21.4',
         'scipy==1.7.2',
         'onnx==1.10.2',
+        'onnxruntime==1.9.0',
         'onnx2pytorch==0.4.1',
         'diffabs==0.1',
         'matplotlib',
