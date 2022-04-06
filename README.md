@@ -75,7 +75,8 @@ There are two versions for the artifact evaluation.
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables.<br/>
      
-       
+   This version was tested on hardwares(to do).                   
+                                    
    ```bash
    cd cav22_artifact
    ./reproduce_results1.sh
@@ -87,7 +88,7 @@ There are two versions for the artifact evaluation.
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables.    <br/>
      
-   The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU
+   The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
          
    ```bash
    cd cav22_artifact
