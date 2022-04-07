@@ -3,6 +3,7 @@
 logs/
 **/verify/*.log
 venv/
+**/ART/results
 *.onnx
 *.png
 *.txt
