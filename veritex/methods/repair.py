@@ -149,9 +149,9 @@ class REPAIR:
         repaired = False
         for num in range(iters):
             logging.info(f'Iteration of repair: {num}')
-            deviation = self.compute_deviation(self.torch_model)
+            # deviation = self.compute_deviation(self.torch_model)
 
-            all_test_deviation.append(deviation)
+            # all_test_deviation.append(deviation)
             tt0 = time.time()
             unsafe_data = self.compute_unsafety()
             logging.info(f'Time for reachability analysis: {time.time()-tt0 :.2f} sec')
@@ -166,7 +166,7 @@ class REPAIR:
                 original_Xs, corrected_Ys = self.correct_unsafe_data(unsafe_data)
                 train_x = original_Xs
                 train_y = corrected_Ys
-                print('Unsafe data: ', len(train_x))
+                # print('Unsafe data: ', len(train_x))
             else:
                 train_x = self.data.train_data[0]
                 train_y = self.data.train_data[1]

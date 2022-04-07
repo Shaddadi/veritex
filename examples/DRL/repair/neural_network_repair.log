@@ -1,0 +1,109 @@
+INFO 2022-04-07 14:48:37,639 - Iteration of repair: 0
+INFO 2022-04-07 14:48:37,640 - Output deviation on the test data: 0.00 
+INFO 2022-04-07 14:49:20,670 - Time for reachability analysis: 43.03 sec
+INFO 2022-04-07 14:49:20,720 - Start retraining for the repair...
+INFO 2022-04-07 14:49:21,169 - The retraining is done
+
+INFO 2022-04-07 14:49:21,170 - Iteration of repair: 1
+INFO 2022-04-07 14:49:21,171 - Output deviation on the test data: 0.01 
+INFO 2022-04-07 14:50:05,581 - Time for reachability analysis: 44.41 sec
+INFO 2022-04-07 14:50:05,649 - Start retraining for the repair...
+INFO 2022-04-07 14:50:06,218 - The retraining is done
+
+INFO 2022-04-07 14:50:06,219 - Iteration of repair: 2
+INFO 2022-04-07 14:50:06,220 - Output deviation on the test data: 0.01 
+INFO 2022-04-07 14:50:47,462 - Time for reachability analysis: 41.24 sec
+INFO 2022-04-07 14:50:47,532 - Start retraining for the repair...
+INFO 2022-04-07 14:50:48,134 - The retraining is done
+
+INFO 2022-04-07 14:50:48,141 - Iteration of repair: 3
+INFO 2022-04-07 14:50:48,143 - Output deviation on the test data: 0.03 
+INFO 2022-04-07 14:51:29,148 - Time for reachability analysis: 41.01 sec
+INFO 2022-04-07 14:51:29,221 - Start retraining for the repair...
+INFO 2022-04-07 14:51:29,841 - The retraining is done
+
+INFO 2022-04-07 14:51:29,841 - Iteration of repair: 4
+INFO 2022-04-07 14:51:29,842 - Output deviation on the test data: 0.06 
+INFO 2022-04-07 14:52:02,771 - Time for reachability analysis: 32.93 sec
+INFO 2022-04-07 14:52:02,841 - Start retraining for the repair...
+INFO 2022-04-07 14:52:03,428 - The retraining is done
+
+INFO 2022-04-07 14:52:03,429 - Iteration of repair: 5
+INFO 2022-04-07 14:52:03,430 - Output deviation on the test data: 0.12 
+INFO 2022-04-07 14:52:13,764 - Time for reachability analysis: 10.33 sec
+INFO 2022-04-07 14:52:13,834 - Start retraining for the repair...
+INFO 2022-04-07 14:52:14,414 - The retraining is done
+
+INFO 2022-04-07 14:52:14,415 - Iteration of repair: 6
+INFO 2022-04-07 14:52:14,415 - Output deviation on the test data: 0.25 
+INFO 2022-04-07 14:52:19,827 - Time for reachability analysis: 5.41 sec
+INFO 2022-04-07 14:52:19,897 - Start retraining for the repair...
+INFO 2022-04-07 14:52:20,471 - The retraining is done
+
+INFO 2022-04-07 14:52:20,472 - Iteration of repair: 7
+INFO 2022-04-07 14:52:20,473 - Output deviation on the test data: 0.54 
+INFO 2022-04-07 14:52:24,488 - Time for reachability analysis: 4.01 sec
+INFO 2022-04-07 14:52:24,560 - Start retraining for the repair...
+INFO 2022-04-07 14:52:25,168 - The retraining is done
+
+INFO 2022-04-07 14:52:25,169 - Iteration of repair: 8
+INFO 2022-04-07 14:52:25,170 - Output deviation on the test data: 1.08 
+INFO 2022-04-07 14:52:28,513 - Time for reachability analysis: 3.34 sec
+INFO 2022-04-07 14:52:28,578 - Start retraining for the repair...
+INFO 2022-04-07 14:52:29,164 - The retraining is done
+
+INFO 2022-04-07 14:52:29,165 - Iteration of repair: 9
+INFO 2022-04-07 14:52:29,166 - Output deviation on the test data: 2.12 
+INFO 2022-04-07 14:52:32,103 - Time for reachability analysis: 2.94 sec
+INFO 2022-04-07 14:52:32,175 - Start retraining for the repair...
+INFO 2022-04-07 14:52:32,773 - The retraining is done
+
+INFO 2022-04-07 14:52:32,774 - Iteration of repair: 10
+INFO 2022-04-07 14:52:32,775 - Output deviation on the test data: 4.27 
+INFO 2022-04-07 14:52:35,583 - Time for reachability analysis: 2.81 sec
+INFO 2022-04-07 14:52:35,653 - Start retraining for the repair...
+INFO 2022-04-07 14:52:36,274 - The retraining is done
+
+INFO 2022-04-07 14:52:36,282 - Iteration of repair: 11
+INFO 2022-04-07 14:52:36,283 - Output deviation on the test data: 8.60 
+INFO 2022-04-07 14:52:38,183 - Time for reachability analysis: 1.90 sec
+INFO 2022-04-07 14:53:00,729 - Iteration of repair: 0
+INFO 2022-04-07 14:53:11,800 - Iteration of repair: 0
+INFO 2022-04-07 14:53:54,870 - Time for reachability analysis: 43.07 sec
+INFO 2022-04-07 14:53:54,923 - Start retraining for the repair...
+INFO 2022-04-07 14:53:55,381 - The retraining is done
+
+INFO 2022-04-07 14:53:55,382 - Iteration of repair: 1
+INFO 2022-04-07 14:54:36,902 - Time for reachability analysis: 41.52 sec
+INFO 2022-04-07 14:54:36,936 - Start retraining for the repair...
+INFO 2022-04-07 14:54:37,271 - The retraining is done
+
+INFO 2022-04-07 14:54:37,271 - Iteration of repair: 2
+INFO 2022-04-07 14:55:19,178 - Time for reachability analysis: 41.91 sec
+INFO 2022-04-07 14:55:19,191 - Start retraining for the repair...
+INFO 2022-04-07 14:55:19,322 - The retraining is done
+
+INFO 2022-04-07 14:55:19,323 - Iteration of repair: 3
+INFO 2022-04-07 14:55:59,651 - Time for reachability analysis: 40.33 sec
+INFO 2022-04-07 14:55:59,661 - Start retraining for the repair...
+INFO 2022-04-07 14:55:59,777 - The retraining is done
+
+INFO 2022-04-07 14:55:59,777 - Iteration of repair: 4
+INFO 2022-04-07 14:56:40,994 - Time for reachability analysis: 41.22 sec
+INFO 2022-04-07 14:56:40,997 - Start retraining for the repair...
+INFO 2022-04-07 14:56:41,102 - The retraining is done
+
+INFO 2022-04-07 14:56:41,103 - Iteration of repair: 5
+INFO 2022-04-07 14:57:21,860 - Time for reachability analysis: 40.76 sec
+INFO 2022-04-07 14:57:21,863 - Start retraining for the repair...
+INFO 2022-04-07 14:57:21,974 - The retraining is done
+
+INFO 2022-04-07 14:57:21,975 - Iteration of repair: 6
+INFO 2022-04-07 14:58:02,023 - Time for reachability analysis: 40.05 sec
+INFO 2022-04-07 14:58:02,025 - Start retraining for the repair...
+INFO 2022-04-07 14:58:02,134 - The retraining is done
+
+INFO 2022-04-07 14:58:02,135 - Iteration of repair: 7
+INFO 2022-04-07 14:58:41,723 - Time for reachability analysis: 39.59 sec
+INFO 2022-04-07 14:58:41,723 - The accurate and safe candidate model is found? True
+INFO 2022-04-07 14:58:41,723 - Total running time: 329.92 sec

@@ -11,7 +11,7 @@ def repair_property1(unsafe_data):
         orig_x = torch.tensor(unsafe_data[i][0], dtype=torch.float32)
         unsafe_y = torch.tensor(unsafe_data[i][1], dtype=torch.float32)
 
-        M, vec = property0.unsafe_domains[0][0], property0.unsafe_domains[0][1]
+        M, vec = property1.unsafe_domains[0][0], property1.unsafe_domains[0][1]
         M, vec = torch.tensor(M, dtype=torch.float32), torch.tensor(vec, dtype=torch.float32)
         res = torch.mm(M, unsafe_y.T) + vec
         values = torch.max(res[0], dim=0).values - epsilon
@@ -35,7 +35,7 @@ def repair_property2(unsafe_data):
         orig_x = torch.tensor(unsafe_data[i][0], dtype=torch.float32)
         unsafe_y = torch.tensor(unsafe_data[i][1], dtype=torch.float32)
 
-        M, vec = property1.unsafe_domains[0][0], property1.unsafe_domains[0][1]
+        M, vec = property2.unsafe_domains[0][0], property2.unsafe_domains[0][1]
         M, vec = torch.tensor(M, dtype=torch.float32), torch.tensor(vec, dtype=torch.float32)
         res = torch.mm(M, unsafe_y.T) + vec
         values = torch.min(-res[0], dim=0).values + epsilon

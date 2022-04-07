@@ -39,7 +39,7 @@ if __name__ == '__main__':
         savepath = './logs'
         if not os.path.isdir(savepath):
             os.mkdir(savepath)
-        savepath += '/agent'+str(n)+'_lr'+str(lr)+'_epochs'+str(epochs)+'_alpha'+str(alpha)+'_beta'+str(beta)
+        savepath += '/agent'+'_lr'+str(lr)+'_epochs'+str(epochs)+'_alpha'+str(alpha)+'_beta'+str(beta)
         if not os.path.isdir(savepath):
             os.mkdir(savepath)
 
