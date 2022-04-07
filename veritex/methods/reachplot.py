@@ -17,7 +17,7 @@ from veritex.utils.sfproperty import Property
 from veritex.utils.vnnlib import vnnlib_to_properties
 import torch
 
-def run(prop_path_list, network_path, dims, savename):
+def run(prop_list, network_path, dims, savename):
 
     if network_path[-4:] == 'onnx':
         torch_model = load_ffnn_onnx(network_path)
@@ -36,11 +36,14 @@ def run(prop_path_list, network_path, dims, savename):
     # output dimensions to project on
     dim0, dim1 = dims
 
-    # extract safety properties from vnnlib files
-    properties = []
-    for prop_path in prop_path_list:
-        prop = vnnlib_to_properties(prop_path, input_num, output_num)
-        properties.extend(prop)
+    # extract safety properties
+    if isinstance(prop_list[0],Property):
+        properties = prop_list
+    else:
+        properties = []
+        for prop in prop_list:
+            temp = vnnlib_to_properties(prop, input_num, output_num)
+            properties.extend(temp)
 
     fig = plt.figure(figsize=(2.0, 2.67))
     ax = fig.add_subplot(111)

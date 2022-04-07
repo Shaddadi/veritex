@@ -8,16 +8,14 @@ class Property:
         self.ubs = input_domain[1]
 
         self.set_type = set_type
-        self.input_set = self.constructInputSet()
+        self.construct_input()
         self.unsafe_domains = unsafe_output_domains
         self.input_ranges = input_ranges
 
 
-    def constructInputSet(self):
+    def construct_input(self):
         box = BoxDomain(self.lbs, self.ubs)
         if self.set_type=='facet-vertex':
-            input_set = box.toFacetVertex()
+            self.input_set = box.toFacetVertex()
         else:
             sys.exit("This set type is not supported.")
-
-        return input_set

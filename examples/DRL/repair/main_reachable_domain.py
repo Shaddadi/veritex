@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import multiprocessing
 import argparse
+import torch
 
 
 
@@ -22,7 +23,7 @@ if __name__ == "__main__":
     parser.add_argument('--network_path', type=str, required=False)
     parser.add_argument('--dims',  nargs='+', type=int, default=(0,1))
     args = parser.parse_args()
-    args.property = '0, 1'
+    args.property = '1, 2'
     prop_indx = np.fromstring(args.property, dtype=int, sep=',')
     props = []
     for n in prop_indx:
@@ -30,18 +31,15 @@ if __name__ == "__main__":
         assert prop_name in all_properties
         props.append(all_properties[prop_name])
     assert props
-    # network_path = '../nets/unsafe_agent0.pt' #args.network_path
-    network_path = 'logs/agent2_lr1e-06_epochs50_alpha1.0_beta0.0/epoch6.pt'
+    network_path = '../nets/unsafe_agent0.pt' #args.network_path
+    # network_path = 'logs/agent2_lr1e-06_epochs50_alpha1.0_beta0.0/repaired_model.pt'
     dim0, dim1 = (0,1) #tuple(args.dims)
 
-    try:
-        if network_path[-4:]=='onnx':
-            torch_model = load_ffnn_onnx(network_path)
-        elif network_path[-2:]=='pt':
-            torch_model = torch.load(network_path)
-        else:
-            torch_model = None
-    except:
+    if network_path[-4:]=='onnx':
+        torch_model = load_ffnn_onnx(network_path)
+    elif network_path[-2:]=='pt':
+        torch_model = torch.load(network_path)
+    else:
         sys.exit('Network file is not found!')
 
     fig = plt.figure(figsize=(2, 2.67))

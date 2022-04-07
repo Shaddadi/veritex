@@ -1,6 +1,5 @@
 import sys
 import logging
-sys.path.insert(0, '../../../src')
 from agent_repair_list import *
 from veritex.utils.load_onnx import load_ffnn_onnx, save_onnx
 import multiprocessing
