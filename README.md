@@ -68,12 +68,12 @@ This section aims to reproduce results in the CAV'22 tool paper, inculding Figur
 
 There are two versions for the artifact evaluation. The difference between these two versions is that the first one does not include the repair of two neural networks which consumes a large amount of memory and time.
 
-1. This version reproduces the results in the paper except for two hard instances (~160 mins), including
+1. This version reproduces the results in the paper except for two hard instances (~170 mins), including
    * safety verification of all instances (data generation for Figure 2) (~2 mins),
    * repair of 33/35 unsafe instances (data generation for Figure 3 and most of results in Table 2&3) (~40 mins),
    * repair of an unsafe DNN agent (data generation for Figure 4) (~6 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
-   * generation of figures and tables (~30 mins, majority of the time is spent on the plot of reachable domains).
+   * generation of figures and tables (~40 mins, majority of the time is spent on the plot of reachable domains).
 
    This version was tested on hardwares(to do).
 
@@ -82,12 +82,12 @@ There are two versions for the artifact evaluation. The difference between these
    ./reproduce_results1.sh
    ```
 
-2. This version reproduces all the results in the paper (~400 mins), including
+2. This version reproduces all the results in the paper (~410 mins), including
    * safety verification of all instances (data generation for Figure 2) (~2 mins),
    * repair of all 35/35 unsafe instances (data generation for Figure 3 and Table 2&3) (~280 mins),
    * repair of an unsafe DNN agent (data generation for Figure 4) (~6 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
-   * generation of figures and tables (~30 mins, majority of the time is spent on the plot of reachable domains).
+   * generation of figures and tables (~40 mins, majority of the time is spent on the plot of reachable domains).
 
    The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
 
