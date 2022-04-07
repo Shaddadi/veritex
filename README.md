@@ -73,7 +73,7 @@ There are two versions for the artifact evaluation. The difference between these
    * repair of 33/35 unsafe instances (data generation for Figure 3 and most of results in Table 2&3) (~40 mins),
    * repair of an unsafe DNN agent (data generation for Figure 4) (~6 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
-   * generation of figures and tables (~30 mins, majority of time is spent on the plot of reachable domains).
+   * generation of figures and tables (~30 mins, majority of the time is spent on the plot of reachable domains).
 
    This version was tested on hardwares(to do).
 
@@ -87,7 +87,7 @@ There are two versions for the artifact evaluation. The difference between these
    * repair of all 35/35 unsafe instances (data generation for Figure 3 and Table 2&3) (~280 mins),
    * repair of an unsafe DNN agent (data generation for Figure 4) (~6 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
-   * generation of figures and tables (~30 mins, majority of time is spent on the plot of reachable domains).
+   * generation of figures and tables (~30 mins, majority of the time is spent on the plot of reachable domains).
 
    The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
 
