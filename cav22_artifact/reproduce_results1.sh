@@ -10,10 +10,15 @@ python3 verify_p8_vnnlib.py
 python3 verify_p9_vnnlib.py
 python3 verify_p10_vnnlib.py
 
-# repair of acasxu
+# repair of acasxu with veritex
 cd ../repair
 python3 repair_sub_nnets.py
 
+# repair of DNN agent in DRL
+cd ../DRL/repair
+python3 repair_nnets.py
+
+# repair of acasxu with art
 cd ../../../cav22_artifact/ART/art
 python3 exp_acas.py
 

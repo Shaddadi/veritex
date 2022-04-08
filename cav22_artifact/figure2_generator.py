@@ -1,3 +1,5 @@
+import os.path
+
 import matplotlib.pyplot as plt
 import numpy as np
 from vnncomp2021_results.process_vnncomp_results import process_results
@@ -33,7 +35,8 @@ def collect_veritex(filepath):
 
 if __name__ == "__main__":
     all_vnncomp_times = process_results()
-
+    if not os.path.isdir('./results'):
+        os.mkdir('./results')
     filepath = '../examples/ACASXu/verify/'
     veritex_times = collect_veritex(filepath)
     veritex_times_sum = np.sum(veritex_times)
@@ -55,4 +58,4 @@ if __name__ == "__main__":
     plt.legend(ncol=3, fontsize=11)
     plt.title('Fig. 2: Cactus plot of the running time of the safety verification \n for ACAS Xu from VNN-COMP’21')
     # plt.show()
-    plt.savefig('Figure2.png')
+    plt.savefig('results/Figure2.png')

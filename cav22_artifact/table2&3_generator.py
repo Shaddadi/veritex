@@ -243,6 +243,8 @@ def compute_weights_ratio():
 if __name__ == "__main__":
     results_refine_art, results_no_refine_art = collect_art_accuracy_runtime()
     results_veritex = collect_veritex_accuracy_runtime()
+    if not os.path.isdir('./results'):
+        os.mkdir('./results')
     tables = ''
     if len(results_veritex[0]) == 33: # only simple cases
         for ls in results_refine_art:
@@ -294,7 +296,7 @@ if __name__ == "__main__":
     else:
         sys.exit("The number of repaired instances is not correct!")
 
-    with open('Table2&3.txt', 'w') as f:
+    with open('results/Table2&3.txt', 'w') as f:
         f.write(tables)
     print(tables)
 
