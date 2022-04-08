@@ -137,7 +137,12 @@ Visualize the output reachable domain
 
 ```bash
 cd examples/ACASXu/repair
-python veritex/methods/reachplot.py --property x,x --dims x x --network_path 'xxx' --savename 'xxx'
+
+python veritex/methods/reachplot.py 
+--property 'path_to_property1',...'path_to_propertyn'
+--network_path 'path_to_model'
+--dims x x
+--savename 'xxx'
 ```
 
 Example:
