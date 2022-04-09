@@ -17,7 +17,7 @@ setup(
     author='Xiaodong Yang',
     author_email='xiaodong.yang@vanderbilt.edu',
     license='BSD',
-    python_requires='>=3.6.9, <3.8',
+    python_requires='>=3.7, <3.8',
     install_requires=[
         'torch==1.10.0',
         'numpy',
