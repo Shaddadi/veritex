@@ -20,7 +20,7 @@ setup(
     python_requires='>=3.7.0, <3.8',
     install_requires=[
         'torch==1.10.0',
-        'numpy==1.21.4',
+        'numpy',
         'scipy==1.7.2',
         'onnx==1.10.2',
         'onnxruntime==1.9.0',
