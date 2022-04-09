@@ -21,7 +21,7 @@ setup(
     install_requires=[
         'torch==1.10.0',
         'numpy',
-        'scipy==1.7.2',
+        'scipy',
         'onnx==1.10.2',
         'onnxruntime==1.9.0',
         'onnx2pytorch==0.4.1',
