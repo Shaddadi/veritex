@@ -15,7 +15,7 @@ cd ../repair
 python3 repair_sub_nnets.py
 
 # repair of DNN agent in DRL using veritex
-cd ../DRL/repair
+cd ../../DRL/repair
 python3 repair_nnets.py
 
 # repair of acasxu using art
