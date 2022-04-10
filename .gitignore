@@ -10,6 +10,7 @@ venv/
 *.odg
 *.pdf
 *.pt
+!cav22_artifact/ART/data
 *.py[cod]
 # Log files
 *.pkl
