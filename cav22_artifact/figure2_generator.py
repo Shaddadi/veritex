@@ -1,9 +1,8 @@
 import os.path
-
 import matplotlib.pyplot as plt
 import numpy as np
 from vnncomp2021_results.process_vnncomp_results import process_results
-import pickle
+from textwrap import wrap
 
 
 def collect_veritex(filepath):
@@ -56,6 +55,9 @@ if __name__ == "__main__":
     plt.xticks(fontsize=10)
     plt.yticks(fontsize=10)
     plt.legend(ncol=3, fontsize=11)
-    plt.title('Fig. 2: Cactus plot of the running time of the safety verification \n for ACAS Xu from VNN-COMP’21')
+    plt.title('Fig. 2: Cactus plot of the running time of the safety verification \n for ACAS Xu from VNN-COMP’21 \n'
+                             'Caution: the results of related works are from VNNVCOMP\'21 run \n'
+                             'on AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.')
+    plt.tight_layout()
     # plt.show()
     plt.savefig('results/Figure2.png')
