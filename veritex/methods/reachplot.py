@@ -73,12 +73,14 @@ def run(prop_list, network_path, dims, savename):
         for item in results:
             if item[0]: unsafe_sets.extend(item[0])
 
-        for item in output_sets:
+        for _ in range(len(output_sets)):
+            item = output_sets.pop()
             out_vertices = np.dot(item.vertices, item.M.T) + item.b.T
             plot_polytope2d(out_vertices[:, [dim0, dim1]], ax, color='b', alpha=1.0, edgecolor='k', linewidth=0.0)
 
         all_output_unsafe_sets = []
-        for item in unsafe_sets:
+        for _ in range(len(unsafe_sets)):
+            item = unsafe_sets.pop()
             out_unsafe_vertices = np.dot(item.vertices, item.M.T) + item.b.T
             plot_polytope2d(out_unsafe_vertices[:, [dim0, dim1]], ax, color='r', alpha=1.0, edgecolor='k',
                             linewidth=0.0)
