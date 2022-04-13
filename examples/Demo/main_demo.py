@@ -84,12 +84,12 @@ if __name__ == "__main__":
         d_unsafe = torch.tensor([[y1_lbs], [-y1_ubs], [-15], [-25]])
         unsafe_domains = [[A_unsafe,d_unsafe]]
         property1 = Property(input_domain, unsafe_domains)
-        vfl_input = cp.deepcopy(property1.input_set)
         dnn0.unsafe_domains = property1.unsafe_domains
 
         # run reachability analysis with multi-process
         processes = []
         num_processors = mp.cpu_count()
+        vfl_input = cp.deepcopy(property1.input_set)
         shared_state = SharedState([vfl_input], num_processors)
         one_worker = Worker(dnn0)
         for index in range(num_processors):
