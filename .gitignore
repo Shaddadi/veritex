@@ -1,3 +1,5 @@
+!cav22_artifact/ART/data
+!examples/ACASXu/repair/figures
 /tbxmanager
 /__pycache__
 logs/
@@ -10,8 +12,6 @@ venv/
 *.odg
 *.pdf
 *.pt
-!cav22_artifact/ART/data
-!examples/ACASXu/repair/figures
 *.py[cod]
 # Log files
 *.pkl
