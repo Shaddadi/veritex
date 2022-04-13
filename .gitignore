@@ -11,6 +11,7 @@ venv/
 *.pdf
 *.pt
 !cav22_artifact/ART/data
+!examples/ACASXu/repair/figures
 *.py[cod]
 # Log files
 *.pkl
