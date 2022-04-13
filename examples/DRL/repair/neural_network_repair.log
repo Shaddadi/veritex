@@ -107,3 +107,53 @@ INFO 2022-04-07 14:58:02,135 - Iteration of repair: 7
 INFO 2022-04-07 14:58:41,723 - Time for reachability analysis: 39.59 sec
 INFO 2022-04-07 14:58:41,723 - The accurate and safe candidate model is found? True
 INFO 2022-04-07 14:58:41,723 - Total running time: 329.92 sec
+INFO 2022-04-12 22:21:57,950 - Iteration of repair: 0
+INFO 2022-04-12 22:22:40,806 - Time for reachability analysis: 42.86 sec
+INFO 2022-04-12 22:22:40,855 - Start retraining for the repair...
+INFO 2022-04-12 22:22:41,292 - The retraining is done
+
+INFO 2022-04-12 22:22:41,293 - Iteration of repair: 1
+INFO 2022-04-12 22:23:22,789 - Time for reachability analysis: 41.50 sec
+INFO 2022-04-12 22:23:22,820 - Start retraining for the repair...
+INFO 2022-04-12 22:23:23,156 - The retraining is done
+
+INFO 2022-04-12 22:23:23,157 - Iteration of repair: 2
+INFO 2022-04-12 22:24:03,807 - Time for reachability analysis: 40.65 sec
+INFO 2022-04-12 22:24:03,827 - Start retraining for the repair...
+INFO 2022-04-12 22:24:03,952 - The retraining is done
+
+INFO 2022-04-12 22:24:03,953 - Iteration of repair: 3
+INFO 2022-04-12 22:24:44,028 - Time for reachability analysis: 40.07 sec
+INFO 2022-04-12 22:24:44,041 - Start retraining for the repair...
+INFO 2022-04-12 22:24:44,154 - The retraining is done
+
+INFO 2022-04-12 22:24:44,155 - Iteration of repair: 4
+INFO 2022-04-12 22:25:23,849 - Time for reachability analysis: 39.69 sec
+INFO 2022-04-12 22:25:23,857 - Start retraining for the repair...
+INFO 2022-04-12 22:25:23,970 - The retraining is done
+
+INFO 2022-04-12 22:25:23,971 - Iteration of repair: 5
+INFO 2022-04-12 22:26:03,186 - Time for reachability analysis: 39.22 sec
+INFO 2022-04-12 22:26:03,190 - Start retraining for the repair...
+INFO 2022-04-12 22:26:03,299 - The retraining is done
+
+INFO 2022-04-12 22:26:03,299 - Iteration of repair: 6
+INFO 2022-04-12 22:26:42,394 - Time for reachability analysis: 39.09 sec
+INFO 2022-04-12 22:26:42,396 - Start retraining for the repair...
+INFO 2022-04-12 22:26:42,505 - The retraining is done
+
+INFO 2022-04-12 22:26:42,506 - Iteration of repair: 7
+INFO 2022-04-12 22:27:21,627 - Time for reachability analysis: 39.12 sec
+INFO 2022-04-12 22:27:21,628 - The accurate and safe candidate model is found? True
+INFO 2022-04-12 22:27:21,628 - Total running time: 323.68 sec
+INFO 2022-04-12 22:29:01,712 - Iteration of repair: 0
+INFO 2022-04-12 22:29:44,748 - Time for reachability analysis: 43.04 sec
+INFO 2022-04-12 22:29:44,796 - Start retraining for the repair...
+INFO 2022-04-12 22:29:45,245 - The retraining is done
+
+INFO 2022-04-12 22:29:45,246 - Iteration of repair: 1
+INFO 2022-04-12 22:30:26,682 - Time for reachability analysis: 41.44 sec
+INFO 2022-04-12 22:30:26,715 - Start retraining for the repair...
+INFO 2022-04-12 22:30:27,051 - The retraining is done
+
+INFO 2022-04-12 22:30:27,052 - Iteration of repair: 2
