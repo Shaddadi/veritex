@@ -12,7 +12,7 @@ from veritex.methods.shared import SharedState
 from veritex.utils.sfproperty import Property
 from veritex.utils.plot_poly import *
 
-
+# plot function
 def plot_sets(input_unsafe_sets, output_sets, unsafe_domain, savepath='', image_id=0):
     fig = plt.figure(figsize=(11, 5))
     ax = fig.add_subplot(121, projection='3d')
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     console_handler.setFormatter(Log_Format)
     logger.addHandler(console_handler)
 
-    num_processors = mp.cpu_count()
+    # init FFNN
     logging.info('Start the demo...')
     model = torch.load('demo_model.pt')
     dnn0 = FFNN(model, unsafe_in_dom=True, exact_out_dom=True)
@@ -73,6 +73,8 @@ if __name__ == "__main__":
     all_input_unsafe_sets = []
     for n in range(55):
         logging.info(f'Completed instances: {n+1}/55')
+
+        # set property (= pre-condition and post-condition)
         lbs = [-1, -1, -1]
         ubs = [1, 1, 1]
         input_domain = [lbs, ubs]
@@ -82,12 +84,12 @@ if __name__ == "__main__":
         d_unsafe = torch.tensor([[y1_lbs], [-y1_ubs], [-15], [-25]])
         unsafe_domains = [[A_unsafe,d_unsafe]]
         property1 = Property(input_domain, unsafe_domains)
-
-        results = []
         vfl_input = cp.deepcopy(property1.input_set)
         dnn0.unsafe_domains = property1.unsafe_domains
 
+        # run reachability analysis with multi-process
         processes = []
+        num_processors = mp.cpu_count()
         shared_state = SharedState([vfl_input], num_processors)
         one_worker = Worker(dnn0)
         for index in range(num_processors):
@@ -98,13 +100,16 @@ if __name__ == "__main__":
         for p in processes:
             p.join()
 
+        results = []
         while not shared_state.outputs.empty():
             results.append(shared_state.outputs.get())
 
+        # get results
         output_sets = [np.dot(item[1].vertices, item[1].M.T) + item[1].b.T for item in results]  # sets represented with their vertices
         input_unsafe_sets = [sub.vertices for item in results for sub in item[0] if sub]  # sets represented with their vertices
         unsafe_domain = np.array([[y1_lbs, -15], [y1_lbs, 25], [y1_ubs, -15], [y1_ubs, 25]])
 
+        # plot
         if not os.path.exists('images'):
             os.makedirs('images')
         plot_sets(input_unsafe_sets, output_sets, unsafe_domain, savepath='images/', image_id=n)
