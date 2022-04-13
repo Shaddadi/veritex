@@ -148,22 +148,23 @@ python veritex/methods/reachplot.py
 Example:
 
 ```bash
-python veritex/methods/reachplot.py \
---property '../nets/prop_3.vnnlib','../nets/prop_4.vnnlib' \
+python ../../../veritex/methods/reachplot.py \
+--property '../nets/prop_3.vnnlib' '../nets/prop_4.vnnlib' \
 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx' \
 --dims 0 1 \
---savename 'reachable_domain_property_3,4_dims0_1'
+--savename 'figures/reachable_domain_property_3,4_dims0_1'
 
-python veritex/methods/reachplot.py \
---property '../nets/prop_3.vnnlib','../nets/prop_4.vnnlib' \
+
+python ../../../veritex/methods/reachplot.py \
+--property '../nets/prop_3.vnnlib' '../nets/prop_4.vnnlib' \
 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx' \
---dims 0 2 \ 
--- savename 'reachable_domain_property_3,4_dims0_2'
+--dims 0 2 \
+--savename 'figures/reachable_domain_property_3,4_dims0_2'
 ```
 
 <p align="center">
-    <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_1.png" style="width:20%">
-    <img src="examples/ACASXu/repair/images/reachable_domain_property_3,4_dims0_2.png" style="width:20%">
+    <img src="examples/ACASXu/repair/figures/reachable_domain_property_3,4_dims0_1.png" style="width:20%">
+    <img src="examples/ACASXu/repair/figures/reachable_domain_property_3,4_dims0_2.png" style="width:20%">
 </p>
 <p align="center">Figure: Output reachable domains of Network21 on Properties 3 and 4. They are projected on (y0,y1) and (y0, y2).
 </p>
