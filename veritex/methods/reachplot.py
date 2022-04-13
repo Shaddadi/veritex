@@ -78,7 +78,6 @@ def run(prop_list, network_path, dims, savename):
             out_vertices = np.dot(item.vertices, item.M.T) + item.b.T
             plot_polytope2d(out_vertices[:, [dim0, dim1]], ax, color='b', alpha=1.0, edgecolor='k', linewidth=0.0)
 
-        all_output_unsafe_sets = []
         for _ in range(len(unsafe_sets)):
             item = unsafe_sets.pop()
             out_unsafe_vertices = np.dot(item.vertices, item.M.T) + item.b.T
@@ -101,6 +100,7 @@ if __name__ == "__main__":
     parser.add_argument('--savename', type=str, required=False)
     parser.add_argument('--dims', nargs='+', type=int, default=(0, 1))
     args = parser.parse_args()
+    print(args.property)
     run(args.property, args.network_path, args.dims, args.savename)
 
 
