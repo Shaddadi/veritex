@@ -148,8 +148,17 @@ python veritex/methods/reachplot.py
 Example:
 
 ```bash
-python veritex/methods/reachplot.py --property 3,4 --dims 0 1 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx --savename 'figure1''
-python veritex/methods/reachplot.py --property 3,4 --dims 0 2 --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx -- savename 'figure2''
+python veritex/methods/reachplot.py 
+--property '../nets/prop_3.vnnlib','../nets/prop_4.vnnlib'
+--network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
+--dims 0 1 
+--savename 'reachable_domain_property_3,4_dims0_1'
+
+python veritex/methods/reachplot.py 
+--property '../nets/prop_3.vnnlib','../nets/prop_4.vnnlib'
+--network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx'
+--dims 0 2 
+-- savename 'reachable_domain_property_3,4_dims0_2'
 ```
 
 <p align="center">
