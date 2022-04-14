@@ -54,9 +54,11 @@ def plot_sets(input_unsafe_sets, output_sets, unsafe_domain, savepath='', image_
 if __name__ == "__main__":
     # Creating and Configuring Logger
     logger = logging.getLogger()
+    for hdlr in logger.handlers[:]:  # remove all old handlers
+        logger.removeHandler(hdlr)
     Log_Format = logging.Formatter('%(levelname)s %(asctime)s - %(message)s')
     logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler('demo.log')
+    file_handler = logging.FileHandler('demo.log','w+')
     file_handler.setFormatter(Log_Format)
     logger.addHandler(file_handler)
     console_handler = logging.StreamHandler()
@@ -80,8 +82,8 @@ if __name__ == "__main__":
         input_domain = [lbs, ubs]
         y1_lbs = -50 + n
         y1_ubs = -40 + n
-        A_unsafe = torch.tensor([[-1, 0], [1, 0], [0, -1], [0, 1]])
-        d_unsafe = torch.tensor([[y1_lbs], [-y1_ubs], [-15], [-25]])
+        A_unsafe = np.array([[-1, 0], [1, 0], [0, -1], [0, 1]])
+        d_unsafe = np.array([[y1_lbs], [-y1_ubs], [-15], [-25]])
         unsafe_domains = [[A_unsafe,d_unsafe]]
         property1 = Property(input_domain, unsafe_domains)
         dnn0.unsafe_domains = property1.unsafe_domains

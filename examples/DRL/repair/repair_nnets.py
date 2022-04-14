@@ -1,9 +1,8 @@
 import sys
 import logging
 from agent_repair_list import *
-from veritex.utils.load_onnx import load_ffnn_onnx, save_onnx
 import multiprocessing
-from veritex.methods.repair import REPAIR, DATA
+from veritex.methods.repair import REPAIR
 import torch.optim as optim
 import torch.nn as nn
 import torch
@@ -14,6 +13,8 @@ import os
 if __name__ == '__main__':
     # Creating and Configuring Logger
     logger = logging.getLogger()
+    for hdlr in logger.handlers[:]:  # remove all old handlers
+        logger.removeHandler(hdlr)
     Log_Format = logging.Formatter('%(levelname)s %(asctime)s - %(message)s')
     logger.setLevel(logging.INFO)
     file_handler = logging.FileHandler('neural_network_repair.log')
