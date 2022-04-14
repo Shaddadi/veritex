@@ -3,10 +3,10 @@ import logging
 import multiprocessing
 import torch.optim as optim
 import torch.nn as nn
-
 from veritex.methods.repair import REPAIR, DATA
 from veritex.utils.load_onnx import load_ffnn_onnx, save_onnx
 from acasxu_repair_list import *
+import argparse
 
 
 if __name__ == '__main__':
@@ -25,12 +25,20 @@ if __name__ == '__main__':
     console_handler.setFormatter(Log_Format)
     logger.addHandler(console_handler)
 
+    parser = argparse.ArgumentParser(description='Plotting of reachable domains')
+    parser.add_argument('--all', action='store_true')
+    args = parser.parse_args()
+    if args.all:
+        networks = repair_list
+    else:
+        networks = repair_list[:33]
+
     num_processors = multiprocessing.cpu_count()
-    for n in range(len(repair_list[:33])):
+    for n in range(len(networks)):
         lr = 0.001
         epochs = 200
         alpha, beta = 1.0, 0.0
-        item = repair_list[n]
+        item = networks[n]
         i, j = item[0][0], item[0][1]
         if (i==1 and j ==9) or (i==2 and j ==9):
             output_limit = 10
