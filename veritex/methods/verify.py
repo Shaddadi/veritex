@@ -16,7 +16,7 @@ import sys
 import argparse
 
 
-def run(properties_list, network_path, netname, propnames):
+def run(properties_list, network_path, netname, propnames, linearize=True):
     # Creating and Configuring Logger
     logger = logging.getLogger()
     for hdlr in logger.handlers[:]:  # remove all old handlers
@@ -59,7 +59,7 @@ def run(properties_list, network_path, netname, propnames):
             properties.extend(temp)
 
     # configure the verification
-    dnn0 = FFNN(torch_model, verify=True, relu_linear=True)
+    dnn0 = FFNN(torch_model, verify=True, relu_linear=linearize)
 
     # run safety verification
     for n, prop in enumerate(properties):
@@ -90,12 +90,13 @@ def run(properties_list, network_path, netname, propnames):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Plotting of reachable domains')
-    parser.add_argument('--property', nargs='+', required=False)
-    parser.add_argument('--property_name', nargs='+', required=False)
-    parser.add_argument('--network_path', type=str, required=False)
-    parser.add_argument('--network_name', type=str, required=False)
+    parser.add_argument('--property', nargs='+', required=True)
+    parser.add_argument('--property_name', nargs='+', required=True)
+    parser.add_argument('--linearize', action='store_false')
+    parser.add_argument('--network_path', type=str, required=True)
+    parser.add_argument('--network_name', type=str, required=True)
     args = parser.parse_args()
-    run(args.property, args.network_path, args.network_name, args.property_name)
+    run(args.property, args.network_path, args.network_name, args.property_name, linearize=args.linearize)
 
 
 
