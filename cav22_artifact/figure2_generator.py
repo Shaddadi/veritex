@@ -7,8 +7,8 @@ from textwrap import wrap
 
 def collect_veritex(filepath):
     veritex_times = []
-    log_paths = ['verify_p1_p4.log', 'verify_p5.log', 'verify_p6.log', 'verify_p7.log',
-                 'verify_p8.log', 'verify_p9.log', 'verify_p10.log']
+    log_paths = [f for f in os.listdir(filepath) if f.endswith('.log')]
+    assert len(log_paths) == 51
     for indx, log_path in enumerate(log_paths):
         with open(filepath+log_path) as file:
             lines = file.readlines()
