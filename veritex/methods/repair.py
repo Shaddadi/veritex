@@ -25,7 +25,7 @@ class REPAIR:
             self.data = self.generate_data()
 
 
-    def compute_unsafety(self):
+    def compute_unsafe_data(self):
         self.ffnn = FFNN(self.torch_model, repair=True)
         all_unsafe_data = []
         num_processors = mp.cpu_count()
@@ -153,7 +153,7 @@ class REPAIR:
 
             # all_test_deviation.append(deviation)
             tt0 = time.time()
-            unsafe_data = self.compute_unsafety()
+            unsafe_data = self.compute_unsafe_data()
             logging.info(f'Time for reachability analysis: {time.time()-tt0 :.2f} sec')
             if np.all([len(sub)==0 for sub in unsafe_data]):
                 logging.info('The accurate and safe candidate model is found? True')
@@ -227,7 +227,7 @@ class REPAIR:
                 accuracy_old = accuracy_new
                 all_test_accuracy.append(accuracy_new)
                 tt0 = time.time()
-                unsafe_data = self.compute_unsafety()
+                unsafe_data = self.compute_unsafe_data()
                 logging.info(f'Time for reachability analysis: {time.time()-tt0 :.2f} sec')
                 if np.all([len(sub)==0 for sub in unsafe_data]):
                     logging.info('The accurate and safe candidate model is found? True')
