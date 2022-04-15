@@ -75,6 +75,16 @@ class VzonoFFNN:
         self.base_vertices = new_base_vertices
         self.base_vectors = new_base_vectors
 
+    def get_valid_neurons_for_over_app(self):
+        vals = np.sum(np.abs(self.base_vectors), axis=1, keepdims=True)
+        temp_neg = np.all((self.base_vertices+vals) <= 0, 1)
+        valid_neurons_neg = np.asarray(np.nonzero(temp_neg)).T[:, 0]
+        temp_pos = np.all((self.base_vertices-vals) >= 0, 1)
+        neurons_sum = temp_neg + temp_pos
+        valid_neurons_neg_pos = np.asarray(np.nonzero(neurons_sum == False)).T[:, 0]
+
+        return valid_neurons_neg_pos, valid_neurons_neg
+
 
 
 class Vzonop:

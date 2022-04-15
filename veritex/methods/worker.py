@@ -294,7 +294,7 @@ class Worker:
 
 
     def collect_results(self, vfl):
-        if self.dnn.config_repair:
+        if self.dnn.repair:
             unsafe_input_sets = self.dnn.backtrack(vfl)
             with self.shared_state.outputs_len.get_lock():
                 if not self.shared_state.work_interrupted.is_set():
@@ -307,14 +307,14 @@ class Worker:
                             self.shared_state.work_interrupted.set()
                             # print('self.shared_state.work_interrupted.set()')
 
-        elif self.dnn.config_verify:
+        elif self.dnn.verification:
             if not self.shared_state.work_interrupted.is_set():
                 unsafe = self.dnn.verify(vfl)
                 if unsafe:
                     self.shared_state.outputs.put(unsafe)
                     self.shared_state.work_interrupted.set()
 
-        elif self.dnn.config_unsafe_in_dom and (not self.dnn.config_exact_out_dom):
+        elif self.dnn.unsafe_inputd and (not self.dnn.exact_outputd):
             unsafe_inputs = self.dnn.backtrack(vfl)
             with self.shared_state.outputs_len.get_lock():
                 if not self.shared_state.work_interrupted.is_set():
@@ -324,12 +324,12 @@ class Worker:
                         if self.shared_state.outputs_len.value >= self.output_len:
                             self.shared_state.work_interrupted.set()
 
-        elif (not self.dnn.config_unsafe_in_dom) and self.dnn.config_exact_out_dom:
+        elif (not self.dnn.unsafe_inputd) and self.dnn.exact_outputd:
             with self.shared_state.outputs_len.get_lock():
                 self.shared_state.outputs_len.value += 1
                 self.shared_state.outputs.put(vfl)
 
-        elif self.dnn.config_unsafe_in_dom and self.dnn.config_exact_out_dom:
+        elif self.dnn.unsafe_inputd and self.dnn.exact_outputd:
             unsafe_inputs = self.dnn.backtrack(vfl)
             with self.shared_state.outputs_len.get_lock():
                 self.shared_state.outputs.put([unsafe_inputs, vfl])
@@ -347,20 +347,6 @@ class Worker:
             assert len(next_tuple_states) == 1
             self.collect_results(next_tuple_states[0][0])
             return
-
-        # if self.dnn.config_relu_linear or self.dnn.config_repair:
-        # # if self.dnn.config_relu_linear:
-        #     assert (not self.dnn.config_verify)
-        #     temp_list = []
-        #     for one_state in next_tuple_states:
-        #         over_app_set = self.dnn.reach_over_app(one_state)
-        #         safe = self.dnn.verify_vzono(over_app_set)
-        #         if not safe:
-        #             temp_list.append(one_state)
-        #     if len(temp_list) != 0:
-        #         next_tuple_states = temp_list
-        #     else:
-        #         return
 
         if len(next_tuple_states) == 2:
             self.private_deque.append(next_tuple_states[1])

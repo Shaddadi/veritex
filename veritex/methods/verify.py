@@ -16,7 +16,7 @@ import sys
 import argparse
 
 
-def run(properties_list, network_path, netname, propnames, linearize=True):
+def run(properties_list, network_path, netname, propnames, linearization=True):
     # Creating and Configuring Logger
     logger = logging.getLogger()
     for hdlr in logger.handlers[:]:  # remove all old handlers
@@ -59,7 +59,7 @@ def run(properties_list, network_path, netname, propnames, linearize=True):
             properties.extend(temp)
 
     # configure the verification
-    dnn0 = FFNN(torch_model, verify=True, relu_linear=linearize)
+    dnn0 = FFNN(torch_model, verification=True, linearization=linearization)
 
     # run safety verification
     for n, prop in enumerate(properties):
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     parser.add_argument('--network_path', type=str, required=True)
     parser.add_argument('--network_name', type=str, required=True)
     args = parser.parse_args()
-    run(args.property, args.network_path, args.network_name, args.property_name, linearize=args.linearize)
+    run(args.property, args.network_path, args.network_name, args.property_name, linearization=args.linearize)
 
 
 
