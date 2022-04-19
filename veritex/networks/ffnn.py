@@ -86,49 +86,30 @@ class FFNN:
                 self._f.append('Tanh')
 
 
-    def backtrack(self, s, verify=False, unsafe_domain=None):
-        if verify:
-            As_unsafe = unsafe_domain[0]
-            ds_unsafe = unsafe_domain[1]
-            elements = np.dot(np.dot(As_unsafe, s.M), s.vertices.T) + np.dot(As_unsafe, s.b) + ds_unsafe
-            if np.any(np.all(elements >= 0, axis=1)):  # reachable set does not satisfy at least one linear constraint
-                return False
-            if np.any(np.all(elements <= 0, axis=0)):  # at least one vertex locates in unsafe domain
-                return True
-            unsafe_s = cp.deepcopy(s)
+    def backtrack(self, s):
+        vfls = []
+        for i in range(len(self.unsafe_domains)):
+            As_unsafe = self.unsafe_domains[i][0]
+            ds_unsafe = self.unsafe_domains[i][1]
+            elements = np.dot(np.dot(As_unsafe,s.M), s.vertices.T) + np.dot(As_unsafe, s.b) +ds_unsafe
+            if np.any(np.all(elements>0, axis=1)): # reachable set does not satisfy at least one linear constraint
+                continue
+
+            unsafe_vfl = cp.deepcopy(s)
             for j in range(len(As_unsafe)):
                 A = As_unsafe[[j]]
                 d = ds_unsafe[[j]]
-                sub0 = unsafe_s.reluSplitHyperplane(A, d)
-                if sub0:
-                    unsafe_s = sub0
+                subvfl0 = unsafe_vfl.reluSplitHyperplane(A, d)
+                if subvfl0:
+                    unsafe_vfl = subvfl0
                 else:
-                    return False # vfl_set does not contain any unsafe elements
-            return True # unsafe_vfl is not none and contains unsafe elements
-        else:
-            vfls = []
-            for i in range(len(self.unsafe_domains)):
-                As_unsafe = self.unsafe_domains[i][0]
-                ds_unsafe = self.unsafe_domains[i][1]
-                elements = np.dot(np.dot(As_unsafe,s.M), s.vertices.T) + np.dot(As_unsafe, s.b) +ds_unsafe
-                if np.any(np.all(elements>0, axis=1)): # reachable set does not satisfy at least one linear constraint
-                    continue
+                    unsafe_vfl = []
+                    break
 
-                unsafe_vfl = cp.deepcopy(s)
-                for j in range(len(As_unsafe)):
-                    A = As_unsafe[[j]]
-                    d = ds_unsafe[[j]]
-                    subvfl0 = unsafe_vfl.reluSplitHyperplane(A, d)
-                    if subvfl0:
-                        unsafe_vfl = subvfl0
-                    else:
-                        unsafe_vfl = []
-                        break
+            if unsafe_vfl:
+                vfls.append(unsafe_vfl)
 
-                if unsafe_vfl:
-                    vfls.append(unsafe_vfl)
-
-            return vfls
+        return vfls
 
 
 
@@ -167,7 +148,6 @@ class FFNN:
 
 
     def verify_vzono(self, s):
-
         safe = []
         for indx, ud in enumerate(self.unsafe_domains):
             As_unsafe = ud[0]
@@ -189,6 +169,26 @@ class FFNN:
 
 
     def verify(self, s):
+        def verify_set(s, unsafe_domain=None):
+            As_unsafe = unsafe_domain[0]
+            ds_unsafe = unsafe_domain[1]
+            elements = np.dot(np.dot(As_unsafe, s.M), s.vertices.T) + np.dot(As_unsafe, s.b) + ds_unsafe
+            if np.any(
+                    np.all(elements >= 0, axis=1)):  # reachable set does not satisfy at least one linear constraint
+                return False
+            if np.any(np.all(elements <= 0, axis=0)):  # at least one vertex locates in unsafe domain
+                return True
+            unsafe_s = cp.deepcopy(s)
+            for j in range(len(As_unsafe)):
+                A = As_unsafe[[j]]
+                d = ds_unsafe[[j]]
+                sub0 = unsafe_s.reluSplitHyperplane(A, d)
+                if sub0:
+                    unsafe_s = sub0
+                else:
+                    return False  # vfl_set does not contain any unsafe elements
+            return True  # unsafe_vfl is not none and contains unsafe elements
+
         unsafe = False
         for ud in self.unsafe_domains:
             A_unsafe = ud[0]
@@ -200,7 +200,7 @@ class FFNN:
                     unsafe = True
                     break
             else:
-                unsafe = self.backtrack(s, verify=True, unsafe_domain=ud)
+                unsafe = verify_set(s, unsafe_domain=ud)
                 if unsafe:
                     break
 
