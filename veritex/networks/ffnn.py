@@ -34,7 +34,8 @@ class FFNN:
                  verification=False,
                  linearization=False,
                  unsafe_inputd=False,
-                 exact_outputd=False):
+                 exact_outputd=False,
+                 safety_property=None):
 
         if isinstance(model, torch.nn.Sequential):
             self.extract_params(model)
@@ -45,7 +46,8 @@ class FFNN:
         assert len(self._W)==len(self._b)
         self._num_layer = len(self._W)
 
-        self.unsafe_domains = None
+        # safety properties
+        self.property = safety_property
 
         # configurations for reachability analysis
         self.verification = verification
@@ -57,6 +59,10 @@ class FFNN:
         # relu linearization does not support computation of unsafe input domains and exact output domains
         assert not(self.exact_outputd and self.linearization)
         assert not (self.unsafe_inputd and self.linearization)
+
+
+    def set_property(self, safety_property):
+        self.property = safety_property
 
 
     def extract_params(self, torch_model):
@@ -88,9 +94,9 @@ class FFNN:
 
     def backtrack(self, s):
         vfls = []
-        for i in range(len(self.unsafe_domains)):
-            As_unsafe = self.unsafe_domains[i][0]
-            ds_unsafe = self.unsafe_domains[i][1]
+        for i in range(len(self.property.unsafe_domains)):
+            As_unsafe = self.property.unsafe_domains[i][0]
+            ds_unsafe = self.property.unsafe_domains[i][1]
             elements = np.dot(np.dot(As_unsafe,s.M), s.vertices.T) + np.dot(As_unsafe, s.b) +ds_unsafe
             if np.any(np.all(elements>0, axis=1)): # reachable set does not satisfy at least one linear constraint
                 continue
@@ -149,7 +155,7 @@ class FFNN:
 
     def verify_vzono(self, s):
         safe = []
-        for indx, ud in enumerate(self.unsafe_domains):
+        for indx, ud in enumerate(self.property.unsafe_domains):
             As_unsafe = ud[0]
             ds_unsafe = ud[1]
             safe.append(False)
@@ -169,9 +175,9 @@ class FFNN:
 
 
     def verify(self, s):
-        def verify_set(s, unsafe_domain=None):
-            As_unsafe = unsafe_domain[0]
-            ds_unsafe = unsafe_domain[1]
+        def verify_set(s, ud=None):
+            As_unsafe = ud[0]
+            ds_unsafe = ud[1]
             elements = np.dot(np.dot(As_unsafe, s.M), s.vertices.T) + np.dot(As_unsafe, s.b) + ds_unsafe
             if np.any(
                     np.all(elements >= 0, axis=1)):  # reachable set does not satisfy at least one linear constraint
@@ -190,7 +196,7 @@ class FFNN:
             return True  # unsafe_vfl is not none and contains unsafe elements
 
         unsafe = False
-        for ud in self.unsafe_domains:
+        for ud in self.property.unsafe_domains:
             A_unsafe = ud[0]
             d_unsafe = ud[1]
             if len(A_unsafe) == 1:
@@ -200,7 +206,7 @@ class FFNN:
                     unsafe = True
                     break
             else:
-                unsafe = verify_set(s, unsafe_domain=ud)
+                unsafe = verify_set(s, ud=ud)
                 if unsafe:
                     break
 

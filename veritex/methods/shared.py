@@ -1,10 +1,11 @@
 
 import multiprocessing as mp
 import numpy as np
+import copy as cp
 idle_workers = 1
 
 class SharedState: #
-    def __init__(self, vfl_inputs, num_workers):
+    def __init__(self, safety_property, num_workers):
 
         self.num_workers = num_workers
         self.shared_queue = mp.Manager().Queue()
@@ -15,7 +16,7 @@ class SharedState: #
 
         self.initial_steal_assign = mp.Event()
         self.initial_completed_workers = mp.Value('i', 0)
-        self.initialize_shared_queue(vfl_inputs)
+        self.initialize_shared_queue(safety_property)
         self.initial_comput = mp.Value('i', 1) # for initial computation
 
         self.stolen_works = mp.Value('i', 0)
@@ -48,11 +49,9 @@ class SharedState: #
         self.workers_assigned = mp.Array('i', [0]*num_workers)
 
 
-    def initialize_shared_queue(self, vfl_inputs):
-        for vfl in vfl_inputs:
-            self.shared_queue.put((vfl, -1, np.array([])))
-
-        self.increase_queue_len(len(vfl_inputs))
+    def initialize_shared_queue(self, prop):
+        self.shared_queue.put((cp.deepcopy(prop.input_set), -1, np.array([])))
+        self.increase_queue_len(1)
 
 
     def increase_queue_len(self, num):

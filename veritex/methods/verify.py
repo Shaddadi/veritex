@@ -65,11 +65,10 @@ def run(properties_list, network_path, netname, propnames, linearization=True):
     for n, prop in enumerate(properties):
         t0 = time.time()
         unsafe = False
-        vfl_input = cp.deepcopy(prop.input_set)
-        dnn0.unsafe_domains = prop.unsafe_domains
+        dnn0.set_property(prop)
 
         processes = []
-        shared_state = SharedState([vfl_input], num_processors)
+        shared_state = SharedState(prop, num_processors)
         one_worker = Worker(dnn0)
         for index in range(num_processors):
             p = mp.Process(target=one_worker.main_func, args=(index, shared_state))

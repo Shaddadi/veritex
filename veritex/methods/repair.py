@@ -30,11 +30,10 @@ class REPAIR:
         all_unsafe_data = []
         num_processors = mp.cpu_count()
         for n, prop in enumerate(self.properties):
-            vfl_input = cp.deepcopy(prop.input_set)
-            self.ffnn.unsafe_domains = prop.unsafe_domains
+            self.ffnn.set_property(prop)
             processes = []
             unsafe_data = []
-            shared_state = SharedState([vfl_input], num_processors)
+            shared_state = SharedState(prop, num_processors)
             one_worker = Worker(self.ffnn, output_len=self.output_limit)
             for index in range(num_processors):
                 p = mp.Process(target=one_worker.main_func, args=(index, shared_state))

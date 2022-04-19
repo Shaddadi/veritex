@@ -6,12 +6,12 @@ properties = []
 for n in range(1, 11):
     properties.append('../nets/prop_' + str(n) + '.vnnlib')
 
-# # verify all networks on properties 1-4
-# for i in range(1, 6):
-#     for j in range(1, 10):
-#         nn_path = "../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
-#         netname, propname = str(i)+str(j), ['1','2','3','4']
-#         run(properties[0:4], nn_path, netname, propname)
+# verify all networks on properties 1-4
+for i in range(1, 6):
+    for j in range(1, 10):
+        nn_path = "../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
+        netname, propname = str(i)+str(j), ['1','2','3','4']
+        run(properties[0:4], nn_path, netname, propname)
 
 # verify network 11 on property 5
 nn_path = "../nets/ACASXU_run2a_1_1_batch_2000.onnx"
