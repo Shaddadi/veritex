@@ -47,15 +47,14 @@ def run(prop_list, network_path, dims, savename):
 
     fig = plt.figure(figsize=(2.0, 2.67))
     ax = fig.add_subplot(111)
-    dnn0 = FFNN(torch_model, unsafe_in_dom=True, exact_out_dom=True)
+    dnn0 = FFNN(torch_model, unsafe_inputd=True, exact_outputd=True)
     for prop in properties:
-        vfl_input = cp.deepcopy(prop.input_set)
-        dnn0.unsafe_domains = prop.unsafe_domains
+        dnn0.set_property(prop)
 
         processes = []
         results = []
         num_processors = multiprocessing.cpu_count()
-        shared_state = SharedState([vfl_input], num_processors)
+        shared_state = SharedState(prop, num_processors)
         one_worker = Worker(dnn0)
         for index in range(num_processors):
             p = mp.Process(target=one_worker.main_func, args=(index, shared_state))
