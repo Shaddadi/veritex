@@ -40,13 +40,19 @@ class REPAIR:
                 Repair the network model for regression
             repair_model_classification(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=2000, epochs=200):
                 Repair the network model for classification
-
-
-
-
-
     """
+
     def __init__(self, torch_model, properties_repair, data=None, output_limit=1000):
+        """
+        Constructs all the necessary attributes for the Repair object
+
+        Parameters:
+            torch_model (Pytorch): A network model
+            properties_repair (list): Safety properties and functions to correct unsafe elements.
+            data (list): Data for training, validating and testing the network model
+            output_limit (int): Maximal unsafe data computed in the reachability analysis
+        """
+
         self.properties = [item[0] for item in properties_repair]
         self.corrections = [item[1] for item in properties_repair]
         self.output_limit = output_limit
@@ -58,6 +64,12 @@ class REPAIR:
 
 
     def compute_unsafe_data(self):
+        """
+        Compute a set of unsafe data pairs (x,y)s which are entire or subsets of vertices of the unsafe input-output domains.
+
+        Returns:
+             all_unsafe_data (list): Unsafe data pairs (x,y)s
+        """
         self.ffnn = FFNN(self.torch_model, repair=True)
         all_unsafe_data = []
         num_processors = mp.cpu_count()
@@ -83,7 +95,16 @@ class REPAIR:
         return all_unsafe_data
 
 
-    def generate_data(self, num=10000):  # for training and test
+    def generate_data(self, num=10000):
+        """
+        Generate random data for training, validating and testing the network model.
+
+        Parameters:
+            num (int): Total number of the data
+
+        Returns:
+            data (DATA): Data for training, validating and testing the network model
+        """
         lbs = self.properties[0].input_ranges[0]
         ubs = self.properties[0].input_ranges[1]
 
@@ -105,7 +126,17 @@ class REPAIR:
         return DATA(train_data, valid_data, test_data)
 
 
-    def purify_data(self, data): # check and remove unsafe data
+    def purify_data(self, data):
+        """
+        Remove the unsafe data from the data
+
+        Parameters:
+            data (np.ndarray): Data pairs (x,y)s
+
+        Returns:
+            data_x (np.ndarray): Safe data x on all safety properties
+            data_y (np.ndarray): safe data y on all safety properties
+        """
         data_x = data[0]
         data_y = data[1]
         for p in self.properties:
@@ -133,6 +164,17 @@ class REPAIR:
 
 
     def correct_unsafe_data(self, unsafe_data):
+        """
+        Approximate the closest safe data for the unsafe date.
+
+        Parameters:
+            unsafe_data (list): Unsafe data pairs (x,y) over each safety property
+
+        Returns:
+            original_Xs (Tensor): Original data x
+            corrected_Ys (Tensor): Corrected or closest safe y for the unsafe y
+        """
+
         length_unsafe_data = 0
         corrected_Ys = []
         original_Xs = []
@@ -152,6 +194,16 @@ class REPAIR:
 
 
     def compute_deviation(self, model):
+        """
+        Compute the parameter deviation
+
+        Parameters:
+            model (Pytorch): A network model
+
+        Returns:
+            rls (float): Parameter deviation
+        """
+
         model.eval()
         with torch.no_grad():
             predicts = model(self.data.test_data[0]) # The minimum is the predication
@@ -162,6 +214,16 @@ class REPAIR:
 
 
     def compute_accuracy(self, model):
+        """
+        Compute the accuracy of the network model on the test data.
+
+        Parameters:
+            model (Pytorch): A network model
+
+        Returns:
+            accuracy (float): Accuracy
+        """
+
         model.eval()
         with torch.no_grad():
             predicts = model(self.data.test_data[0]) * (-1)  # The minimum is the predication
@@ -175,14 +237,30 @@ class REPAIR:
 
 
     def repair_model_regular(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=200, epochs=200):
+        """
+        Repair the network model for regression
+
+        Parameters:
+            optimizer (optimizer): Optimizer for the training of the model
+            loss_fun (function): Loss function for the training of the model
+            alpha (float): Weight of the distance between safe domains and unsafe domains in the loss function
+            beta (float): Wight of the loss value on training data in the loss function
+            savepath (str): Path to save the repaired network
+            iters (int): Number of the iterations
+            batch_size (int): Batch size
+            epochs (int): Number of epochs
+
+        """
+
         t0 = time.time()
         all_test_deviation = []
         repaired = False
         for num in range(iters):
             logging.info(f'Iteration of repair: {num}')
             # deviation = self.compute_deviation(self.torch_model)
-
             # all_test_deviation.append(deviation)
+
+            # Compute unsafe domain of the network and construct corrected safe training data
             tt0 = time.time()
             unsafe_data = self.compute_unsafe_data()
             logging.info(f'Time for reachability analysis: {time.time()-tt0 :.2f} sec')
@@ -197,7 +275,6 @@ class REPAIR:
                 original_Xs, corrected_Ys = self.correct_unsafe_data(unsafe_data)
                 train_x = original_Xs
                 train_y = corrected_Ys
-                # print('Unsafe data: ', len(train_x))
             else:
                 train_x = self.data.train_data[0]
                 train_y = self.data.train_data[1]
@@ -235,6 +312,20 @@ class REPAIR:
 
 
     def repair_model_classification(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=2000, epochs=200):
+        """
+        Repair the network model for classification
+
+        Parameters:
+            optimizer (optimizer): Optimizer for the training of the model
+            loss_fun (function): Loss function for the training of the model
+            alpha (float): Weight of the distance between safe domains and unsafe domains in the loss function
+            beta (float): Wight of the loss value on training data in the loss function
+            savepath (str): Path to save the repaired network
+            iters (int): Number of the iterations
+            batch_size (int): Batch size
+            epochs (int): Number of epochs
+
+        """
         all_test_accuracy = []
         accuracy_old = 1.0
         candidate_old = cp.deepcopy(self.torch_model)
@@ -244,15 +335,18 @@ class REPAIR:
         for num in range(iters):
             logging.info(f'Iteration of repair: {num}')
             accuracy_new = self.compute_accuracy(self.torch_model)
+            # Restore the previous model if there is a large drop of accuracy in the current model
             if accuracy_old - accuracy_new > 0.1:
                 logging.info('A large drop of accuracy!')
                 self.torch_model = cp.deepcopy(candidate_old)
+                # Decrease the learning rate to reduce the accuracy degradation
                 lr = optimizer.param_groups[0]['lr'] * 0.8
                 logging.info(f'Current lr: {lr}')
                 optimizer = optim.SGD(self.torch_model.parameters(), lr=lr, momentum=0.9)
                 reset_flag = True
                 continue
 
+            # Compute unsafe domain of the network and construct corrected safe training data
             if not reset_flag:
                 candidate_old = cp.deepcopy(self.torch_model)
                 accuracy_old = accuracy_new
@@ -297,6 +391,7 @@ class REPAIR:
                     loss = alpha*loss_adv + beta*loss_train
                     loss.backward()
                     optimizer.step()
+
             self.torch_model.cpu()
             logging.info('The retraining is done\n')
             if num % 1 == 0:
