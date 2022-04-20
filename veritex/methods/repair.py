@@ -13,7 +13,39 @@ import torch.optim as optim
 
 
 class REPAIR:
+    """
+    A class for the repair of a neural network
 
+        Attributes:
+            properties (Property): Safety properties of the neural network
+            corrections (function): Functions to approximate the closest safe point to an unsafe point
+            output_limit (int): Maximal unsafe data computed in the reachability analysis
+            torch_model (Pytorch): Network model in Pytorch
+            data (DATA): data to train, validate and test the network
+
+        Methods:
+            compute_unsafe_data():
+                Compute a set of unsafe data pairs (x,y)s which are entire or subsets of vertices of the unsafe input-output domains.
+            generate_data():
+                Generate random data for training, validating and testing the network model.
+            purify_data():
+                Remove the unsafe data from the data
+            correct_unsafe_data(unsafe_data):
+                Approximate the closest safe data for the unsafe date.
+            compute_deviation(model):
+                Compute the parameter deviation
+            compute_accuracy(model):
+                Compute the accuracy of the network model on the test data.
+            repair_model_regular(optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=200, epochs=200):
+                Repair the network model for regression
+            repair_model_classification(self, optimizer, loss_fun, alpha, beta, savepath, iters=100, batch_size=2000, epochs=200):
+                Repair the network model for classification
+
+
+
+
+
+    """
     def __init__(self, torch_model, properties_repair, data=None, output_limit=1000):
         self.properties = [item[0] for item in properties_repair]
         self.corrections = [item[1] for item in properties_repair]
@@ -277,6 +309,14 @@ class REPAIR:
 
 
 class DATA:
+    """
+    A class for data
+
+    Attributes:
+        train_data (np.ndarray): Training data
+        valid_data (np.ndarray): Validation data
+        test_data (np.ndarray): Test data
+    """
     def __init__(self, train_data, valid_data, test_data):
         self.train_data = train_data
         self.valid_data = valid_data

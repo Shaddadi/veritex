@@ -17,6 +17,7 @@ from veritex.utils.sfproperty import Property
 from veritex.utils.vnnlib import vnnlib_to_properties
 import torch
 
+
 def run(prop_list, network_path, dims, savename):
 
     if network_path[-4:] == 'onnx':

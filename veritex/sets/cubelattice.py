@@ -7,7 +7,20 @@ import facelattice as fl
 import collections as cln
 
 class cubelattice:
+    """
+    A class for the set representation of a cube based on Face Lattice
 
+        Attributes:
+            dim (int): Dimensionality of the cube
+            bs (np.ndarray): Intervals of dimensions
+            lb (list): Lower bound of the cube
+            ub (list): Upper bound of the cube
+            vertices (np.ndarray): Vertices of the cube
+            lattice (list): Containment relation bewteen (k)-dim faces and (k-1)-dim faces
+            id_vals
+            vertices_ref
+            ref_vertex
+    """
     def __init__(self, range_set):
         self.dim = len(range_set)
         self.bs = np.array(range_set)

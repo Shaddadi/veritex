@@ -1,8 +1,29 @@
 import sys
-from veritex.sets.boxdomain import BoxDomain
+from veritex.sets.cubedomain import CubeDomain
 
 class Property:
+    """
+    A class for the safety property of a neural network
+
+        Attributes:
+            lbs (list): Lower bound of the input domain
+            ubs (list): Upper bound of the input domain
+            set_type (str): Name of the set representation
+            input_set (FVIM or Flattice): Input set constructed by a set representation
+            unsafe_domains (list): A set of unsafe output domains of the neural network
+            input ranges (list): Entire input range to the neural network
+    """
     def __init__(self, input_domain: list, unsafe_output_domains: list, input_ranges=None, set_type='facet-vertex'):
+        """
+        Construct the attributes for a Property object
+
+        Parameters:
+            input_domain (list): Lower and Upper bounds of the input domain
+            unsafe_output_domains (list): Unsafe output domains using sets of linear inequalities
+            input_ranges (list): Entire input range to the network
+            set_type (str): Name of the set representation that is used to construct the input set
+        """
+
         assert len(input_domain)!=0
         self.lbs = input_domain[0]
         self.ubs = input_domain[1]
@@ -14,8 +35,11 @@ class Property:
 
 
     def construct_input(self):
-        box = BoxDomain(self.lbs, self.ubs)
+        """
+        Construct the input set with a set representation.
+        """
+        box = CubeDomain(self.lbs, self.ubs)
         if self.set_type=='facet-vertex':
-            self.input_set = box.toFacetVertex()
+            self.input_set = box.to_FVIM()
         else:
             sys.exit("This set type is not supported.")
