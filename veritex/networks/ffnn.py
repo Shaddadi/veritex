@@ -14,50 +14,37 @@ class FFNN:
     """
     A class to construct a network model and conduct reachability analysis
 
-    ...
-    Attributes
-    ----------
-    _W: list
-        Weight matrix between the network layers
-    _b: list
-        Bias vector between the network layers
-    _f: list
-        Activation functions in each layer
-    _num_layer: int
-        The number of layers in the network model
-    property: Property
-        One safety property
-    verification: bool
-        Enable the safety verification of the network
-    linearization: bool
-        Enable the linearization of activation functions
-    unsafe_inputd: bool
-        Enable the computation of the entire unsafe input domain.
-    exact_outputd: bool
-        Enable the computation of the exact unsafe output domain.
-    repair: bool
-        Enable the repair of the network.
+    Attributes:
+        _W (list): Weight matrix between the network layers
+        _b (list): Bias vector between the network layers
+        _f (list): Activation functions in each layer
+        _num_layer (int): The number of layers in the network model
+        property (Property): One safety property
+        verification (bool): Enable the safety verification of the network
+        linearization (bool): Enable the linearization of activation functions
+        unsafe_inputd (bool): Enable the computation of the entire unsafe input domain.
+        exact_outputd (bool): Enable the computation of the exact unsafe output domain.
+        repair (bool): Enable the repair of the network.
 
-    Methods
-    _______
-    set_property(safety_property):
-        Set the safety property of the network.
-    extract_params(torch_model):
-        Extract parameters such as weights, bias and activation functions from a torch model.
-    backtrack(s):
-        Backtrack the unsafe input subspace with respect to an output reachable set.
-    reach_over_approximation(s):
-        Over approximate the output reachable domain of the network given an input set.
-    layer_over_approximation(s, l):
-        Over approximate the outpt reachable domain of one layer given its input set.
-    reach_over_tuple(state_tuple):
-        Over approximate the output reachable domain of the nework given a state tuple.
-    compute_state(tuple_state):
-        Compute the next state tuples given a state tuple
-    verify(s):
-        Verify the safey of a reachable set in FVIM or Flattice on the safety property.
-    verify_vzono(s):
-        Verify the safey of a reachable set in Vzono on the safety property.
+    Methods:
+        set_property(safety_property):
+            Set the safety property of the network.
+        extract_params(torch_model):
+            Extract parameters such as weights, bias and activation functions from a torch model.
+        backtrack(s):
+            Backtrack the unsafe input subspace with respect to an output reachable set.
+        reach_over_approximation(s):
+            Over approximate the output reachable domain of the network given an input set.
+        layer_over_approximation(s, l):
+            Over approximate the outpt reachable domain of one layer given its input set.
+        reach_over_tuple(state_tuple):
+            Over approximate the output reachable domain of the nework given a state tuple.
+        compute_state(tuple_state):
+            Compute the next state tuples given a state tuple
+        verify(s):
+            Verify the safey of a reachable set in FVIM or Flattice on the safety property.
+        verify_vzono(s):
+            Verify the safey of a reachable set in Vzono on the safety property.
     """
 
     def __init__(self, model,
@@ -178,7 +165,7 @@ class FFNN:
             for j in range(len(As_unsafe)):
                 A = As_unsafe[[j]]
                 d = ds_unsafe[[j]]
-                sub0 = unsafe_s.reluSplitHyperplane(A, d)
+                sub0 = unsafe_s.relu_split_hyperplane(A, d)
                 if sub0:
                     unsafe_s = sub0
                 else:
@@ -319,7 +306,7 @@ class FFNN:
             for j in range(len(As_unsafe)):
                 A = As_unsafe[[j]]
                 d = ds_unsafe[[j]]
-                sub0 = unsafe_s.reluSplitHyperplane(A, d)
+                sub0 = unsafe_s.relu_split_hyperplane(A, d)
                 if sub0:
                     unsafe_s = sub0
                 else:
@@ -368,7 +355,7 @@ class FFNN:
 
             W = self._W[layer+1]
             b = self._b[layer+1]
-            s.affineMap(W, b)
+            s.affine_map(W, b)
             new_tuple_states.append((s, layer+1, np.arange(s.M.shape[0])))
         else: # not empty
             new_vfl_sets, new_neurons = relu.exact_reach(s, neurons)

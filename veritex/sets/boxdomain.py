@@ -1,7 +1,7 @@
 import sys
 import itertools
 import numpy as np
-from veritex.sets.facetvertex import FacetVertex
+from veritex.sets.facetvertex import FVIM
 
 
 class BoxDomain:
@@ -27,7 +27,7 @@ class BoxDomain:
 
     def toFacetVertex(self):
         fmatrix = self.computeFmatrix()
-        return FacetVertex(fmatrix, self.vertices, self.dim, self.M, self.b)
+        return FVIM(fmatrix, self.vertices, self.dim, self.M, self.b)
 
     def computeFmatrix(self):
         facets_vertex = []
