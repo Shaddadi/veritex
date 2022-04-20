@@ -68,8 +68,9 @@ class REPAIR:
         Compute a set of unsafe data pairs (x,y)s which are entire or subsets of vertices of the unsafe input-output domains.
 
         Returns:
-             all_unsafe_data (list): Unsafe data pairs (x,y)s
+             all_unsafe_data (list): Unsafe data pairs (x,y)s over each safety property
         """
+
         self.ffnn = FFNN(self.torch_model, repair=True)
         all_unsafe_data = []
         num_processors = mp.cpu_count()
