@@ -2,7 +2,6 @@
 import multiprocessing as mp
 import numpy as np
 import copy as cp
-idle_workers = 1
 
 class SharedState: #
     def __init__(self, safety_property, num_workers):

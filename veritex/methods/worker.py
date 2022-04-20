@@ -4,7 +4,6 @@ import numpy as np
 from collections import deque
 
 
-idle_workers = 1
 class Worker:
     def __init__(self, dnn, output_len=np.infty):
         self.dnn = dnn
