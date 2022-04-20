@@ -7,11 +7,11 @@ class FVIM:
     A class for the set representation of a polytope based on Facet-vertex Incidence Matrix
 
     Attributes:
-        fmatrix (np.array): Matrix encoding the containment relation between facets and vertices of the polytope
-        vertices (np.array): Vertices of the polytope
+        fmatrix (np.ndarray): Matrix encoding the containment relation between facets and vertices of the polytope
+        vertices (np.ndarray): Vertices of the polytope
         dim (int): Dimension of the polytope
-        M (np.array): Matrix for the affine mapping relation
-        b (np.array): Vector for the affine mapping relation
+        M (np.ndarray): Matrix for the affine mapping relation
+        b (np.ndarray): Vector for the affine mapping relation
 
     Methods:
         affine_map(M, b):
@@ -33,8 +33,8 @@ class FVIM:
                 fmatrix (np.ndarray): Matrix encoding the containment relation between facets and vertices of the polytope
                 vertices (np.ndarray): Vertices values of the polytope
                 dim (int): Dimension of the polytope
-                M (np.array): Matrix for the affine mapping relation between current polytope and the initial one
-                b (np.array): Vector for the affine mapping relation
+                M (np.ndarray): Matrix for the affine mapping relation between current polytope and the initial one
+                b (np.ndarray): Vector for the affine mapping relation
 
         """
         self.fmatrix = fmatrix
@@ -49,8 +49,8 @@ class FVIM:
         Affine map the polytope through M and b
 
             Parameters:
-                W (np.array): Matrix
-                b (np.array): Vector
+                W (np.ndarray): Matrix
+                b (np.ndarray): Vector
         """
         self.M = np.dot(W, self.M)
         self.b = np.dot(W, self.b) + b
@@ -153,7 +153,7 @@ class FVIM:
         Split the polytope by a hyperplane Ax + d = 0
 
             Parameters:
-                A (np.array): Vector
+                A (np.ndarray): Vector
                 d (float): Value
 
             Returns:

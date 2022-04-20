@@ -7,11 +7,11 @@ def exact_reach(s, neurons):
 
         Parameters:
             s (FVIM or Flattice): input set to neurons
-            neurons (np.array): relu neurons to further process s
+            neurons (np.ndarray): relu neurons to further process s
 
         Returns:
             sets (list): new-generated sets
-            new_neurons (np.array): the rest of neurons to process in the future
+            new_neurons (np.ndarray): the rest of neurons to process in the future
     """
 
     new_neurons = neurons
@@ -99,11 +99,11 @@ def get_valid_neurons(s, neurons):
 
         Parameters:
             s (FVIM or Flattice): input reachable set
-            neurons (np.array): a list of neuron indices
+            neurons (np.ndarray): a list of neuron indices
 
         Returns:
-            valid_neurons_neg_pos (np.array): relu neurons whose both negative and positive input ranges are spanned by the input set
-            valid_neurons_neg (np.array): neurons whose only negative input range is spanned by the input set
+            valid_neurons_neg_pos (np.ndarray): relu neurons whose both negative and positive input ranges are spanned by the input set
+            valid_neurons_neg (np.ndarray): neurons whose only negative input range is spanned by the input set
     """
 
     assert neurons.shape[0]!=0
