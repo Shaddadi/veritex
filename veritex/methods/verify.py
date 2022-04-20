@@ -28,7 +28,7 @@ def run(properties_list, network_path, netname, propnames, linearization=True):
         linearization (bool): Linearization of activation functions.
 
     """
-    
+
     # Creating and Configuring Logger
     logger = logging.getLogger()
     for hdlr in logger.handlers[:]:  # remove all old handlers

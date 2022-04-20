@@ -66,7 +66,6 @@ class SharedState: #
 
     def compute_steal_rate(self):
         with self.work_steal_rate.get_lock():
-            # self.work_steal_rate.value = self.num_workers_to_assign.value / self.num_workers
             self.work_steal_rate.value = sum(self.workers_to_assign)/self.num_workers
 
 
@@ -95,7 +94,6 @@ class SharedState: #
 
         with self.num_workers_to_assign.get_lock():
             self.num_workers_to_assign.value = 0
-            # print('self.num_workers_to_assign.value = 0')
 
         with self.workers_assigned.get_lock():
             for n,_ in enumerate(self.workers_assigned):
