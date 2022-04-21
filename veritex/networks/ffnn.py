@@ -172,7 +172,7 @@ class FFNN:
                     unsafe_s = []
                     break
 
-            if unsafe_s:
+            if unsafe_s: # in FVIM or Flattice
                 inputs.append(unsafe_s)
 
         return inputs

@@ -329,7 +329,7 @@ class Worker:
 
         # Compute the exact unsafe input subspace and exact unsafe output reachable domain
         elif self.dnn.unsafe_inputd and self.dnn.exact_outputd:
-            unsafe_inputs = self.dnn.backtrack(s)
+            unsafe_inputs = self.dnn.backtrack(s) # in FVIM or Flattice
             with self.shared_state.outputs_len.get_lock():
                 self.shared_state.outputs.put([unsafe_inputs, s])
                 self.shared_state.outputs_len.value += 1

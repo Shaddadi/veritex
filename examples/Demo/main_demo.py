@@ -105,9 +105,10 @@ if __name__ == "__main__":
         while not shared_state.outputs.empty():
             results.append(shared_state.outputs.get())
 
-        # get results
-        output_sets = [np.dot(item[1].vertices, item[1].M.T) + item[1].b.T for item in results]  # sets represented with their vertices
-        input_unsafe_sets = [sub.vertices for item in results for sub in item[0] if sub]  # sets represented with their vertices
+        # Compute vertices of output reachable sets
+        output_sets = [np.dot(item[1].vertices, item[1].M.T) + item[1].b.T for item in results]
+        # Compute vertices of unsafe input sets
+        input_unsafe_sets = [sub.vertices for item in results for sub in item[0] if sub]
         unsafe_domain = np.array([[y1_lbs, -15], [y1_lbs, 25], [y1_ubs, -15], [y1_ubs, 25]])
 
         # plot

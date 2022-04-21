@@ -19,7 +19,16 @@ import torch
 
 
 def run(prop_list, network_path, dims, savename):
+    """
+    Plot reachable domains of the network model on the safety properties
 
+    Parameters:
+        prop_list (list): A list of paths to safety properties
+        network_path (str): Path to the network model
+        dims (list): Dimensions to project reachable domains on
+        savename (str): Path to save figures
+
+    """
     if network_path[-4:] == 'onnx':
         torch_model = load_ffnn_onnx(network_path)
         input_num, output_num = torch_model[0].in_features, torch_model[-1].out_features
@@ -34,10 +43,10 @@ def run(prop_list, network_path, dims, savename):
     else:
         sys.exit('Network file is not found!')
 
-    # output dimensions to project on
+    # Output dimensions to project on
     dim0, dim1 = dims
 
-    # extract safety properties
+    # Extract safety properties
     if isinstance(prop_list[0],Property):
         properties = prop_list
     else:
@@ -49,6 +58,7 @@ def run(prop_list, network_path, dims, savename):
     fig = plt.figure(figsize=(2.0, 2.67))
     ax = fig.add_subplot(111)
     dnn0 = FFNN(torch_model, unsafe_inputd=True, exact_outputd=True)
+    # Compute the exact unsafe output domains of the network model over safety properties
     for prop in properties:
         dnn0.set_property(prop)
 
@@ -75,11 +85,13 @@ def run(prop_list, network_path, dims, savename):
 
         for _ in range(len(output_sets)):
             item = output_sets.pop()
+            # Compute the vertices of all output reachable sets
             out_vertices = np.dot(item.vertices, item.M.T) + item.b.T
             plot_polytope2d(out_vertices[:, [dim0, dim1]], ax, color='b', alpha=1.0, edgecolor='k', linewidth=0.0)
 
         for _ in range(len(unsafe_sets)):
             item = unsafe_sets.pop()
+            # Compute the vertices of unsafe output reachable sets
             out_unsafe_vertices = np.dot(item.vertices, item.M.T) + item.b.T
             plot_polytope2d(out_unsafe_vertices[:, [dim0, dim1]], ax, color='r', alpha=1.0, edgecolor='k',
                             linewidth=0.0)
