@@ -24,7 +24,7 @@ def run(properties_list, network_path, netname, propnames, linearization=True):
         properties_list (list): Safety properties to verify
         network_path (str): Path to load the network model
         netname (str): Name to specify the network model
-        propnames (str): Names to specify the safety properties
+        propnames (list): Names to specify the safety properties
         linearization (bool): Linearization of activation functions.
 
     """

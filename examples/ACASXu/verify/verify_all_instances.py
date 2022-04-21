@@ -15,7 +15,7 @@ for i in range(1, 6):
 
 # verify network 11 on property 5
 nn_path = "../nets/ACASXU_run2a_1_1_batch_2000.onnx"
-netname, propname = '11', '5'
+netname, propname = '11', ['5']
 run([properties[4]], nn_path, netname, propname)
 
 # verify network 11 on property 6
@@ -25,20 +25,20 @@ run([properties[5]], nn_path, netname, propname)
 
 # verify network 19 on property 7
 nn_path = "../nets/ACASXU_run2a_1_9_batch_2000.onnx"
-netname, propname = '19', '7'
+netname, propname = '19', ['7']
 run([properties[6]], nn_path, netname, propname)
 
 # verify network 29 on property 8
 nn_path = "../nets/ACASXU_run2a_2_9_batch_2000.onnx"
-netname, propname = '29', '8'
+netname, propname = '29', ['8']
 run([properties[7]], nn_path, netname, propname)
 
 # verify network 33 on property 9
 nn_path = "../nets/ACASXU_run2a_3_3_batch_2000.onnx"
-netname, propname = '33', '9'
+netname, propname = '33', ['9']
 run([properties[8]], nn_path, netname, propname)
 
 # verify network 45 on property 10
 nn_path = "../nets/ACASXU_run2a_4_5_batch_2000.onnx"
-netname, propname = '45', '10'
+netname, propname = '45', ['10']
 run([properties[9]], nn_path, netname, propname)
