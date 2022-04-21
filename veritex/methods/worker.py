@@ -17,6 +17,22 @@ class Worker:
             inital_num (int): Length threshold to start stealing work from the local deque
             inital_layer (int): Layer threshold to start stealing work from the local deque
 
+        Methods:
+            inital_assgin():
+                Assign states to this local worker at the beginning of the computation
+            main_func(indx, shared_state):
+                Create and start parallel computation in this worker
+            steal_from_this_worker():
+                Steal states in the local deque of this worker
+            asssign_to_this_worker():
+                Assign shared states to this local worker
+            collect_results(s):
+                Conduct the function in terms of the configuration
+            state_spawn_depth_first(tuple_state):
+                Depth-first computation of states
+            state_spawn_breath_first(tuple_state):
+                Breath-first computation of states
+
     """
     def __init__(self, dnn, output_len=np.infty):
         self.dnn = dnn
@@ -73,9 +89,6 @@ class Worker:
                 self.shared_state.workers_valid_status[self.worker_id] = 0
                 self.shared_state.work_steal_ready.wait()
                 self.steal_from_this_worker()
-                # self.shared_state.work_assign_ready.wait()
-                with self.shared_state.initial_comput.get_lock(): # disable it forever
-                    self.shared_state.initial_comput.value = 0
                 break
 
         # Depth-first computation for output states of the network model
@@ -264,7 +277,6 @@ class Worker:
 
                     self.shared_state.work_assign_ready.clear()
                     self.shared_state.reset_after_assgin()
-                    self.shared_state.all_idle_ready.clear()
                     self.shared_state.steal_assign_ready.set()
 
 
