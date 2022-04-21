@@ -325,7 +325,6 @@ class Worker:
             raise ValueError('Reachability configuration error!')
 
 
-
     def state_spawn_depth_first(self, tuple_state):
         """
         Depth-first computation of states
