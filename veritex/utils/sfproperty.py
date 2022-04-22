@@ -1,5 +1,6 @@
 import sys
 from veritex.sets.cubedomain import CubeDomain
+from veritex.sets.cubelattice import CubeLattice
 
 class Property:
     """
@@ -13,7 +14,7 @@ class Property:
             unsafe_domains (list): A set of unsafe output domains of the neural network
             input ranges (list): Entire input range to the neural network
     """
-    def __init__(self, input_domain: list, unsafe_output_domains: list, input_ranges=None, set_type='facet-vertex'):
+    def __init__(self, input_domain: list, unsafe_output_domains: list, input_ranges=None, set_type='FVIM'):
         """
         Construct the attributes for a Property object
 
@@ -38,8 +39,15 @@ class Property:
         """
         Construct the input set with a set representation.
         """
-        box = CubeDomain(self.lbs, self.ubs)
-        if self.set_type=='facet-vertex':
+
+        if self.set_type == 'FVIM':
+            box = CubeDomain(self.lbs, self.ubs)
             self.input_set = box.to_FVIM()
+        elif self.set_type == 'FlatticeFFNN':
+            box = CubeLattice(self.lbs, self.ubs)
+            self.input_set = box.to_FlatticeFFNN()
+        elif self.set_type == 'FlatticeCNN':
+            box = CubeLattice(self.lbs, self.ubs)
+            self.input_set = box.to_FlatticeCNN()
         else:
             sys.exit("This set type is not supported.")

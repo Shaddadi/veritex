@@ -3,7 +3,7 @@ import copy
 import numpy as np
 import collections as cln
 
-class facelattice:
+class FlatticeCNN:
     def __init__(self, lattice, vertices, vertices_init, dim):
         self.lattice = lattice
         self.vertices = vertices
@@ -93,7 +93,7 @@ class facelattice:
             zero_id = np.arange(self.vertices.shape[0] - vs_new.shape[0], self.vertices.shape[0])
             negative_zero_id = np.concatenate((negative_id[:, 0], zero_id), 0)
             neg_lattice = self.split_lattice(negative_zero_id)
-            negative_fl = facelattice(neg_lattice, neg_vertices, neg_vertices_init, self.dim)
+            negative_fl = FlatticeCNN(neg_lattice, neg_vertices, neg_vertices_init, self.dim)
         if (sign_flg > 0) or (not self.fast_reach):
             if self.fast_reach:
                 negative_fl = []
@@ -102,7 +102,7 @@ class facelattice:
             zero_id = np.arange(self.vertices.shape[0] - vs_new.shape[0], self.vertices.shape[0])
             positive_zero_id = np.concatenate((positive_id[:, 0], zero_id), 0)
             pos_lattice = self.split_lattice(positive_zero_id)
-            positive_fl = facelattice(pos_lattice, pos_vertices, pos_vertices_init, self.dim)
+            positive_fl = FlatticeCNN(pos_lattice, pos_vertices, pos_vertices_init, self.dim)
         if sign_flg <= 0 and (not self.fast_reach):
             positive_fl.lattice = copy.deepcopy(positive_fl.lattice)
         if sign_flg > 0 and (not self.fast_reach):
@@ -171,7 +171,7 @@ class facelattice:
             neg_vertices_init = np.concatenate((negative_vs_init, vs_init_new), 0)
             neg_lattice = self.split_lattice(negative_zero_id)
 
-            negative_fl = facelattice(neg_lattice, neg_vertices, neg_vertices_init, self.dim)
+            negative_fl = FlatticeCNN(neg_lattice, neg_vertices, neg_vertices_init, self.dim)
             negative_fl.map_negative_fl_relu1(idx)
         if (sign_flg > 0) or (not self.fast_reach):
             if self.fast_reach:
@@ -179,7 +179,7 @@ class facelattice:
             pos_vertices = np.concatenate((positive_vs, vs_new), 0)
             pos_vertices_init = np.concatenate((positive_vs_init, vs_init_new), 0)
             pos_lattice = self.split_lattice(positive_zero_id)
-            positive_fl = facelattice(pos_lattice, pos_vertices, pos_vertices_init, self.dim)
+            positive_fl = FlatticeCNN(pos_lattice, pos_vertices, pos_vertices_init, self.dim)
         if sign_flg <= 0 and (not self.fast_reach):
             positive_fl.lattice = copy.deepcopy(positive_fl.lattice)
 
@@ -248,7 +248,7 @@ class facelattice:
             zero_id = np.arange(self.vertices.shape[0] - vs_new.shape[0], self.vertices.shape[0])
             negative_zero_id = np.concatenate((negative_id[:, 0], zero_id), 0)
             neg_lattice = self.split_lattice(negative_zero_id)
-            negative_fl = facelattice(neg_lattice, neg_vertices, neg_vertices_init, self.dim)
+            negative_fl = FlatticeCNN(neg_lattice, neg_vertices, neg_vertices_init, self.dim)
             negative_fl.map_negative_fl_relu2(idx)
 
         if (sign_flg > 0) or (not self.fast_reach):
@@ -259,7 +259,7 @@ class facelattice:
             zero_id = np.arange(self.vertices.shape[0] - vs_new.shape[0], self.vertices.shape[0])
             positive_zero_id = np.concatenate((positive_id[:, 0], zero_id), 0)
             pos_lattice = self.split_lattice(positive_zero_id)
-            positive_fl = facelattice(pos_lattice, pos_vertices, pos_vertices_init, self.dim)
+            positive_fl = FlatticeCNN(pos_lattice, pos_vertices, pos_vertices_init, self.dim)
 
         if sign_flg <= 0 and (not self.fast_reach):
             positive_fl.lattice = copy.deepcopy(positive_fl.lattice)
@@ -348,6 +348,244 @@ class facelattice:
         # self.test_face_num(alattice)
         return alattice
 
+
+
+class FlatticeFFNN:
+    def __init__(self, lattice, vertices, dim, M, b):
+        """
+        Constructs all the necessary attributes for the polytope object
+
+            Parameters:
+                lattice (list): Face lattice encoding the containment relation between facets and vertices of the polytope
+                vertices (np.ndarray): Vertices values of the polytope
+                dim (int): Dimension of the polytope
+                M (np.ndarray): Matrix for the affine mapping relation between current polytope and the initial one
+                b (np.ndarray): Vector for the affine mapping relation
+
+        """
+        self.lattice = lattice
+        self.vertices = vertices
+        self.dim = dim
+        self.M = M
+        self.b = b
+
+
+    def relu_split(self, neuron_pos_neg):
+        """
+        Split the polytope in a relu neuron
+
+            Parameters:
+                neuron_pos_neg (int): index of the target neuron in the layer
+
+            Returns:
+                subset0 (Flattice): an output set
+                subset1 (Flattice): an output set
+        """
+        elements = np.matmul(self.vertices, self.M[neuron_pos_neg,:].T)+self.b[neuron_pos_neg,:].T
+        positive_bool = (elements>0)
+        positive_id = np.asarray(positive_bool.nonzero()).T
+        positive_vs = self.vertices[positive_bool]
+        negative_bool = (elements<0)
+        negative_id = np.asarray(negative_bool.nonzero()).T
+        negative_vs = self.vertices[negative_bool]
+        if positive_vs.shape[0]>=negative_vs.shape[0]:
+            less_vs_id = negative_id
+            sign_flg = 1
+        else:
+            less_vs_id = positive_id
+            sign_flg = -1
+
+        edges_inter = []
+        vs_new = np.zeros(0)
+        ref_vertex_list= list(self.lattice[0].keys())
+        for p0_id in less_vs_id:
+            edges = list(self.lattice[0].values())[p0_id[0]][1]
+            p0 = self.vertices[p0_id]
+            elem0 = elements[p0_id]
+            for ed in edges:
+                for p1_rf in self.lattice[1][ed][0]:
+                    p1_id = np.array([ref_vertex_list.index(p1_rf)])
+                    p1 = self.vertices[p1_id]
+                    sign_p1 = np.sign(elements[p1_id])
+                    if sign_p1 == sign_flg or sign_p1 == 0:
+                        edges_inter.append(ed) # add the edge that spans negative and positive domain
+                        elem1 = elements[p1_id]
+                        alpha = abs(elem0)/(abs(elem0)+abs(elem1))
+                        p_new = p0 + (p1-p0)*alpha
+                        if vs_new.shape[0]!=0:
+                            vs_new = np.concatenate((vs_new, p_new), 0)
+                        else:
+                            vs_new = p_new
+
+        # merge positive vertices with new_vs
+        self.vertices = np.concatenate((self.vertices, vs_new), 0)
+        self.inter_lattice(edges_inter)
+
+        neg_vertices = np.concatenate((negative_vs, vs_new), 0)
+        zero_id = np.arange(self.vertices.shape[0] - vs_new.shape[0], self.vertices.shape[0])
+        negative_zero_id = np.concatenate((negative_id[:, 0], zero_id), 0)
+        neg_lattice = self.split_lattice(negative_zero_id)
+        negative_fl = FlatticeFFNN(neg_lattice, neg_vertices,  self.dim, copy.copy(self.M), copy.copy(self.b))
+        negative_fl.affine_map_negative(neuron_pos_neg)
+        negative_fl.lattice = copy.deepcopy(negative_fl.lattice)
+
+        pos_vertices = np.concatenate((positive_vs, vs_new), 0)
+        zero_id = np.arange(self.vertices.shape[0] - vs_new.shape[0], self.vertices.shape[0])
+        positive_zero_id = np.concatenate((positive_id[:, 0], zero_id), 0)
+        pos_lattice = self.split_lattice(positive_zero_id)
+        positive_fl = FlatticeFFNN(pos_lattice, pos_vertices, self.dim, copy.copy(self.M), copy.copy(self.b))
+
+        return positive_fl, negative_fl
+
+
+    def relu_split_hyperplane(self, A, d):
+        """
+        Split the polytope by a hyperplane Ax + d = 0
+
+            Parameters:
+                A (np.ndarray): Vector
+                d (float): Value
+
+            Returns:
+                negative_fl (Flattice): Subset locating in the halfspace, Ax + d <= 0
+        """
+        A_new = np.dot(A,self.M)
+        d_new = np.dot(A, self.b) +d
+        elements = np.dot(A_new, self.vertices.T) + d_new
+        elements = elements[0]
+
+        # the polytope locates in the positive halfspace, Ax + d >= 0
+        if np.all(elements >= 0):
+            return None
+        # the polytope locates in the negative halfspace, Ax + d <= 0
+        elif np.all(elements <= 0):
+            return self
+
+        negative_bool = (elements<0)
+        negative_id = np.asarray(negative_bool.nonzero()).T
+        negative_vs = self.vertices[negative_bool]
+
+        edges_inter = []
+        vs_new = np.zeros(0)
+        ref_vertex_list= list(self.lattice[0].keys())
+        for p0_id in negative_id:
+            edges = list(self.lattice[0].values())[p0_id[0]][1]
+            p0 = self.vertices[p0_id]
+            elem0 = elements[p0_id]
+            for ed in edges:
+                for p1_rf in self.lattice[1][ed][0]:
+                    p1_id = np.array([ref_vertex_list.index(p1_rf)])
+                    p1 = self.vertices[p1_id]
+                    # Check they are the two vertices connected by the edge
+                    if np.sign(elements[p0_id]) != np.sign(elements[p1_id]):
+                        edges_inter.append(ed) # add the edge that spans negative and positive domain
+                        elem1 = elements[p1_id]
+                        alpha = abs(elem0)/(abs(elem0)+abs(elem1))
+                        p_new = p0 + (p1-p0)*alpha
+                        if vs_new.shape[0]!=0:
+                            vs_new = np.concatenate((vs_new, p_new), 0)
+                        else:
+                            vs_new = p_new
+
+        # merge positive vertices with new_vs
+        self.vertices = np.concatenate((self.vertices, vs_new), 0)
+        self.inter_lattice(edges_inter)
+
+        neg_vertices = np.concatenate((negative_vs, vs_new), 0)
+        zero_id = np.arange(self.vertices.shape[0] - vs_new.shape[0], self.vertices.shape[0])
+        negative_zero_id = np.concatenate((negative_id[:, 0], zero_id), 0)
+        neg_lattice = self.split_lattice(negative_zero_id)
+        negative_fl = FlatticeFFNN(neg_lattice, neg_vertices,  self.dim, copy.copy(self.M), copy.copy(self.b))
+
+        return negative_fl
+
+
+    def affine_map(self, W, b):
+        """
+        Affine map the polytope through M and b
+
+            Parameters:
+                W (np.ndarray): Matrix
+                b (np.ndarray): Vector
+        """
+        self.M = np.dot(W, self.M)
+        self.b = np.dot(W, self.b) + b
+
+
+    def affine_map_negative(self, n):
+        """
+        Set nth dimension to zero
+
+            Parameters:
+                n (int): Dimension index of the matrix and vector
+        """
+        self.M[n, :] = 0
+        self.b[n, :] = 0
+
+
+    def inter_lattice(self, edges_inter):
+        # get the lattice all the faces of which intersect with target hyperplane
+        inter_faces = edges_inter
+        inter_lattice_orig = self.extract_inter_lattice(inter_faces)
+        # copy new_lattice with different addresses
+        inter_lattice_new = copy.deepcopy(inter_lattice_orig)
+        # create containment relation between
+        for i in range(self.dim):
+            rfs_list_orig = list(inter_lattice_orig[i].keys())
+            rfs_list_new = list(inter_lattice_new[i].keys())
+            for n in range(len(rfs_list_orig)):
+                rf_orig = rfs_list_orig[n]
+                rf_new = rfs_list_new[n]
+                inter_lattice_new[i][rf_new][1].add(rf_orig)
+                self.lattice[i + 1][rf_orig][0].add(rf_new)
+        # merge self.lattice with inter_lattice
+        for i in range(self.dim):
+            self.lattice[i].update(inter_lattice_new[i])
+
+
+    def split_lattice(self, selected_vs):
+        # extract lattice according to vertices
+        alattice = self.extract_vertex_lattice(selected_vs)
+        return alattice
+
+
+    def extract_vertex_lattice(self, indx):
+        temp = list(self.lattice[0].keys())
+        vertex = [temp[i] for i in indx]
+        alattice = self.extract_lattice(vertex, 0)
+        return alattice
+
+
+    def extract_inter_lattice(self, rfs):
+        alattice = self.extract_lattice(rfs, 1)
+        # edit the bottom layer
+        for key in alattice[0].keys():
+            alattice[0][key][0] = set()
+        # edit the top layer
+        for key in alattice[self.dim-1].keys():
+            alattice[self.dim-1][key][1] = set()
+        return alattice
+
+
+    def extract_lattice(self, rfs, n):
+        alattice = []
+        last_aset_temp = set()
+        rfs_temp = rfs
+        for i in range(n, self.dim+1):
+            dict_temp = cln.OrderedDict()
+            next_aset_temp = set()
+            for rf in rfs_temp:
+                rf_values =  copy.copy(self.lattice[i][rf])
+                rf_values[0] =rf_values[0]&last_aset_temp
+                dict_temp.update({rf: rf_values})
+                next_aset_temp = next_aset_temp.union(rf_values[1])
+            alattice.append(dict_temp)
+            last_aset_temp = set(rfs_temp)
+            rfs_temp = next_aset_temp
+        # self.test_face_num(alattice)
+        return alattice
+
+
     def test_face_num(self, hss):
         for m in range(self.dim-1):
             if m + 1 > len(hss):
@@ -364,5 +602,3 @@ class facelattice:
                 print('f1_f0', m)
             if len(f0_f1) != len(face_m1):
                 print('f0_f1', m)
-
-

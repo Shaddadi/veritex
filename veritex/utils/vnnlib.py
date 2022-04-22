@@ -289,7 +289,7 @@ def read_vnnlib_simple(vnnlib_filename, num_inputs, num_outputs):
     return final_rv
 
 
-def vnnlib_to_properties(vnnlib_path, num_inputs, num_outputs, input_ranges=None):
+def vnnlib_to_properties(vnnlib_path, num_inputs, num_outputs, input_ranges=None, set_type='FVIM'):
     vnnlib_specs = read_vnnlib_simple(vnnlib_path, num_inputs, num_outputs)
     properties = []
     for spec in vnnlib_specs:
@@ -298,6 +298,6 @@ def vnnlib_to_properties(vnnlib_path, num_inputs, num_outputs, input_ranges=None
         input_domain = [lbs, ubs]
 
         unsafe_domains = [[item[0], np.array([-item[1]]).T] for item in spec[1]]
-        properties.append(Property(input_domain, unsafe_domains, input_ranges=input_ranges))
+        properties.append(Property(input_domain, unsafe_domains, input_ranges=input_ranges, set_type=set_type))
 
     return properties

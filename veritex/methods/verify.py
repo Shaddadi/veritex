@@ -67,7 +67,7 @@ def run(properties_list, network_path, netname, propnames, linearization=True):
     else: # extract safety properties from vnnlib files
         properties = []
         for prop in properties_list:
-            temp = vnnlib_to_properties(prop, input_num, output_num)
+            temp = vnnlib_to_properties(prop, input_num, output_num, set_type='FlatticeFFNN')
             properties.extend(temp)
 
     # configure the verification

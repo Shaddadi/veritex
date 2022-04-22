@@ -28,8 +28,6 @@ class VzonoAdap: # adaptive over approximation
     def relu_linear_relax_adaptive(self, neurons_neg_pos):
         assert neurons_neg_pos.shape[0] != 0
         base_vectices = self.base_vertices[neurons_neg_pos, :]
-        # vals = np.
-
 
 
 

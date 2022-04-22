@@ -3,10 +3,10 @@ import itertools
 import numpy as np
 import operator as op
 from functools import reduce
-import facelattice as fl
+import veritex.sets.facelattice as fl
 import collections as cln
 
-class cubelattice:
+class CubeLattice:
     """
     A class for the set representation of a cube based on Face Lattice
 
@@ -15,27 +15,36 @@ class cubelattice:
             bs (np.ndarray): Intervals of dimensions
             lb (list): Lower bound of the cube
             ub (list): Upper bound of the cube
+            sp (list): Target dimensions for reachability analysis
             vertices (np.ndarray): Vertices of the cube
             lattice (list): Containment relation bewteen (k)-dim faces and (k-1)-dim faces
-            id_vals
-            vertices_ref
-            ref_vertex
+            id_vals (dict): Mapping from faces to their references
+            vertices_ref: Mapping from vertices to their references
+            ref_vertex: Mapping from references to vertex
     """
-    def __init__(self, range_set):
-        self.dim = len(range_set)
-        self.bs = np.array(range_set)
-        self.lb = self.bs[:,0].tolist()
-        self.ub = self.bs[:,1].tolist()
 
-        self.vertices = self.compute_vertex(self.lb, self.ub)
+    def __init__(self, lbs, ubs, sp=None):
+        self.dim = len(lbs)
+        self.bs = np.array([lbs, ubs]).T
+        self.lbs = lbs
+        self.ubs = ubs
+        self.M = np.eye(len(lbs))
+        self.b = np.zeros((len(lbs),1))
+        self.sp = sp
+        self.vertices = self.compute_vertex(self.lbs, self.ubs)
         self.lattice, self.id_vals, self.vertices_ref, self.ref_vertex = self.initial_lattice()
         for m in range(1,self.dim):
             self.single_dim_face(m)
 
 
-    def to_facelattice(self, sp): #shape height x weight
-        self.vertices = self.vertices.reshape((self.vertices.shape[0], 3, sp[1][0]-sp[0][0]+1, sp[1][1]-sp[0][1]+1))
-        return fl.facelattice(self.lattice, self.vertices, self.vertices, self.dim)
+    def to_FlatticeFFNN(self): #shape height x weight
+        return fl.FlatticeFFNN(self.lattice, self.vertices, self.dim, self.M, self.b)
+
+
+    def to_FlatticeCNN(self): #shape height x weight
+        assert self.sp is not None
+        self.vertices = self.vertices.reshape((self.vertices.shape[0], 3, self.sp[1][0]-self.sp[0][0]+1, self.sp[1][1]-self.sp[0][1]+1))
+        return fl.FlatticeCNN(self.lattice, self.vertices, self.vertices, self.dim)
 
 
     def initial_lattice(self):
@@ -85,7 +94,7 @@ class cubelattice:
 
         id_vals_temp = cln.OrderedDict()
 
-        nlist = list(range(len(self.lb)))
+        nlist = list(range(len(self.lbs)))
         element_id_sets = list(itertools.combinations(nlist, self.dim-m))
         c = 0
         for element_id in element_id_sets:
@@ -109,7 +118,7 @@ class cubelattice:
                     elem_id_m_1 = np.sort(np.append(elem_id_m_1, i))
                     f_m_1 = np.copy(f_m)
                     # upper bound
-                    f_m_1[i] = self.ub[i]
+                    f_m_1[i] = self.ubs[i]
                     k_m_1 = tuple(np.concatenate((elem_id_m_1, f_m_1)))
                     if m!=1:
                         id_m_1 = self.id_vals[m - 1][k_m_1]
@@ -120,7 +129,7 @@ class cubelattice:
                     self.lattice[m - 1][id_m_1][1].add(ref_m[c])
 
                     # lower bound
-                    f_m_1[i] = self.lb[i]
+                    f_m_1[i] = self.lbs[i]
                     k_m_1 = tuple(np.concatenate((elem_id_m_1, f_m_1)))
                     if m != 1:
                         id_m_1 = self.id_vals[m - 1][k_m_1]
@@ -147,8 +156,8 @@ class cubelattice:
 
 
 class reference:
+    """
+    A class to create an unique id
+    """
     def __init__(self, val):
         self._value = val  # just refers to val, no copy
-
-
-    # print(hull.vertices)
