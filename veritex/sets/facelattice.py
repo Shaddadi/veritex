@@ -351,6 +351,38 @@ class FlatticeCNN:
 
 
 class FlatticeFFNN:
+    """
+    A class for the face lattice of reachable sets in the reachability analysis of feed-forward neural networks
+
+        Attributes:
+                lattice (list): Face lattice encoding the containment relation between facets and vertices of the polytope
+                vertices (np.ndarray): Vertices values of the polytope
+                dim (int): Dimension of the polytope
+                M (np.ndarray): Matrix for the affine mapping relation between current polytope and the initial one
+                b (np.ndarray): Vector for the affine mapping relation
+
+        Methods:
+            relu_split(neuron_pos_neg):
+                Split the reachable set in a relu neuron
+            relu_split_hyperplane(A, d):
+                Split the reachable set by a hyperplane Ax + d = 0
+            affine_map(W, b):
+                Affine map the reachable set through M and b
+            affine_map_negative(n):
+                Set nth dimension to zero
+            inter_lattice(edges_inter):
+                Generate a new lattice from the intersection and merge it to the original lattice
+            split_lattice(selected_vs):
+                Extract lattice according to vertices
+            extract_inter_lattice(faces):
+                Generate the lattice from the intersection between the original lattice with target hyperplane
+            extract_lattice(faces, n):
+                Generate a row lattice from the intersection between the original lattice with target hyperplane
+            test_face_num(alattice):
+                Check the correctness of the number of each dimensional faces
+
+
+    """
     def __init__(self, lattice, vertices, dim, M, b):
         """
         Constructs all the necessary attributes for the polytope object
@@ -372,7 +404,7 @@ class FlatticeFFNN:
 
     def relu_split(self, neuron_pos_neg):
         """
-        Split the polytope in a relu neuron
+        Split the reachable set in a relu neuron
 
             Parameters:
                 neuron_pos_neg (int): index of the target neuron in the layer
@@ -440,7 +472,7 @@ class FlatticeFFNN:
 
     def relu_split_hyperplane(self, A, d):
         """
-        Split the polytope by a hyperplane Ax + d = 0
+        Split the reachable set by a hyperplane Ax + d = 0
 
             Parameters:
                 A (np.ndarray): Vector
@@ -503,7 +535,7 @@ class FlatticeFFNN:
 
     def affine_map(self, W, b):
         """
-        Affine map the polytope through M and b
+        Affine map the reachable set through M and b
 
             Parameters:
                 W (np.ndarray): Matrix
@@ -568,17 +600,17 @@ class FlatticeFFNN:
         return alattice
 
 
-    def extract_inter_lattice(self, rfs):
+    def extract_inter_lattice(self, faces):
         """
         Generate the lattice from the intersection between the original lattice with target hyperplane
 
         Parameters:
-            rfs (list): Faces that intersects with the hyperplance
+            faces (list): Faces that intersects with the hyperplance
 
         Returns:
             alattice (list): All new faces generated from the intersection
         """
-        alattice = self.extract_lattice(rfs, 1)
+        alattice = self.extract_lattice(faces, 1)
         # edit the bottom layer
         for key in alattice[0].keys():
             alattice[0][key][0] = set()
@@ -588,12 +620,12 @@ class FlatticeFFNN:
         return alattice
 
 
-    def extract_lattice(self, rfs, n):
+    def extract_lattice(self, faces, n):
         """
         Generate a row lattice from the intersection between the original lattice with target hyperplane
 
         Parameters:
-            rfs (list): Faces that intersects with the hyperplane
+            faces (list): Faces that intersects with the hyperplane
             n (int): Dimensionaloity to start the extraction
 
         Returns:
@@ -601,7 +633,7 @@ class FlatticeFFNN:
         """
         alattice = []
         last_aset_temp = set()
-        rfs_temp = rfs
+        rfs_temp = faces
         for i in range(n, self.dim+1):
             dict_temp = cln.OrderedDict()
             next_aset_temp = set()
