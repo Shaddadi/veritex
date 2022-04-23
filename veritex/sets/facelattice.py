@@ -378,8 +378,8 @@ class FlatticeFFNN:
                 neuron_pos_neg (int): index of the target neuron in the layer
 
             Returns:
-                subset0 (Flattice): an output set
-                subset1 (Flattice): an output set
+                positive_fl (Flattice): an output set
+                negative_fl (Flattice): an output set
         """
         elements = np.matmul(self.vertices, self.M[neuron_pos_neg,:].T)+self.b[neuron_pos_neg,:].T
         positive_bool = (elements>0)
@@ -449,6 +449,7 @@ class FlatticeFFNN:
             Returns:
                 negative_fl (Flattice): Subset locating in the halfspace, Ax + d <= 0
         """
+
         A_new = np.dot(A,self.M)
         d_new = np.dot(A, self.b) +d
         elements = np.dot(A_new, self.vertices.T) + d_new
@@ -524,7 +525,14 @@ class FlatticeFFNN:
 
 
     def inter_lattice(self, edges_inter):
-        # get the lattice all the faces of which intersect with target hyperplane
+        """
+        Generate a new lattice from the intersection and merge it to the original lattice
+
+        Parameters:
+            edges_inter (list): Edges that intersects with the hyperplane
+
+        """
+
         inter_faces = edges_inter
         inter_lattice_orig = self.extract_inter_lattice(inter_faces)
         # copy new_lattice with different addresses
@@ -544,19 +552,32 @@ class FlatticeFFNN:
 
 
     def split_lattice(self, selected_vs):
-        # extract lattice according to vertices
-        alattice = self.extract_vertex_lattice(selected_vs)
-        return alattice
+        """
+        Extract lattice according to vertices
 
+        Parameters:
+            selected_vs (list): Indices of the veritces
 
-    def extract_vertex_lattice(self, indx):
+        Returns:
+            alattice (list): Face lattice extracted
+        """
+
         temp = list(self.lattice[0].keys())
-        vertex = [temp[i] for i in indx]
+        vertex = [temp[i] for i in selected_vs]
         alattice = self.extract_lattice(vertex, 0)
         return alattice
 
 
     def extract_inter_lattice(self, rfs):
+        """
+        Generate the lattice from the intersection between the original lattice with target hyperplane
+
+        Parameters:
+            rfs (list): Faces that intersects with the hyperplance
+
+        Returns:
+            alattice (list): All new faces generated from the intersection
+        """
         alattice = self.extract_lattice(rfs, 1)
         # edit the bottom layer
         for key in alattice[0].keys():
@@ -568,6 +589,16 @@ class FlatticeFFNN:
 
 
     def extract_lattice(self, rfs, n):
+        """
+        Generate a row lattice from the intersection between the original lattice with target hyperplane
+
+        Parameters:
+            rfs (list): Faces that intersects with the hyperplane
+            n (int): Dimensionaloity to start the extraction
+
+        Returns:
+            alattice (list): All new faces generated from the intersection
+        """
         alattice = []
         last_aset_temp = set()
         rfs_temp = rfs
@@ -586,18 +617,24 @@ class FlatticeFFNN:
         return alattice
 
 
-    def test_face_num(self, hss):
+    def test_face_num(self, alattice):
+        """
+        Check the correctness of the number of each dimensional faces
+
+        Parameters:
+            alattice (list): Face lattice structure
+        """
         for m in range(self.dim-1):
-            if m + 1 > len(hss):
+            if m + 1 > len(alattice):
                 break
-            face_m0 = hss[m]
-            face_m1 = hss[m + 1]
+            face_m0 = alattice[m]
+            face_m1 = alattice[m + 1]
             f1_f0 = set()
-            for k in hss[m + 1].keys():
-                f1_f0.update(hss[m + 1][k][0])
+            for k in alattice[m + 1].keys():
+                f1_f0.update(alattice[m + 1][k][0])
             f0_f1 = set()
-            for k in hss[m].keys():
-                f0_f1.update(hss[m][k][1])
+            for k in alattice[m].keys():
+                f0_f1.update(alattice[m][k][1])
             if len(f1_f0) != len(face_m0):
                 print('f1_f0', m)
             if len(f0_f1) != len(face_m1):
