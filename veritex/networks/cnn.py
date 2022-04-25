@@ -6,28 +6,28 @@ import torch.nn as nn
 import torch.multiprocessing
 from torch.autograd import Variable
 import matplotlib.pyplot as plt
-import cubelattice as cl
+import veritex.sets.cubelattice as cl
 import scipy.io as sio
-import inconfig
+import logging
 import pickle
 import time
 import sys
+import os
 
 
 class Flatten(nn.Module):
     def forward(self, input):
         return torch.flatten(input,1)
 
-class network:
+class Network:
     def __init__(self, net, image, label, attack_pos, layer_gradients,
-                 is_cuda=False, top_dims=1):
+                 is_cuda=False, relaxation=1):
 
-        self.pool = None
         self.class_label = None
         self.flatten_pos = None # the position of the flatten function in layers
         self.is_cuda = is_cuda
         self.layer_gradients = layer_gradients
-        self.top_dims = top_dims # top_dims<1 indicates under approximation
+        self.relaxation = relaxation # relaxation<1 indicates under approximation
         self.label = label
         self.start_time = 0
 
@@ -39,7 +39,7 @@ class network:
         self.all_inputs = self.forward_layer_input(image)
 
         self.all_range_pos, self.all_attack_pos = self.layers_range(attack_pos)
-        if self.top_dims < 1:
+        if self.relaxation < 1:
             self.indices_selected_layers = self.get_target_indices()
 
         self._layer = None
@@ -69,18 +69,18 @@ class network:
 
     def forward_layer_input(self, image):
         if self.is_cuda:
-            im = copy.deepcopy(image).cuda()
+            im = cp.deepcopy(image).cuda()
             all_inputs = [im.cpu().numpy()]
             for i in range(len(self.sequential)):
                 im = self.sequential[i](im)
-                all_inputs.append(copy.deepcopy(im.cpu().numpy()))
+                all_inputs.append(cp.deepcopy(im.cpu().numpy()))
 
         else:
-            im = copy.deepcopy(image)
+            im = cp.deepcopy(image)
             all_inputs = [im.numpy()]
             for i in range(len(self.sequential)):
                 im = self.sequential[i](im)
-                all_inputs.append(copy.deepcopy(im.numpy()))
+                all_inputs.append(cp.deepcopy(im.numpy()))
 
         self.class_label = np.argmax(all_inputs[-1],1)
 
@@ -92,24 +92,18 @@ class network:
         layer_fls = [initial_image_fl]
         for self._layer in range(self.layer_num):
             layer_name = type(self.sequential[self._layer]).__name__
-            print('***************************************')
-            print('Layer type: ', layer_name)
-            t0 = time.time()
+            # print('***************************************')
+            # print('Layer type: ', layer_name)
+            # t0 = time.time()
 
             self.reach_single_layer(layer_fls)
 
-            print('Time: ', time.time()-t0)
-            print('Layer: ', self._layer, '/', self.layer_num)
-            print('Number of sets: ', len(layer_fls))
-            print('\n')
+            # print('Time: ', time.time()-t0)
+            # print('Layer: ', self._layer, '/', self.layer_num)
+            # print('Number of sets: ', len(layer_fls))
+            # print('\n')
 
-        layer_fls_new = []
-        for afl in layer_fls:
-            temp = []
-            temp.append(afl.vertices)
-            temp.append(afl.vertices_init)
-            layer_fls_new.append(temp)
-
+        layer_fls_new = [[afl.vertices, afl.vertices_init] for afl in layer_fls]
         return layer_fls_new
 
 
@@ -139,7 +133,7 @@ class network:
             if layer < self.flatten_pos:
                 pos = self.all_attack_pos[layer]
                 grads_pos = gradients[:, pos[0][0]:pos[1][0] + 1, pos[0][1]:pos[1][1] + 1]
-                tops = int(np.ceil(self.top_dims*grads_pos.shape[0]*grads_pos.shape[1]*grads_pos.shape[2]))
+                tops = int(np.ceil(self.relaxation*grads_pos.shape[0]*grads_pos.shape[1]*grads_pos.shape[2]))
                 grads_pos_faltten = grads_pos.flatten()
                 _, indices_topk = torch.topk(grads_pos_faltten, tops)
 
@@ -156,7 +150,7 @@ class network:
 
             else:
                 grads_pos = gradients
-                tops = int(np.ceil(self.top_dims *grads_pos.shape[0]))
+                tops = int(np.ceil(self.relaxation *grads_pos.shape[0]))
                 _, indices_topk = torch.topk(grads_pos, tops)
                 indices_new_topk = indices_topk.tolist()
 
@@ -365,7 +359,7 @@ class network:
         if new_neurons.shape[0] == 0:
             return [im_fl]
 
-        if self.top_dims<1 and (tuple(new_neurons[0]) not in self.indices_selected_layers[self._layer]):
+        if self.relaxation<1 and (tuple(new_neurons[0]) not in self.indices_selected_layers[self._layer]):
             im_fl.fast_reach = True
         fls = self.split_facelattice(im_fl, new_neurons[0], 'relu')
 
@@ -388,7 +382,7 @@ class network:
         if new_neurons.shape[0] == 0:
             return [im_fl]
 
-        if self.top_dims<1 and (new_neurons[0] not in self.indices_selected_layers[self._layer]):
+        if self.relaxation<1 and (new_neurons[0] not in self.indices_selected_layers[self._layer]):
             im_fl.fast_reach = True
         fls = self.split_facelattice(im_fl, new_neurons[0], 'relu2')
         new_neurons = new_neurons[1:]
@@ -424,7 +418,7 @@ class network:
         elif split_type =='relu2':
             pos_fl, neg_fl = im_fl.single_split_relu2(aneuron)
         else:
-            print('Split type is not defined!\n')
+            sys.exit('Split type is not defined!\n')
 
         outputs = []
         if pos_fl:
@@ -484,7 +478,7 @@ class network:
         fls_temp = [image_fl]
         for hp in hyperplanes:
             fls_temp_hp = []
-            if self.top_dims<1 and (tuple(hp[0]) not in self.indices_selected_layers[self._layer]) and \
+            if self.relaxation<1 and (tuple(hp[0]) not in self.indices_selected_layers[self._layer]) and \
                     (tuple(hp[1]) not in self.indices_selected_layers[self._layer]):
                 temp_fast = True
             else:
@@ -560,13 +554,13 @@ class network:
         image_fl = clattice.to_facelattice()
         return image_fl
 
-    def __getstate__(self):
-        self_dict = self.__dict__.copy()
-        del self_dict['pool']
-        return self_dict
-
-    def __setstate__(self, state):
-        self.__dict__.update(state)
+    # def __getstate__(self):
+    #     self_dict = self.__dict__.copy()
+    #     del self_dict['pool']
+    #     return self_dict
+    #
+    # def __setstate__(self, state):
+    #     self.__dict__.update(state)
 
 
 class Sequence():
@@ -600,96 +594,70 @@ class Hook():
 
 
 class Method:
-    def __init__(self, model, image, label, epsilon, file_path, pixel_block=[1,1],
-                 mean=np.array([0,0,0]), std=np.array([1,1,1]),num_core=1, top_dims=1, target=None,  is_cuda=False):
+    def __init__(self, model, image, label, file_path,
+                 attack_block=(1,1),
+                 epsilon=0.001,
+                 relaxation=1,
+                 target=None,
+                 mean=np.array([0,0,0]),
+                 std=np.array([1,1,1]),
+                 is_cuda=False):
+
         self.model = model
-        self.image_orig = image[0]
-        self.image= cp.deepcopy(image[0])
+        self.image_orig = cp.deepcopy(image)
+        self.image = image
         self.label = label
-        self.pixel_block = pixel_block
+        self.attack_block = attack_block
         self.attack_target = target
-        self.pool = None
-        self.num_core = num_core
-        self.is_cuda = is_cuda
         self.epsilon = epsilon
 
+        self.num_core = torch.multiprocessing.cpu_count()-1
+        self.is_cuda = is_cuda
+
         self.mean, self.std = mean, std
-        self.attack_pos, self.layer_gradients = self.layer_gradients()
-        
-        self.poss = self.attack_pos[0]
+        self.attack_poss_ranks, self.layer_gradients = self.layer_gradients()
+        self.attack_poss = self.attack_poss_ranks[0]
+
         self.elapsed_time = 0
+        if not os.path.isdir(file_path):
+            os.mkdir(file_path)
         self.savepath = file_path
-        self.top_dims = top_dims
+        self.relaxation = relaxation
         if self.attack_target == self.label:
-            sys.exit()
-
-
-    def simulate(self, ablock):
-        self.attack_range_3channel(self.poss)
-        lbs = self.attack_range[0].flatten()
-        ubs = self.attack_range[1].flatten()
-        num = 100000
-
-        rands = []
-        for idx in range(len(lbs)):
-            lb = lbs[idx]
-            ub = ubs[idx]
-            rands.append(np.random.uniform(lb, ub, num))
-
-        rands = np.array(rands).transpose().reshape((num, 3, ablock[0], ablock[1]))
-
-        image = self.image_orig.numpy()
-        ap = self.poss
-        outputs = np.array([])
-        for n in range(num//100):
-            sub = rands[n*100:(n+1)*100]
-            image_frame = image.repeat(sub.shape[0], 0)
-            image_frame[:, :, ap[0][0]: ap[1][0] + 1, ap[0][1]: ap[1][1] + 1] = sub
-            image_frame = torch.tensor(image_frame)
-            if n==0:
-                outputs = self.model(image_frame.cuda()).cpu().numpy()
-            else:
-                outputs = np.concatenate((outputs, self.model(image_frame.cuda()).cpu().numpy()), axis=0)
-
-        outputs = np.array(outputs)
-        if self.model_name == 'vgg16':
-            with open('./results/simulation.pkl', 'wb') as f:
-                pickle.dump([outputs], f)
-        else:
-            with open('./results-distilled/simulation.pkl', 'wb') as f:
-                pickle.dump([outputs], f)
-
+            sys.exit('Label should not be the attack target')
 
 
     def reach(self):
         t0 = time.time()
-        net = network(self.model, self.image, self.label, self.attack_pos[0],
-                           self.layer_gradients, top_dims=self.top_dims, is_cuda=self.is_cuda)
+        net = Network(self.model, self.image, self.label, self.attack_poss,
+                           self.layer_gradients, relaxation=self.relaxation, is_cuda=self.is_cuda)
 
-        self.attack_range_3channel(self.poss)
-        all_input_fls = inconfig.partition_input(self.attack_range,  pnum=4,
-                                                 sp=self.poss)
-        net.pool = torch.multiprocessing.Pool(self.num_core)  # multiprocessing
+        self.attack_range = self.attack_range_3channel()
+        all_input_fls = cl.partition_input(self.attack_range, pnum=4, poss=self.attack_poss)
+        pool = torch.multiprocessing.Pool(self.num_core)  # multiprocessing
 
         outputSets = []
-        outputSets.extend(net.pool.imap(net.regular_reach, all_input_fls))
-        net.pool.close()
+        outputSets.extend(pool.imap(net.regular_reach, all_input_fls))
+        pool.close()
         self.elapsed_time = time.time() - t0
         all_fls = [item for sublist in outputSets for item in sublist]
 
-        print('Neurons: '+str(self.top_dims*100)+'%')
-        print('Epsilon: ', self.epsilon)
-        print('Running Time: ', self.elapsed_time)
-        print('Number of Output Sets: ', len(all_fls))
-        with open(self.savepath+'.pkl', 'wb') as f:
-            pickle.dump([all_fls, self.label.numpy(), self.label2.numpy(), self.elapsed_time, self.attack_pos[0], self.top_dims], f)
+        logging.info(f'Running time: {self.elapsed_time}')
+        logging.info(f'Number of Output Sets: {len(all_fls)}')
+        filename = f'image_label_{self.label.numpy()}_epsilon' \
+                   f'_{self.epsilon}_relaxation_{self.relaxation}'
+        with open(self.savepath+'/'+filename+'.pkl', 'wb') as f:
+            pickle.dump({'Output reachable sets':all_fls,
+                         'Image label':self.label.numpy(),
+                         'Running time':self.elapsed_time,
+                         'Attack pixels':self.attack_poss,
+                         'Relaxtion factor':self.relaxation}, f)
 
-        sio.savemat(self.savepath+'.mat', {'all_fls': all_fls, 'label': self.label.numpy(), 'label2': self.label2.numpy()})
+        return all_fls
 
 
-
-    def attack_range_3channel(self, pos):
-        blocks = self.image[:,:,pos[0][0]:(pos[1][0]+1), pos[0][1]:(pos[1][1]+1)]
+    def attack_range_3channel(self):
+        blocks = self.image[:,:,self.attack_poss[0][0]:(self.attack_poss[1][0]+1), self.attack_poss[0][1]:(self.attack_poss[1][1]+1)]
 
         for n in range(3):
             blocks[0,n,:,:] = blocks[0,n,:,:]*self.std[n]+self.mean[n]
@@ -703,150 +671,37 @@ class Method:
             ub[0,n,:,:] = (ub[0,n,:,:]-self.mean[n])/self.std[n]
             lb[0,n,:,:] = (lb[0,n,:,:]-self.mean[n])/self.std[n]
 
-        self.attack_range=[lb[0].numpy(),ub[0].numpy()]
+        return [lb[0].numpy(), ub[0].numpy()]
 
 
+    def simulate(self):
+        self.attack_range = self.attack_range_3channel()
+        lbs = self.attack_range[0].flatten()
+        ubs = self.attack_range[1].flatten()
+        num = 10000
 
-    def falsification_one_step(self):
-        t0 = time.time()
-        self.flag = True
-        self.attack_pos_all = []
-        self.adv_image = None
-        self.adv_label = None
-        pool = torch.multiprocessing.Pool(self.num_core)  # multiprocessing
+        rands = []
+        for idx in range(len(lbs)):
+            lb = lbs[idx]
+            ub = ubs[idx]
+            rands.append(np.random.uniform(lb, ub, num))
 
-        pos = self.attack_pos[0]
+        rands = np.array(rands).transpose().reshape((num, 3, self.attack_block[0], self.attack_block[1]))
 
-        net = network(cp.deepcopy(self.model), self.image, self.label, pos,
-                           self.layer_gradients, top_dims=self.top_dims, is_cuda=self.is_cuda)
-        net.pool = pool
-        self.attack_range_3channel(pos)
-        all_input_fls = inconfig.partition_input(self.attack_range, pnum=5,
-                                                 sp=pos)
-
-        outputSets = []
-        outputSets.extend(net.pool.imap(net.regular_reach, all_input_fls))
-
-        all_output_fls = [item for sublist in outputSets for item in sublist]
-
-        self.elapsed_time = time.time() - t0
-        print('Number of outputs: ', len(all_output_fls))
-        print('Time: ', self.elapsed_time)
-
-        self.attack_pos_all.append(pos)
-        new_output = self.find_optimal_image_one_step(all_output_fls)
-
-        pool.close()
-
-        ori_output = self.model(self.image_orig)[0]
-        _, labels_adv = torch.topk(new_output,2)
-        for l in labels_adv:
-            if l != self.label[0]:
-                break
-
-        return torch.tensor([[ori_output[self.label[0]], ori_output[l]],
-         [new_output[self.label[0]], new_output[l]]]).numpy()
-
-
-    def falsification(self):
-        t0 = time.time()
-        self.flag = True
-        self.attack_pos_all = []
-        self.adv_image = None
-        self.adv_label = None
-        pool = torch.multiprocessing.Pool(self.num_core)  # multiprocessing
-
-        for pos in self.attack_pos:
-            net = network(self.model, self.model_name, self.image, self.label, pos,
-                               self.layer_gradients, top_dims=self.top_dims, is_cuda=self.is_cuda)
-            net.pool = pool
-            self.attack_range_3channel(pos)
-            all_input_fls = inconfig.partition_input(self.attack_range, pnum=5,
-                                                     sp=pos)
-
-            outputSets = []
-            outputSets.extend(net.pool.imap(net.regular_reach, all_input_fls))
-
-            all_output_fls = [item for sublist in outputSets for item in sublist]
-
-            self.elapsed_time = time.time() - t0
-            print('Number of outputs: ', len(all_output_fls))
-            print('Time: ', self.elapsed_time)
-
-            self.attack_pos_all.append(pos)
-            self.find_optimal_image(all_output_fls)
-
-            if not self.flag:
-                break
-
-        pool.close()
-
-
-    def find_optimal_image_one_step(self, all_output_fls):
-        min_value = 100000
-        ap = self.attack_pos_all[-1]
-        for afl in all_output_fls:
-            vs = afl[0]
-            diff = vs[:, self.label].T - vs.T
-            diff = np.delete(diff, self.label, 0)
-
-            index = np.argmin(diff)
-            min_val = diff.flatten()[index]
-            if min_val < min_value:
-                min_value = min_val
-                min_vs = vs
-                v_id = index % diff.shape[1]
-                self.image[:, :, ap[0][0]: ap[1][0] + 1, ap[0][1]: ap[1][1] + 1] = torch.tensor(afl[1][v_id, :, :, :])
-
-        new_output = torch.tensor(min_vs[0])
-        return new_output
-
-
-    def find_optimal_image(self, all_output_fls):
-        min_value = 100000
-        ap = self.attack_pos_all[-1]
-        for afl in all_output_fls:
-            vs = afl[0]
-            diff = vs[:, self.label].T - vs.T
-            diff = np.delete(diff, self.label, 0)
-
-            index = np.argmin(diff)
-            min_val = diff.flatten()[index]
-            if min_val < min_value:
-                min_value = min_val
-                min_vs = vs
-                v_id = index % diff.shape[1]
-                self.image[:, :, ap[0][0]: ap[1][0] + 1, ap[0][1]: ap[1][1] + 1] = torch.tensor(afl[1][v_id, :, :, :])
-
-        if min_value<0:
-
-            y = torch.tensor(min_vs[[0]])
-            _, self.adv_label = torch.max(y, 1)
-
-            orig_image = torch.squeeze(self.image_orig)
-            orig_image = orig_image.permute([1, 2, 0])
-            adv_image = torch.squeeze(self.image)
-            for k in range(3):
-                adv_image[k,:,:] = adv_image[k,:,:]*self.std[k] + self.mean[k]
-            self.adv_image = adv_image.permute([1, 2, 0])
-
-            with open(self.savepath+'.pkl', 'wb') as f:
-                pickle.dump([self.elapsed_time, self.attack_pos_all, orig_image.numpy(),
-                             self.adv_image.numpy(), self.label.numpy(), self.adv_label.numpy()], f)
-
-            plt.imshow(self.adv_image)
-            if self.model_name =='cifar10':
-                plt.title('Class '+self.classes[self.label[0]]+'; '+'Adv Class '+ self.classes[self.adv_label]+
-                           '; '+'Pixels changed '+str(len(self.attack_pos_all)), fontsize=18)
+        image = self.image_orig.numpy()
+        ap = self.attack_poss
+        outputs = np.array([])
+        for n in range(num//100):
+            sub = rands[n*100:(n+1)*100]
+            image_frame = image.repeat(sub.shape[0], 0)
+            image_frame[:, :, ap[0][0]: ap[1][0] + 1, ap[0][1]: ap[1][1] + 1] = sub
+            image_frame = torch.tensor(image_frame)
+            if n==0:
+                outputs = self.model(image_frame).numpy()
             else:
-                plt.title('Class ' + str(self.label.numpy()) + '; ' + 'Adv Class '+str(self.adv_label[0].numpy())+
-                           '; '+'Pixels changed '+str(len(self.attack_pos_all)), fontsize=18)
-            plt.savefig(self.savepath+'.png')
+                outputs = np.concatenate((outputs, self.model(image_frame).numpy()), axis=0)
 
-            print('Adversarial examplea are found!')
-            print('Pixels changed: ', len(self.attack_pos_all))
-            self.flag = False
-
+        return outputs
 
 
     def layer_gradients(self):
@@ -892,19 +747,19 @@ class Method:
         im_h = self.image.shape[2]
         im_w = self.image.shape[3]
         image_abs_grads = []
-        for i in range(im_h - self.pixel_block[0]):
-            for j in range(im_w-self.pixel_block[1]):
-                tb_grad = image_grad[:,i:(i+self.pixel_block[0]),j:(j+self.pixel_block[1])]
+        for i in range(im_h - self.attack_block[0]):
+            for j in range(im_w-self.attack_block[1]):
+                tb_grad = image_grad[:,i:(i+self.attack_block[0]),j:(j+self.attack_block[1])]
                 abs_grads = torch.sum(torch.abs(tb_grad))
                 image_abs_grads.append(abs_grads)
 
         image_abs_grads = torch.tensor(image_abs_grads)
         idx_sorted = image_abs_grads.argsort(descending=True)
-        attack_image_pos = []
+        attack_poss_ranks = [] # Rank pixel blocks in terms of their sensitivity
         for idx in idx_sorted:
-            hb = idx//(im_h - self.pixel_block[0])
-            wb = idx%(im_w-self.pixel_block[1])
-            attack_image_pos.append([np.array([hb, wb]),
-                                     np.array([hb+self.pixel_block[0]-1, wb+self.pixel_block[1]-1])])
+            hb = torch.div(idx,(im_h - self.attack_block[0]), rounding_mode='trunc')
+            wb = idx%(im_w-self.attack_block[1])
+            attack_poss_ranks.append([np.array([hb, wb]),
+                                     np.array([hb+self.attack_block[0]-1, wb+self.attack_block[1]-1])])
 
-        return attack_image_pos, layer_gradients
+        return attack_poss_ranks, layer_gradients

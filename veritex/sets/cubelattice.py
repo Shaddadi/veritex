@@ -15,7 +15,7 @@ class CubeLattice:
             bs (np.ndarray): Intervals of dimensions
             lb (list): Lower bound of the cube
             ub (list): Upper bound of the cube
-            sp (list): Target dimensions for reachability analysis
+            poss (list): Target dimensions for reachability analysis
             vertices (np.ndarray): Vertices of the cube
             lattice (list): Containment relation bewteen (k)-dim faces and (k-1)-dim faces
             id_vals (dict): Mapping from faces to their references
@@ -23,14 +23,14 @@ class CubeLattice:
             ref_vertex: Mapping from references to vertex
     """
 
-    def __init__(self, lbs, ubs, sp=None):
+    def __init__(self, lbs, ubs, poss=None):
         self.dim = len(lbs)
         self.bs = np.array([lbs, ubs]).T
         self.lbs = lbs
         self.ubs = ubs
         self.M = np.eye(len(lbs))
         self.b = np.zeros((len(lbs),1))
-        self.sp = sp
+        self.poss = poss
         self.vertices = self.compute_vertex(self.lbs, self.ubs)
         self.lattice, self.id_vals, self.vertices_ref, self.ref_vertex = self.initial_lattice()
         for m in range(1,self.dim):
@@ -42,8 +42,8 @@ class CubeLattice:
 
 
     def to_FlatticeCNN(self): #shape height x weight
-        assert self.sp is not None
-        self.vertices = self.vertices.reshape((self.vertices.shape[0], 3, self.sp[1][0]-self.sp[0][0]+1, self.sp[1][1]-self.sp[0][1]+1))
+        assert self.poss is not None
+        self.vertices = self.vertices.reshape((self.vertices.shape[0], 3, self.poss[1][0]-self.poss[0][0]+1, self.poss[1][1]-self.poss[0][1]+1))
         return fl.FlatticeCNN(self.lattice, self.vertices, self.vertices, self.dim)
 
 
@@ -161,3 +161,66 @@ class reference:
     """
     def __init__(self, val):
         self._value = val  # just refers to val, no copy
+
+
+
+def partition_input(input_range, pnum, poss):
+    """
+    Partition one input range into mulitple sub inputs in Flattice
+
+    Parameters:
+        input_range (list): Lower bounds and upper bounds
+        pnum (int): Number of each sub ranges in each dimension
+        poss (list): Positions of the pixel block
+
+    Returns:
+        all_inputs (list): All sub inputs in Flattice
+    """
+    mean, std = [0, 0, 0], [1, 1, 1],
+    input_range[0] = ((input_range[0].transpose((1,2,0))-mean)/std).transpose((2,0,1))
+    input_range[1] = ((input_range[1].transpose((1,2,0))-mean)/std).transpose((2,0,1))
+
+    ranges = divide_range(input_range, pnum)
+    range_comb = list(itertools.product(*ranges))
+    all_inputs = []
+    for acomb in range_comb:
+        lbs = [e[0] for e in acomb]
+        ubs = [e[1] for e in acomb]
+        aset = CubeLattice(lbs, ubs, poss=poss).to_FlatticeCNN()
+        all_inputs.append(aset)
+
+    return all_inputs
+
+
+def divide_range(input_range, pnum):
+    """
+    Split input ranges into sub ranges
+
+    Parameters:
+        input_range (list): Lower bounds and upper bounds
+        pnum (int): Number of each sub ranges in each dimension
+
+    Returns:
+        subs (list): Sub ranges
+    """
+    minv = input_range[0].flatten()
+    maxv = input_range[1].flatten()
+
+    subs = []
+    for i in range(len(minv)):
+        alist = []
+        min = minv[i]
+        max = maxv[i]
+        ave = (max - min) / pnum
+        for n in range(pnum):
+            if n == 0:
+                temp = [min, min + ave]
+            if n == pnum - 1:
+                temp = [min + (pnum - 1) * ave, max]
+            else:
+                temp = [min + n * ave, min + (n + 1) * ave]
+            alist.append(temp)
+
+        subs.append(alist)
+
+    return subs

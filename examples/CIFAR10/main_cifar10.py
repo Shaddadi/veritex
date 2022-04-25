@@ -1,12 +1,11 @@
 
-import sys
-import os
 import torch.multiprocessing
-sys.path.insert(0, '../src')
-import matlab.engine
-import argparse
-import methods
-import utils
+import matplotlib.pyplot as plt
+from veritex.networks.cnn import Method
+import data.cifar_torch_net as cifar10
+from veritex.utils.plot_poly import plot_polytope2d
+import logging
+import numpy as np
 
 
 classes = ('plane', 'car', 'bird', 'cat',
@@ -15,47 +14,59 @@ classes = ('plane', 'car', 'bird', 'cat',
 
 if __name__ == '__main__':
     torch.multiprocessing.set_start_method('spawn',force=True)
+    # Creating and Configuring Logger
+    logger = logging.getLogger()
+    for hdlr in logger.handlers[:]:  # remove all old handlers
+        logger.removeHandler(hdlr)
+    Log_Format = logging.Formatter('%(levelname)s %(asctime)s - %(message)s')
+    logger.setLevel(logging.INFO)
+    file_handler = logging.FileHandler(f'cifar10.log', 'w+')
+    file_handler.setFormatter(Log_Format)
+    logger.addHandler(file_handler)
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(Log_Format)
+    logger.addHandler(console_handler)
 
-    parser = argparse.ArgumentParser(description='Paramerers Settings')
-    parser.add_argument('--image', type=int, default=1, help='target image')
-    #parser.add_argument('--cores', type=int, default=1, help='number of cores')
-    parser.add_argument('--epsilon', type=float, default=1, help='epsilon')
-    parser.add_argument('--relaxation', type=float, default=0.01, help='relaxation')
-    parser.add_argument('--falsify', action='store_true')
-    #parser.add_argument('--is_cuda', action='store_true', help='GPU usage')
+    # Load cifar10 model
+    model = cifar10.Net()
+    model.load_state_dict(torch.load('data/cifar_torch_net.pth', map_location=torch.device('cpu')))
+    model.eval()
 
-    args = parser.parse_args()
-    n = args.image
-    cores = torch.multiprocessing.cpu_count()-1
-    epsilon = args.epsilon
-    top_dims = args.relaxation
-    falsify = args.falsify
-    is_cuda = False
-    pixel_block = [1,1]
+    # Load target image
+    [image, label, target_label, _] = torch.load('data/images/3.pt')
 
-    print('Running with '+str(cores)+' CPUs')
-    model = utils.load_cifar10()
-    image = utils.load_classfied_images_cifar10(model, n)
+    attack_block = (1,1)
+    epsilon = 0.02
+    relaxation = 0.6
 
-    file_path = './results'
-    if not os.path.isdir(file_path):
-        os.mkdir(file_path)
-    file_path += '/falsify_'+ str(falsify) +'_epsilon_'+str(epsilon)+'_top_dims_' +str(top_dims)
-    if not os.path.isdir(file_path):
-        os.mkdir(file_path)
+    logging.info(f'Size of block: {attack_block}')
+    logging.info(f'Perturbation epsilon: {epsilon}')
+    logging.info(f'Neuron relaxation: {relaxation * 100} %')
+    logging.info(f'Image label: {label}')
 
-    file_pathf = file_path + '/run_info' + str(n)
-    reach_model = methods.analysis_method(model, 'cifar10', image, epsilon, file_pathf, pixel_block =pixel_block,
-                                          top_dims=top_dims, num_core=cores, falsify=falsify, is_cuda=is_cuda)
-    reach_model.reach()
+    reach_model = Method(model, image, label, 'logs',
+                         attack_block=attack_block,
+                         epsilon=epsilon,
+                         relaxation=relaxation)
+    output_sets = reach_model.reach()
 
-    if not falsify:
-        print("Plotting in Matlab")
-        eng = matlab.engine.start_matlab()
-        eng.plot_sets_cifar10(file_path, n, nargout=0)
-        print("Plotting is done")
+    sims = reach_model.simulate()
 
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    dim0, dim1 = label.numpy(), target_label.numpy()
 
+    for item in output_sets:
+        out_vertices = item[0]
+        plot_polytope2d(out_vertices[:, [dim0, dim1]], ax, color='b', alpha=1.0, edgecolor='k', linewidth=0.0,zorder=2)
+
+    ax.plot(sims[:,dim0], sims[:,dim1],'k.',zorder=1)
+    ax.autoscale()
+    ax.set_xlabel('$y_' + str(dim0) + '$', fontsize=16)
+    ax.set_ylabel('$y_' + str(dim1) + '$', fontsize=16)
+    plt.tight_layout()
+    plt.show()
+    plt.close()
 
 
 

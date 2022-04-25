@@ -7,7 +7,7 @@ from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 
 
-def plot_polytope2d(set_vs, ax, color='r',alpha=1.0, edgecolor='k',linewidth=1.0, box=False):
+def plot_polytope2d(set_vs, ax, color='r',alpha=1.0, edgecolor='k',linewidth=1.0, box=False,zorder=1):
     try: # 2 dimensional hull
         hull = ConvexHull(set_vs)
         fs, ps  = hull.equations, hull.points
@@ -37,7 +37,7 @@ def plot_polytope2d(set_vs, ax, color='r',alpha=1.0, edgecolor='k',linewidth=1.0
         ps_final = set_vs
 
     poly = Polygon(ps_final, facecolor=color, alpha=alpha, edgecolor=edgecolor, linewidth=linewidth)
-    ax.add_collection(PatchCollection([poly], match_original=True))
+    ax.add_collection(PatchCollection([poly], match_original=True,zorder=zorder))
 
 
 def plot_polytope3d(set_vs, ax, color='r',alpha=1.0, edgecolor='k',linewidth=1.0):
