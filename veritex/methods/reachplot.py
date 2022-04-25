@@ -1,3 +1,12 @@
+"""
+These functions are used to visualize the 2D or 3D reachable domain of a DNN with respect to a safety property.
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+TODO: Add more visualization functions
+"""
+
 import sys
 import os.path
 import copy as cp
@@ -6,8 +15,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import multiprocessing
 import argparse
-from veritex.utils.load_nnet import NNet
 
+from veritex.utils.load_nnet import NNet
 from veritex.networks.ffnn import FFNN
 from veritex.utils.plot_poly import plot_polytope2d
 from veritex.methods.worker import Worker
@@ -22,12 +31,12 @@ def run(prop_list, network_path, dims, savename):
     """
     Plot reachable domains of the network model on the safety properties
 
-    Parameters:
+    Parameters
+    --------
         prop_list (list): A list of paths to safety properties
         network_path (str): Path to the network model
         dims (list): Dimensions to project reachable domains on
         savename (str): Path to save figures
-
     """
     if network_path[-4:] == 'onnx':
         torch_model = load_ffnn_onnx(network_path)
@@ -58,6 +67,7 @@ def run(prop_list, network_path, dims, savename):
     fig = plt.figure(figsize=(2.0, 2.67))
     ax = fig.add_subplot(111)
     dnn0 = FFNN(torch_model, unsafe_inputd=True, exact_outputd=True)
+
     # Compute the exact unsafe output domains of the network model over safety properties
     for prop in properties:
         dnn0.set_property(prop)
