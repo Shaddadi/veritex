@@ -33,7 +33,7 @@ if __name__ == '__main__':
     model.eval()
 
     # Load target image
-    [image, label, target_label, _] = torch.load('data/images/3.pt')
+    [image, label, target_label, _] = torch.load('data/images/1.pt')
 
     attack_block = (1,1)
     epsilon = 0.02
@@ -62,8 +62,9 @@ if __name__ == '__main__':
 
     ax.plot(sims[:,dim0], sims[:,dim1],'k.',zorder=1)
     ax.autoscale()
-    ax.set_xlabel('$y_' + str(dim0) + '$', fontsize=16)
-    ax.set_ylabel('$y_' + str(dim1) + '$', fontsize=16)
+    ax.set_xlabel(f'Correct class: $y_{dim0}$', fontsize=16)
+    ax.set_ylabel(f'Adversarial class: $y_{dim1}$', fontsize=16)
+    plt.title('Reachability analysis of CNNs with input pixels under perturbation. \nBlue area represents the reachable domain. \nBlack dots represent simultations')
     plt.tight_layout()
     plt.show()
     plt.close()

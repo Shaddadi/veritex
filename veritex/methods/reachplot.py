@@ -8,8 +8,6 @@ TODO: Add more visualization functions
 """
 
 import sys
-import os.path
-import copy as cp
 import multiprocessing as mp
 import matplotlib.pyplot as plt
 import numpy as np
@@ -31,8 +29,7 @@ def run(prop_list, network_path, dims, savename):
     """
     Plot reachable domains of the network model on the safety properties
 
-    Parameters
-    --------
+    Parameters:
         prop_list (list): A list of paths to safety properties
         network_path (str): Path to the network model
         dims (list): Dimensions to project reachable domains on
