@@ -50,7 +50,7 @@ if __name__ == '__main__':
                          relaxation=relaxation)
     output_sets = reach_model.reach()
 
-    sims = reach_model.simulate()
+    sims = reach_model.simulate(num=10000)
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
