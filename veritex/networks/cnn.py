@@ -466,7 +466,7 @@ class Network:
             flag (bool): Help to determine the end of computation
 
         Returns:
-            all_fls (list): Input reachable sets and after computation it stores all output reachable sets
+            all_fls (list): All output reachable sets
         """
         if (neurons.shape[0] == 0) and flag:
             return [im_fl]
@@ -479,8 +479,8 @@ class Network:
             return [im_fl]
 
         if self.relaxation<1 and (tuple(new_neurons[0]) not in self.layer_selected_neurons[self._layer]):
-            im_fl.fast_reach = True
-        fls = self.split_facelattice(im_fl, new_neurons[0], 'relu')
+            im_fl.fast_reach = True # Enable fast reachability analysis
+        fls = self.split_facelattice(im_fl, new_neurons[0], 'relu1')
 
         new_neurons = new_neurons[1:]
 
@@ -492,6 +492,17 @@ class Network:
 
 
     def relu_layer2(self, im_fl, neurons, flag=True):
+        """
+        Reachability analysis in ReLU layers. It is after the flatten layer
+
+        Parameters:
+            im_fl (FlatticeCNN): Input reachable set
+            neurons (np.ndarray): Indices of neurons to process
+            flag (bool): Help to determine the end of computation
+
+        Returns:
+            all_fls (list): All output reachable sets
+        """
         if (neurons.shape[0] == 0) and flag:
             return [im_fl]
 
@@ -502,7 +513,7 @@ class Network:
             return [im_fl]
 
         if self.relaxation<1 and (new_neurons[0] not in self.layer_selected_neurons[self._layer]):
-            im_fl.fast_reach = True
+            im_fl.fast_reach = True # Enable fast reachability analysis
         fls = self.split_facelattice(im_fl, new_neurons[0], 'relu2')
         new_neurons = new_neurons[1:]
 
@@ -513,7 +524,13 @@ class Network:
         return all_fls
 
 
-    def linear_layer(self,im_fl):
+    def linear_layer(self, im_fl):
+        """
+        Affine Mapping between layers
+
+        Parameters:
+            im_fl (FlatticeCNN): Input set and it becomes the output reachable set after the computation
+        """
         if self.is_cuda:
             im_input = im_fl.vertices
             # while self.check_gpu_and_block(im_input): pass
@@ -530,11 +547,22 @@ class Network:
 
 
     def split_facelattice(self, im_fl, aneuron, split_type):
-        if split_type=='relu':
+        """
+        Conduct split operation on a reachable set w.r.t. ReLU function in ReLU or Maxpool layers
+
+        Parameters:
+            im_fl (FlatticeCNN): Input set
+            aneuron (np.ndarray): Index of the ReLU neuron or function
+            split_type (str): Name of the layer
+
+        Outputs:
+            outputs (list): Output reachable sets
+        """
+        if split_type=='relu1': # ReLU layers before the Faltten layer
             pos_fl, neg_fl = im_fl.single_split_relu1(aneuron)
         elif split_type=='maxpool':
             pos_fl, neg_fl = im_fl.single_split_maxpool(aneuron)
-        elif split_type =='relu2':
+        elif split_type =='relu2': # ReLU layers before the Faltten layer
             pos_fl, neg_fl = im_fl.single_split_relu2(aneuron)
         else:
             sys.exit('Split type is not defined!\n')
@@ -544,11 +572,21 @@ class Network:
             outputs.append(pos_fl)
         if neg_fl:
             outputs.append(neg_fl)
-        # return cp.deepcopy(outputs)
+
         return outputs
 
 
     def get_valid_blocks(self, blocks_tosplit, indices):
+        """
+        Identify new blocks in Maxpool layers where an input set will be split
+
+        Parameters:
+            blocks_tosplit (np.ndarray): Block candidates
+            indices (np.ndarray): Indices of dimensions that are maximal in the max pooling
+
+        Returns:
+            valid_blocks (np.ndarray): New blocks
+        """
         if blocks_tosplit.shape[0]==0:
             flag_equ = (indices==indices[0,:,:,:])
             valid_blocks = np.asarray(np.nonzero(np.any(flag_equ==False, 0))).T
@@ -562,6 +600,18 @@ class Network:
 
 
     def maxpool2d_layer(self, image_fl, blocks_tosplit, flag=True):
+        """
+        Reachability analysis in Maxpool layers
+
+        Parameters:
+            image_fl (FlatticeCNN): Input set
+            blocks_tosplit (np.ndarray): Blocks where input sets are split
+            flag (bool): Help to determine the end of computation
+
+        Returns:
+            all_fls (list): All output reachable sets
+        """
+
         if self.is_cuda:
             self.sequential[self._layer].return_indices = True
             temp0 = torch.from_numpy(image_fl.vertices).cuda()
@@ -582,18 +632,21 @@ class Network:
             image_fl.vertices = layer_outs
             return [image_fl]
 
+        # Identify blocks where input sets are split
         blocks_tosplit_new = self.get_valid_blocks(blocks_tosplit, indices)
 
         if blocks_tosplit_new.shape[0]==0:
             image_fl.vertices = layer_outs
             return [image_fl]
 
+        # Derive hyperplanes that will split input sets
         ablock = blocks_tosplit_new[0]
         blocks_tosplit_new = blocks_tosplit_new[1:]
         indices_flatten = np.unique(indices[:,ablock[0],ablock[1],ablock[2]])
         aset_elements = [[ablock[0]]+self._slice_blocks[idx] for idx in indices_flatten]
         hyperplanes = list(itertools.combinations(aset_elements, 2))
 
+        # Conduct the split operation using each hyperplane
         fls_temp = [image_fl]
         for hp in hyperplanes:
             fls_temp_hp = []
@@ -617,7 +670,15 @@ class Network:
 
 
     def get_slice_blocks(self, range_to_process):
-        # single depth slice
+        """
+        Compute dimensions of the input that will be processed in max pooling layers
+
+        Parameters:
+            range_to_process (list): Dimension range to process
+
+        Returns:
+            blocks (list): All dimensions of the input to process
+        """
         width = range_to_process[1][1]-range_to_process[0][1]+1
         height = range_to_process[1][0]-range_to_process[0][0]+1
         blocks = []
@@ -630,6 +691,12 @@ class Network:
 
 
     def flatten_layer(self, image_fl):
+        """
+        Reachability analysis in Flatten layer
+
+        Parameters:
+            image_fl (FlatticeCNN): Input set and after the computation it becomes the output set
+        """
         ap = self.layer_attack_poss[self._layer]
         data_frame = cp.deepcopy(self._image_frame).repeat(image_fl.vertices.shape[0], 0)
         data_frame[:, :, ap[0][0]:ap[1][0] + 1, ap[0][1]:ap[1][1] + 1] = cp.deepcopy(image_fl.vertices)
@@ -637,6 +704,16 @@ class Network:
 
 
     def range_to_process_layer(self, attack_pos):
+        """
+        Compute the attack positions and the process range of inputs in one layer
+
+        Parameters:
+            attack_pos (list): Attack positions of the input images in the current layer
+
+        Returns:
+            range_to_process (list): Process range of inputs in the current layer
+            next_attack_pos (list): Attack positions of inputs in the next layer
+        """
         if type(self.sequential[self._layer]).__name__ == 'DataParallel':
             layer_function = self.sequential[self._layer].module
         else:
@@ -665,35 +742,14 @@ class Network:
 
         range_to_process = [lb, ub]
         next_attack_pos = [nmin, nmax]
+
         return range_to_process, next_attack_pos
-
-    def create_image_fl(self, image):
-        clattice = cl.cubelattice()
-        image_fl = clattice.to_facelattice()
-        return image_fl
-
-    # def __getstate__(self):
-    #     self_dict = self.__dict__.copy()
-    #     del self_dict['pool']
-    #     return self_dict
-    #
-    # def __setstate__(self, state):
-    #     self.__dict__.update(state)
-
-
-class Sequence():
-    def __init__(self, my_list):
-        self.my_list = my_list
-
-    def __getitem__(self, item):
-        return self.my_list[item]
-
-    def __len__(self):
-        return len(self.my_list)
-
 
 
 class Hook():
+    """
+    A class for the computation of gradients in CNNs
+    """
     def __init__(self, module=None, backward=False):
         self.input = None
         self.output = None
