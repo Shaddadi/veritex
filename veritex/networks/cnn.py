@@ -42,11 +42,22 @@ class Network:
             _slice_blocks (list): Dimensions of the input that will be processed in max pooling layers
 
 
-
-
     """
     def __init__(self, net, image, label, attack_pos, layer_gradients,
                  is_cuda=False, relaxation=1):
+
+        """
+        Construct attributes for a class object
+
+        Parameters:
+            net (pytorch): Network model
+            image (tensor): Input image
+            label (tensor): Class index of the image
+            attack_pos (list): Attack positions of the image
+            layer_gradients (list): Gradients of layers with respect to one output
+            is_cuda (bool): Enable cuda
+            relaxation (float): Percentage of neurons that are accurately processed in the fast reachability analysis
+        """
 
         self.flatten_pos = None # the position of the flatten function in layers
         self.is_cuda = is_cuda
@@ -768,6 +779,29 @@ class Hook():
 
 
 class Method:
+    """
+    A class for reachability analysis methods
+
+        Attributes:
+            model (pytorch): Network model
+            image_orig (tensor): Original input image
+            image (tensor): Image processed in layers
+            label (tensor): Class index of the input image
+            attack_block (tuple): Size of the attack block in the input image
+            attack_target (int): Adversarial label to misclassify to, None if not specified
+            epsilon (float): Perturbation epsilon
+            num_core (int): Number of processors for computation
+            is_cuda (bool): Enable cuda
+            mean (np.ndarray): Mean for normalization of the input image
+            std (np.ndarray): Std for normalization of the input image
+            relaxation (float): Percentage of neurons that are accurately processed in the fast reachability analysis
+            attack_poss_ranks (list): pixels to attack that are ranked in terms of their sensitivity (gradients)
+            layer_gradients (list): Gradients of layers with respect to one output
+            attack_poss (list): the pixel that has the largest gradient
+            elapsed_time (float): Running time
+            savepath (str): Path to save results
+
+    """
     def __init__(self, model, image, label, file_path,
                  attack_block=(1,1),
                  epsilon=0.001,
@@ -776,6 +810,23 @@ class Method:
                  mean=np.array([0,0,0]),
                  std=np.array([1,1,1]),
                  is_cuda=False):
+
+        """
+        Construct attributes for a class object
+
+        Parameters:
+            model (pytorch): Network model
+            image (tensor): Image processed in layers
+            label (tensor): Class index of the input image
+            file_path (str): Path to save results
+            attack_block (tuple): Size of the attack block in the input image
+            epsilon (float): Perturbation epsilon
+            relaxation (float): Percentage of neurons that are accurately processed in the fast reachability analysis
+            target (int): Adversarial label to misclassify to, None if not specified
+            mean (np.ndarray): Mean for normalization of the input image
+            std (np.ndarray): Std for normalization of the input image
+            is_cuda (bool): Enable cuda
+        """
 
         self.model = model
         self.image_orig = cp.deepcopy(image)
@@ -789,7 +840,7 @@ class Method:
         self.is_cuda = is_cuda
 
         self.mean, self.std = mean, std
-        self.attack_poss_ranks, self.layer_gradients = self.layer_gradients()
+        self.attack_poss_ranks, self.layer_gradients = self.get_layer_gradients()
         self.attack_poss = self.attack_poss_ranks[0]
 
         self.elapsed_time = 0
@@ -802,11 +853,18 @@ class Method:
 
 
     def reach(self):
+        """
+        Compute output reachable sets of the CNN for the pixel perturbation
+
+        Returns:
+            all_fls (list): Output reachable sets
+        """
         t0 = time.time()
         net = Network(self.model, self.image, self.label, self.attack_poss,
                            self.layer_gradients, relaxation=self.relaxation, is_cuda=self.is_cuda)
 
         self.attack_range = self.attack_range_3channel()
+        # Partition input set into subsets
         all_input_fls = cl.partition_input(self.attack_range, pnum=4, poss=self.attack_poss)
         pool = torch.multiprocessing.Pool(self.num_core)  # multiprocessing
 
@@ -831,6 +889,13 @@ class Method:
 
 
     def attack_range_3channel(self):
+        """
+        Compute lower bounds and upper bounds of the input set from the pixel perturbation
+
+        Returns:
+            lb (np.ndarray): Lower bounds
+            up (np.ndarray): Upper bounds
+        """
         blocks = self.image[:,:,self.attack_poss[0][0]:(self.attack_poss[1][0]+1), self.attack_poss[0][1]:(self.attack_poss[1][1]+1)]
 
         for n in range(3):
@@ -849,6 +914,15 @@ class Method:
 
 
     def simulate(self, num=10000):
+        """
+        Compute outputs for images randomly generated from the perturbation
+
+        Parameters:
+            num (int): Number of simulations
+
+        Returns:
+            outputs (np.ndarray): Outputs of simulations
+        """
         self.attack_range = self.attack_range_3channel()
         lbs = self.attack_range[0].flatten()
         ubs = self.attack_range[1].flatten()
@@ -877,9 +951,17 @@ class Method:
         return outputs
 
 
-    def layer_gradients(self):
-        # compute attack position in each layer
-        hook_back = []  # create hooks
+    def get_layer_gradients(self):
+        """
+        Rank pixels in terms of their sensitivity and compute gradients of layers with respect to one output
+
+        Returns:
+            attack_poss_ranks (list): Pixels to attack that are ranked in terms of their sensitivity (gradients)
+            layer_gradients (list): Gradients of layers with respect to one output
+        """
+
+        # create hooks for computation of gradients
+        hook_back = []
         for layer in list(self.model._modules.items()):
             if layer[1]._modules != {}:
                 for sub_layer in list(layer[1]._modules.items()):
@@ -928,7 +1010,9 @@ class Method:
 
         image_abs_grads = torch.tensor(image_abs_grads)
         idx_sorted = image_abs_grads.argsort(descending=True)
-        attack_poss_ranks = [] # Rank pixel blocks in terms of their sensitivity
+
+        # Rank pixel blocks in terms of their sensitivity
+        attack_poss_ranks = []
         for idx in idx_sorted:
             hb = torch.div(idx,(im_h - self.attack_block[0]), rounding_mode='trunc')
             wb = idx%(im_w-self.attack_block[1])
