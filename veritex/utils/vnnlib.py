@@ -1,10 +1,13 @@
-'''
-heavily borrowed from vnnlib simple utilities (https://github.com/stanleybak/nnenum/blob/master/src/nnenum/vnnlib.py)
-'''
+
+"""
+These functions are used to load network models from .onnx files
+
+This file is from vnnlib simple utilities (https://github.com/stanleybak/nnenum/blob/master/src/nnenum/vnnlib.py)
+
+"""
 
 from copy import deepcopy
 import re
-import torch
 import numpy as np
 from veritex.utils.sfproperty import Property
 import onnxruntime as ort

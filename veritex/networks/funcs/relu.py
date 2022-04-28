@@ -1,3 +1,12 @@
+"""
+These functions are used for reachability analysis in the ReLU function
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+TODO: Add more linearization methods
+"""
+
 import numpy as np
 
 
@@ -6,12 +15,12 @@ def exact_reach(s, neurons):
     Process the input set 's' with the first relu neuron from 'neurons'
 
         Parameters:
-            s (FVIM or Flattice): input set to neurons
-            neurons (np.ndarray): relu neurons to further process s
+            s (FVIM or Flattice): Input set to neurons
+            neurons (np.ndarray): ReLU neurons to further process s
 
         Returns:
-            sets (list): new-generated sets
-            new_neurons (np.ndarray): the rest of neurons to process in the future
+            sets (list): New-generated sets
+            new_neurons (np.ndarray): Rest of neurons to process in the future
     """
 
     new_neurons = neurons
@@ -35,11 +44,11 @@ def split(s, l):
     Split the input set into at most two subsets in the exact reachability analysis
 
         Parameters:
-            s (FVIM or Flattice): an input set
-            l (int): index of the relu neuron in the layer
+            s (FVIM or Flattice): An input set
+            l (int): Index of the relu neuron in the layer
 
         Returns:
-            outputs (list): output reachable sets
+            outputs (list): Output reachable sets
     """
 
     outputs = []
@@ -57,10 +66,10 @@ def layer_linearize(s):
     Process 's' with respect to a relu neuron using relu linearization
 
         Parameters:
-            s (Vzono): an input reachable set
+            s (Vzono): An input reachable set
 
         Returns:
-            s (Vzono): an output reachable set
+            s (Vzono): An output reachable set
     """
 
     neurons_neg_pos, neurons_neg = s.get_valid_neurons_for_over_app()
@@ -97,13 +106,13 @@ def get_valid_neurons(s, neurons):
     Identify the relu neurons whose both negative and positive input ranges are spanned by the input set
     and the neurons whose only negative input range is spanned by the input set
 
-        Parameters:
-            s (FVIM or Flattice): input reachable set
-            neurons (np.ndarray): a list of neuron indices
+    Parameters:
+        s (FVIM or Flattice): Input reachable set
+        neurons (np.ndarray): A list of neuron indices
 
-        Returns:
-            valid_neurons_neg_pos (np.ndarray): relu neurons whose both negative and positive input ranges are spanned by the input set
-            valid_neurons_neg (np.ndarray): neurons whose only negative input range is spanned by the input set
+    Returns:
+        valid_neurons_neg_pos (np.ndarray): ReLU neurons whose both negative and positive input ranges are spanned by the input set
+        valid_neurons_neg (np.ndarray): Neurons whose only negative input range is spanned by the input set
     """
 
     assert neurons.shape[0]!=0

@@ -1,4 +1,11 @@
-import copy as cp
+"""
+These functions are used to verify the safety of a DNN over safety properties
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+"""
+
 from veritex.networks.ffnn import FFNN
 import multiprocessing as mp
 from veritex.methods.worker import Worker
@@ -67,7 +74,7 @@ def run(properties_list, network_path, netname, propnames, linearization=True):
     else: # extract safety properties from vnnlib files
         properties = []
         for prop in properties_list:
-            temp = vnnlib_to_properties(prop, input_num, output_num, set_type='FlatticeFFNN')
+            temp = vnnlib_to_properties(prop, input_num, output_num, set_type='FVIM')
             properties.extend(temp)
 
     # configure the verification

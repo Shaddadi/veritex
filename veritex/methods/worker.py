@@ -1,5 +1,11 @@
+"""
+These functions are used to parallelly compute reachable sets for the reachability analysis
 
-import time
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+"""
+
 import numpy as np
 from collections import deque
 

@@ -1,4 +1,11 @@
+"""
+These functions are used to compute reachable sets represented Flattice
 
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+TODO: optimize the data structure of Flattice
+"""
 import copy
 import numpy as np
 import collections as cln

@@ -5,7 +5,6 @@ from veritex.networks.cnn import Method
 import data.cifar_torch_net as cifar10
 from veritex.utils.plot_poly import plot_polytope2d
 import logging
-import numpy as np
 
 
 classes = ('plane', 'car', 'bird', 'cat',
@@ -52,6 +51,7 @@ if __name__ == '__main__':
 
     sims = reach_model.simulate(num=10000)
 
+    # Plot output reachable sets and simulations
     fig = plt.figure()
     ax = fig.add_subplot(111)
     dim0, dim1 = label.numpy(), target_label.numpy()

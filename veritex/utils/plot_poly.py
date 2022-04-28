@@ -1,3 +1,12 @@
+"""
+These functions are used to plot reachable sets represented vertices
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+
+"""
+
 import sys
 import numpy as np
 import mpl_toolkits.mplot3d as a3
@@ -7,7 +16,20 @@ from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 
 
-def plot_polytope2d(set_vs, ax, color='r',alpha=1.0, edgecolor='k',linewidth=1.0, box=False,zorder=1):
+def plot_polytope2d(set_vs, ax, color='r',alpha=1.0, edgecolor='k', linewidth=1.0, zorder=1):
+    """
+    Function to plot 2-dimensional polytope
+
+    Parameters:
+        set_vs (np.ndarray): Vertices of the set
+        ax (AxesSubplot): AxesSubplot
+        color (str): Face color
+        alpha (float): Color transparency
+        edgecolor (str): Edge color
+        Linewidth (float): Line width of edges
+        zorder (int): Plotting order
+
+    """
     try: # 2 dimensional hull
         hull = ConvexHull(set_vs)
         fs, ps  = hull.equations, hull.points
@@ -40,7 +62,19 @@ def plot_polytope2d(set_vs, ax, color='r',alpha=1.0, edgecolor='k',linewidth=1.0
     ax.add_collection(PatchCollection([poly], match_original=True,zorder=zorder))
 
 
-def plot_polytope3d(set_vs, ax, color='r',alpha=1.0, edgecolor='k',linewidth=1.0):
+def plot_polytope3d(set_vs, ax, color='r',alpha=1.0, edgecolor='k', linewidth=1.0):
+    """
+    Function to plot 3-dimensional polytope
+
+    Parameters:
+        set_vs (np.ndarray): Vertices of the set
+        ax (AxesSubplot): AxesSubplot
+        color (str): Face color
+        alpha (float): Color transparency
+        edgecolor (str): Edge color
+        Linewidth (float): Line width of edges
+
+    """
     hull = ConvexHull(set_vs)
     faces = hull.simplices
     for s in faces:
@@ -57,7 +91,21 @@ def plot_polytope3d(set_vs, ax, color='r',alpha=1.0, edgecolor='k',linewidth=1.0
         ax.add_collection3d(f)
 
 
-def plot_box3d(lbs, ubs, ax, color='r',alpha=1.0, edgecolor='k',linewidth=1.0):
+def plot_box3d(lbs, ubs, ax, color='r', alpha=1.0, edgecolor='k', linewidth=1.0):
+    """
+    Function to plot 3-dimensional box
+
+    Parameters:
+        lbs (list): Lower bounds of the box
+        ubs (list): Upper bounds of the box
+        ax (AxesSubplot): AxesSubplot
+        color (str): Face color
+        alpha (float): Color transparency
+        edgecolor (str): Edge color
+        Linewidth (float): Line width of edges
+
+    """
+
     V = []
     for i in range(len(lbs)):
         V.append([lbs[i], ubs[i]])

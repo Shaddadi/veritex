@@ -1,3 +1,11 @@
+"""
+These functions are used construct hypercubes in Flattice
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+"""
+
 import sys
 import itertools
 import numpy as np

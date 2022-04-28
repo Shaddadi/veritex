@@ -1,3 +1,12 @@
+"""
+These functions are used to compute reachable sets represented FVIM
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+
+"""
+
 import sys
 import copy as cp
 import numpy as np

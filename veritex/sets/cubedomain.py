@@ -1,4 +1,11 @@
-import sys
+"""
+These functions are used construct hypercubes in FVIM
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+"""
+
 import itertools
 import numpy as np
 from veritex.sets.facetvertex import FVIM

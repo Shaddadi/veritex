@@ -1,5 +1,12 @@
-import sys
+"""
+These functions are used for reachability analysis of feed-forward neural networks
 
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+"""
+
+import sys
 import numpy as np
 import copy as cp
 from veritex.sets.vzono import VzonoFFNN as Vzono
@@ -110,7 +117,7 @@ class FFNN:
         Extract the parameters from a pytorch model
 
             Parameters:
-                torch_model (Pytorch): a pytorch model
+                torch_model (Pytorch): Pytorch model
         """
 
         self._W = []
@@ -146,10 +153,10 @@ class FFNN:
         Backtrack the input subspace given an output reachable set
 
             Parameters:
-                s (FVIM or Flattice): an output reachable set
+                s (FVIM or Flattice): An output reachable set
 
             Returns:
-                inputs (FVIM or Flattice): a set of unsafe input sets
+                inputs (FVIM or Flattice): A set of unsafe input sets
 
         """
 
@@ -178,20 +185,55 @@ class FFNN:
         return inputs
 
 
-    def reach_over_approximation(self, s):
+    def reach_over_approximation(self, s=None):
         """
         Over approximate the output reachable domain of the network given an input set
 
             Parameters:
-                s (Vzono): an input set to the network
+                s (Vzono): An input set to the network
 
             Returns:
-                s (Vzono): an output reachable domain of the network
+                s (Vzono): An output reachable domain of the network
         """
+        if s is None:
+            s = self.property.input_set
 
         for l in range(self._num_layer):
             s = self.layer_over_approximation(s, l)
         return s
+
+
+    def simulate(self, inputs=None, num=1000):
+        """
+        Comput outputs for input points
+
+        Parameters:
+            inputs (np.ndarray): Input points
+            num (int): Number of inputs generated if 'inputs' is none
+
+        Returns:
+            inputs (np.ndarray): Output values
+        """
+        if inputs is None:
+            lbs, ubs = self.property.lbs, self.property.ubs
+            inputs = []
+            for i in range(len(lbs)):
+                inputs.append(torch.rand(num)*(ubs-lbs)+lbs)
+
+        inputs = torch.tensor(inputs)
+        for layer in range(self._num_layer):
+            inputs = torch.matmul(torch.tensor(self._W[layer]),inputs) + torch.tensor(self._b[layer])
+            if layer <= len(self._f)-1:
+                if self._f[layer] == 'ReLU':
+                    f = torch.nn.ReLU()
+                    inputs = f(inputs)
+                elif self._f[layer] == 'Sigmoid':
+                    f = torch.nn.Sigmoid()
+                    inputs = f(inputs)
+                elif self._f[layer] == 'Tanh':
+                    f = torch.nn.Tanh()
+                    inputs = f(inputs)
+        return inputs.numpy()
 
 
     def layer_over_approximation(self, s, l):
@@ -199,17 +241,15 @@ class FFNN:
         Over approximate the output reachable domain of one layer given its input set
 
             Parameters:
-                s (Vzono): an input set
-                l (int): index of the layer
+                s (Vzono): An input set
+                l (int): Index of the layer
 
             Returns:
-                s (Vzono): an output reachable set
+                s (Vzono): An output reachable set
         """
 
-        W = self._W[l]
-        b = self._b[l]
-        s.base_vertices = np.dot(W, s.base_vertices) + b
-        s.base_vectors = np.dot(W, s.base_vectors)
+        # Affine mapping
+        s.affine_map(self._W[l], self._b[l])
 
         # The last layer may not other activation functions
         if l <= len(self._f)-1:
@@ -233,7 +273,7 @@ class FFNN:
                 state_tuple (tuple): (a reachable set, index of the layer, neurons to process)
 
             Returns:
-                vzono_set (Vzono): an output reachable set of the network
+                vzono_set (Vzono): An output reachable set of the network
         """
 
         # Convert the set into Vzono
@@ -287,7 +327,7 @@ class FFNN:
         Check if the reachable set overlaps with the unsafe output domains.
 
             Parameters:
-                s (FVIM or Flattice): an output reachable set
+                s (FVIM or Flattice): An output reachable set
 
             Returns:
                 unsafe (bool): Whether the safety of the reachable set is safe or unsafe
@@ -339,7 +379,7 @@ class FFNN:
                 state_tuple (tuple): (a reachable set, index of the layer, neurons to process)
 
             Returns:
-                new_tuple_states (list): new-generated state tuples
+                new_tuple_states (list): New-generated state tuples
         """
         s, layer, neurons = tuple_state
 

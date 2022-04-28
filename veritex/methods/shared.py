@@ -1,3 +1,10 @@
+"""
+These functions are used to collect and share states between workers
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+"""
 
 import multiprocessing as mp
 import numpy as np
@@ -27,7 +34,7 @@ class SharedState:
             work_interrupted (mp.Event): Indicator of work interruption
             all_workers_done (mp.Event): Indicator the computation in all the workers is done
             work_steal_rate (mp.Value): Rate of the local states to steal
-            workers_valid_status (mp.Array): Indicators of valid workers to steal
+            workers_valid_status (mp.Array): Indicators of valid workers to steal states from
             workers_idle_status (mp.Array): Indicators of idle workers
             workers_to_assign (mp.Array): Indicators of workers to assign with states
             workers_assigned (mp.Array): Indicators of workers that are assigned with states

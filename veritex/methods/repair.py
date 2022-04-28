@@ -1,4 +1,11 @@
-import logging
+"""
+These functions are used to repair an unsafe DNN with respect to a set of safety properties.
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+"""
+
 import time
 import logging
 from veritex.networks.ffnn import FFNN

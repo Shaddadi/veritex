@@ -1,3 +1,12 @@
+"""
+These functions are used to load network models from .onnx files
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+
+"""
+
 import onnx
 import torch
 from torch import nn
@@ -5,6 +14,16 @@ import onnx2pytorch  # pip install onnx2pytorch
 
 
 def load_ffnn_onnx(path):
+    """
+    Load ffnn model from a .onnx file
+
+    Parameters:
+        path (str): Path to the network model
+
+    Returns:
+        torch_model (pytorch): Network model
+    """
+
     onnx_model = onnx.load(path)
     pytorch_model = onnx2pytorch.ConvertModel(onnx_model)
 
@@ -15,14 +34,19 @@ def load_ffnn_onnx(path):
             new_modules.append(m)
 
     torch_model = nn.Sequential(*new_modules)
-    # for param in torch_model.parameters():
-    #     param.requires_grad = False
-
     return torch_model
 
 
-
 def save_onnx(torch_model, input_size, savepath):
+    """
+    Save network model to a .onnx model
+
+    Parameters:
+        torch_model (pytorch): Network model
+        input_size (tensor): Size of the input image
+        savepath (str): Path to save the model
+    """
+
     x = torch.randn(10, input_size, requires_grad=True)
     torch_out = torch_model(x)
 

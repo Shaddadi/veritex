@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     # init FFNN
     logging.info('Start the demo...')
-    model = torch.load('demo_model.pt')
+    model = torch.load('models/model_relu.pt')
     dnn0 = FFNN(model, unsafe_inputd=True, exact_outputd=True)
 
     all_unsafe_domain = []

@@ -1,8 +1,13 @@
+"""
+These functions are used to load network models from .nnet files
+
+This file is from https://github.com/sisl/NNet.git
+
+"""
+
 import numpy as np
 
-##
-# it is from https://github.com/sisl/NNet.git
-##
+
 class NNet():
     """
     Class that represents a fully connected ReLU network from a .nnet file

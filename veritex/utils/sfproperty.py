@@ -1,6 +1,16 @@
+"""
+These functions are used to construct safety properties for DNNs
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+
+"""
+
 import sys
 from veritex.sets.cubedomain import CubeDomain
 from veritex.sets.cubelattice import CubeLattice
+from veritex.sets.vzono import VzonoFFNN
 
 class Property:
     """
@@ -49,5 +59,8 @@ class Property:
         elif self.set_type == 'FlatticeCNN':
             box = CubeLattice(self.lbs, self.ubs)
             self.input_set = box.to_FlatticeCNN()
+        elif self.set_type == 'Vzono':
+            self.input_set = VzonoFFNN()
+            self.input_set.create_from_bounds(self.lbs, self.ubs)
         else:
             sys.exit("This set type is not supported.")

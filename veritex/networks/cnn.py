@@ -1,3 +1,11 @@
+"""
+These functions are used for reachability analysis of CNNs
+
+Authors: Xiaodong Yang, xiaodong.yang@vanderbilt.edu
+License: BSD 3-Clause
+
+"""
+
 import numpy as np
 import itertools
 import copy as cp
@@ -5,9 +13,7 @@ import torch
 import torch.nn as nn
 import torch.multiprocessing
 from torch.autograd import Variable
-import matplotlib.pyplot as plt
 import veritex.sets.cubelattice as cl
-import scipy.io as sio
 import logging
 import pickle
 import time
@@ -682,7 +688,7 @@ class Network:
 
     def get_slice_blocks(self, range_to_process):
         """
-        Compute dimensions of the input that will be processed in max pooling layers
+        Compute dimensions of the input that will be processed in reachability analysis of max pooling layers
 
         Parameters:
             range_to_process (list): Dimension range to process
