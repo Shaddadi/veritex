@@ -75,7 +75,7 @@ There are two versions for the artifact evaluation. The difference between these
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables (~40 mins, majority of the time is spent on the plot of reachable domains).
 
-   This version was tested on hardwares(to do).
+   This version requires at least 32 GB memory.
 
    ```bash
    cd cav22_artifact
