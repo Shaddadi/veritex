@@ -2,17 +2,11 @@
 
 # verification of acasxu
 cd ../examples/ACASXu/verify
-python3 verify_p1-p4_vnnlib.py
-python3 verify_p5_vnnlib.py
-python3 verify_p6_vnnlib.py
-python3 verify_p7_vnnlib.py
-python3 verify_p8_vnnlib.py
-python3 verify_p9_vnnlib.py
-python3 verify_p10_vnnlib.py
+python3 verify_all_instances.py
 
 # repair of acasxu using veritex
 cd ../repair
-python3 repair_sub_nnets.py
+python3 repair_nnets.py
 
 # repair of DNN agent in DRL using veritex
 cd ../../DRL/repair
