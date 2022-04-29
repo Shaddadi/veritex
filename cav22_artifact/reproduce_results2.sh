@@ -8,6 +8,11 @@ python3 verify_all_instances.py
 cd ../repair
 python3 repair_nnets.py -all
 
+# repair of DNN agent in DRL using veritex
+cd ../../DRL/repair
+python3 repair_nnets.py
+
+# ART
 cd ../../../cav22_artifact/ART/art
 python3 exp_acas.py
 
