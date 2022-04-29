@@ -2,17 +2,11 @@
 
 # verification of acasxu
 cd ../examples/ACASXu/verify
-python3 verify_p1-p4_vnnlib.py
-python3 verify_p5_vnnlib.py
-python3 verify_p6_vnnlib.py
-python3 verify_p7_vnnlib.py
-python3 verify_p8_vnnlib.py
-python3 verify_p9_vnnlib.py
-python3 verify_p10_vnnlib.py
+python3 verify_all_instances.py
 
 # repair of acasxu
 cd ../repair
-python3 repair_all_nnets.py
+python3 repair_nnets.py -all
 
 cd ../../../cav22_artifact/ART/art
 python3 exp_acas.py
