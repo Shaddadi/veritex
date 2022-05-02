@@ -79,7 +79,7 @@ There are two versions for the artifact evaluation. The difference between these
 
    ```bash
    cd cav22_artifact
-   ./reproduce_results1.sh
+   bash reproduce_results1.sh
    ```
 
 2. This version reproduces all the results in the paper (~410 mins), including
@@ -93,7 +93,7 @@ There are two versions for the artifact evaluation. The difference between these
 
    ```bash
    cd cav22_artifact
-   ./reproduce_results2.sh
+   bash reproduce_results2.sh
    ```
 
 ### Demo
