@@ -128,7 +128,7 @@ python main_demo.py
 
     ```bash
     cd examples/ACASXu/repair
-    python repair_sub_nnets.py
+    python repair_nnets.py
     ```
 
 ### Visualize Reachable Domains of ACASXu Networks
