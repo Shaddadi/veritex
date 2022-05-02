@@ -57,7 +57,7 @@ class AcasNetID(object):
         return self.x == other.x and self.y == other.y
 
     def __repr__(self):
-        return f'AcasNetID<{self.x},{self.y}>'
+        return f'AcasNetID-{self.x}-{self.y}'
 
     def fpath(self, dir: str = ACAS_DIR):
         """ Return the corresponding file path for this network. """
