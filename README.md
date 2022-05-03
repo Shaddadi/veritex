@@ -66,7 +66,9 @@ This tool is confirmed with only Python3.7.
 
 Linux systems are suggested. This artifact aims to reproduce results in the CAV'22 tool paper, including **Figure 2&3&4** and **Table 2&3**. Results are stored in 'veritex/cav22_artifact/results'. **Caution**: reachable domains of networks in Figure 3&4 may be slightly different from the ones in the paper because each run of the repair method can not guarantee to produce the exact same safe network.
 
-There are two versions for the artifact evaluation. The difference between these two versions is that the first one does not include the repair of two neural networks which consumes a large amount of memory and time. For Windows users who encounter the error '\r command not found' when implementing the artifact, please run the following commands before the shell script.
+There are two versions for the artifact evaluation. The difference between these two versions is that the first one does not include the repair of two neural networks which consumes a large amount of memory and time. 
+
+For Windows users who encounter the error '\r command not found' when implementing the artifact, please run the following commands before the shell script.
 ```bash
 apt-get update
 apt-get install dos2unix
