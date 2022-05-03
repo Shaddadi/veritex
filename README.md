@@ -129,7 +129,7 @@ python main_demo.py
 
     ```bash
     cd examples/ACASXu/verify
-    ./verify_all_instances.sh
+    python verify_all_instances.py
     ```
 
 1. Run the repair of the unsafe ACAS Xu neural networks. Repaired networks will be saved in /logs and the info will be logged.
