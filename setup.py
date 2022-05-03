@@ -8,7 +8,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='veritx',
+    name='veritex',
     version='0.0.0',
     description='Tool for Reachability Analysis and Repair of Neural Networks.',
     long_description=long_description,
