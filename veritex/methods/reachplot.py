@@ -44,7 +44,8 @@ def run(prop_list, network_path, dims, savename):
     elif network_path[-4:] == 'nnet':
         model = NNet(network_path)
         biases = [np.array([bia]).T for bia in model.biases]
-        torch_model = [model.weights, biases]
+        func = ['ReLU'] * (len(biases) - 1)  # default activation function for .nnet
+        torch_model = [model.weights, biases, func]
         input_num, output_num = model.num_inputs(), model.num_outputs()
     else:
         sys.exit('Network file is not found!')
