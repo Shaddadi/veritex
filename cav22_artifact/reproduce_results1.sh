@@ -19,7 +19,7 @@ python3 exp_acas.py
 # display results
 cd ../../
 python3 figure2_generator.py
-python3 figure3\&4_generator.py
-python3 table2\&3_generator.py
+python3 figure_3_4_generator.py
+python3 table_2_3_generator.py
 
 
