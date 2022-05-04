@@ -173,3 +173,12 @@ python ../../../veritex/methods/reachplot.py \
 </p>
 <p align="center">Figure: Output reachable domains of Network21 on Properties 3 and 4. They are projected on (y0,y1) and (y0, y2).
 </p>
+
+### Over Approximate Reachable Domains with Vzono
+<p align="center">
+    <img src="examples/Demo/relu_vzono.png" style="width:20%">
+    <img src="examples/Demo/tanh_vzono.png" style="width:20%">
+   <img src="examples/Demo/sigmoid_vzono.png" style="width:20%">
+</p>
+<p align="center">Figure: Over approximated reachable domains of networks with ReLU, Tanh, Sigmoid, respectively.
+</p>
