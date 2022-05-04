@@ -175,10 +175,15 @@ python ../../../veritex/methods/reachplot.py \
 </p>
 
 ### Over Approximate Reachable Domains with Vzono
+Over approximate reachable domains of networks 
+```
+cd examples/Demo
+python demo_vzono.py
+```
 <p align="center">
-    <img src="examples/Demo/relu_vzono.png" style="width:30%">
-    <img src="examples/Demo/tanh_vzono.png" style="width:30%">
-   <img src="examples/Demo/sigmoid_vzono.png" style="width:30%">
+    <img src="examples/Demo/relu_vzono.png" style="width:33%">
+    <img src="examples/Demo/tanh_vzono.png" style="width:33%">
+   <img src="examples/Demo/sigmoid_vzono.png" style="width:33%">
 </p>
 <p align="center">Figure: Over approximated reachable domains of networks with ReLU, Tanh, Sigmoid, respectively.
 </p>
