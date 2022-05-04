@@ -6,7 +6,7 @@ python3 verify_all_instances.py
 
 # repair of acasxu
 cd ../repair
-python3 repair_nnets.py -all
+python3 repair_nnets.py --all
 
 # repair of DNN agent in DRL using veritex
 cd ../../DRL/repair
