@@ -123,16 +123,14 @@ python main_demo.py
    Figure: Demo for our reachability analysis algorithms. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.
 </p>
 
-### ACAS experiments
+### Verify ACASXu Networks
 
-1. Run the verification of ACAS Xu neural networks. Info will be logged
-
-    ```bash
-    cd examples/ACASXu/verify
-    python verify_all_instances.py
+ ```bash
+ cd examples/ACASXu/verify
+ python verify_all_instances.py
     ```
 
-1. Run the repair of the unsafe ACAS Xu neural networks. Repaired networks will be saved in /logs and the info will be logged.
+### Repair Unsafe ACASXu Networks
 
     ```bash
     cd examples/ACASXu/repair
