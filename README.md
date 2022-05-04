@@ -30,7 +30,7 @@ cd veritex
 1. Create and start the docker container.
 
     ```bash
-    sudo docker run --rm -it veritex_image bash
+    sudo docker run --name cav_veritex --rm -it veritex_image bash
     ```
 
 ### Option 2: installing as a User
