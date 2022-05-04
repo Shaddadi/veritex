@@ -34,13 +34,31 @@ class VzonoFFNN:
             ubs (list): Upper bounds
 
         """
-        self.base_vertices = (np.array(lbs)+np.array(ubs))/2
+        self.base_vertices = (np.array([lbs])+np.array([ubs])).T/2
         self.base_vectors = np.diag((np.array(ubs)-np.array(lbs))/2)
+
+    def get_sound_vertices(self):
+        """
+        Over approximation when there are too many vertices
+
+        Returns:
+            vertices (np.ndarray): Vertices of the Vzono set
+        """
+
+        vals = np.sum(np.abs(self.base_vectors), axis=1, keepdims=True)
+        V = [[v,-v] for v in vals]
+        combs = list(itertools.product(*V))
+
+        vertices = []
+        for cb in combs:
+            vertices.append(self.base_vertices+np.array(cb))
+        vertices = np.concatenate(vertices, axis=1)
+        return vertices
 
 
     def get_vertices(self):
         """
-        Compute vertices from the vzono object
+        Compute exact vertices from the vzono object
 
         Returns:
             vertices (np.ndarray): Vertices of the Vzono set
