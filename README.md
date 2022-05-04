@@ -111,7 +111,7 @@ Linux systems are suggested. This artifact aims to reproduce results in the CAV'
    bash reproduce_results2.sh
    ```
 
-   3. Export results from docker to host.
+3. Export results from docker to host.
    ```bash
    sudo docker cp cav_veritex:/veritex/cav22_artifact/results/. path_to_your_host
    ```
