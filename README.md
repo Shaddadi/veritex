@@ -36,13 +36,14 @@ cd veritex
 ### Option 2: installing as a User
 
 This tool is confirmed with only Python3.7.
-Simply you may install veritex pkg with pip.
 
-```bash
-python3.7 -m pip install .
-```
+1. Install veritex pkg with pip.
 
-Set path to /veritex under this repository.
+   ```bash
+   python3.7 -m pip install .
+   ```
+
+2. Set path to /veritex under this repository.
 
  ```bash
  export PYTHONPATH='<YOUR_REPO_PATH>/veritex'
