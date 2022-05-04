@@ -45,11 +45,11 @@ This tool is confirmed with only Python3.7.
 
 2. Set path to /veritex under this repository.
 
-    ```bash
-    export PYTHONPATH='<YOUR_REPO_PATH>/veritex'
-    export OPENBLAS_NUM_THREADS=1
-    export OMP_NUM_THREADS=1
- ```
+   ```bash
+   export PYTHONPATH='<YOUR_REPO_PATH>/veritex'
+   export OPENBLAS_NUM_THREADS=1
+   export OMP_NUM_THREADS=1
+   ```
 
 ### Option 3: installing as a Developer
 
@@ -92,9 +92,9 @@ Linux systems are suggested. This artifact aims to reproduce results in the CAV'
 
    This version requires at least 32 GB memory.
 
-      ```bash
-      cd cav22_artifact
-      bash reproduce_results1.sh
+   ```bash
+   cd cav22_artifact
+   bash reproduce_results1.sh
       ```
 
 2. The second version reproduces all the results in the paper (~410 mins), including
@@ -106,10 +106,10 @@ Linux systems are suggested. This artifact aims to reproduce results in the CAV'
 
    The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
 
-      ```bash
-      cd cav22_artifact
-      bash reproduce_results2.sh
-      ```
+   ```bash
+   cd cav22_artifact
+   bash reproduce_results2.sh
+   ```
 
 ## Run experiments
 ### Demo
