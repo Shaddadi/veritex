@@ -29,6 +29,7 @@ if __name__ == '__main__':
     parser.add_argument('--all', action='store_true')
     args = parser.parse_args()
     if args.all:
+        logging.info(f'Repair all unsafe networks')
         networks = repair_list
     else:
         networks = repair_list[:33]
