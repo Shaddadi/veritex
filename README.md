@@ -60,9 +60,7 @@ This tool is confirmed with only Python3.7.
     export OMP_NUM_THREADS=1
     ```
 
-## Run experiments
-
-### CAV'22 Artifact
+## CAV'22 Artifact
 
 Linux systems are suggested. This artifact aims to reproduce results in the CAV'22 tool paper, including **Figure 2&3&4** and **Table 2&3**. Results are stored in 'veritex/cav22_artifact/results'. There are two versions for the artifact evaluation. The difference between these two versions is that the first one does not include the repair of two neural networks which consumes a large amount of memory and time. 
 
@@ -104,6 +102,7 @@ dos2unix reproduce_results2.sh
    bash reproduce_results2.sh
    ```
 
+## Run experiments
 ### Demo
 
 This demo includes the computation of the exact output reachable domain of a neural network using our reachability analysis method.
