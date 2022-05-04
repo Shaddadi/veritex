@@ -42,6 +42,14 @@ Simply you may install veritex pkg with pip.
 python3.7 -m pip install .
 ```
 
+Set path to /veritex under this repository.
+
+ ```bash
+ export PYTHONPATH='<YOUR_REPO_PATH>/veritex'
+ export OPENBLAS_NUM_THREADS=1
+ export OMP_NUM_THREADS=1
+ ```
+
 ### Option 3: installing as a Developer
 
 This tool is confirmed with only Python3.7.
@@ -52,7 +60,7 @@ This tool is confirmed with only Python3.7.
     python3.7 -m pip install -e .
     ```
 
-1. Set path to /veritex under this repository.
+2. Set path to /veritex under this repository.
 
     ```bash
     export PYTHONPATH='<YOUR_REPO_PATH>/veritex'
