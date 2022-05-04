@@ -45,10 +45,10 @@ This tool is confirmed with only Python3.7.
 
 2. Set path to /veritex under this repository.
 
- ```bash
- export PYTHONPATH='<YOUR_REPO_PATH>/veritex'
- export OPENBLAS_NUM_THREADS=1
- export OMP_NUM_THREADS=1
+    ```bash
+    export PYTHONPATH='<YOUR_REPO_PATH>/veritex'
+    export OPENBLAS_NUM_THREADS=1
+    export OMP_NUM_THREADS=1
  ```
 
 ### Option 3: installing as a Developer
@@ -76,12 +76,12 @@ Linux systems are suggested. This artifact aims to reproduce results in the CAV'
 **Caution**: Reachable domains of networks in **Figure 3&4** may be slightly different from the ones in the paper because each run of the repair method can not guarantee to produce the exact same safe network. 
 
 **Caution**: For *Windows* users who encounter the error '\r command not found' when implementing the artifact, please run the following commands before the shell script.
-```bash
-apt-get update
-apt-get install dos2unix
-dos2unix reproduce_results1.sh
-dos2unix reproduce_results2.sh
-```
+   ```bash
+   apt-get update
+   apt-get install dos2unix
+   dos2unix reproduce_results1.sh
+   dos2unix reproduce_results2.sh
+   ```
 
 1. The first version reproduces the results in the paper except for two hard instances (~170 mins), including
    * safety verification of all instances (data generation for Figure 2) (~2 mins),
@@ -92,10 +92,10 @@ dos2unix reproduce_results2.sh
 
    This version requires at least 32 GB memory.
 
-   ```bash
-   cd cav22_artifact
-   bash reproduce_results1.sh
-   ```
+      ```bash
+      cd cav22_artifact
+      bash reproduce_results1.sh
+      ```
 
 2. The second version reproduces all the results in the paper (~410 mins), including
    * safety verification of all instances (data generation for Figure 2) (~2 mins),
@@ -106,10 +106,10 @@ dos2unix reproduce_results2.sh
 
    The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
 
-   ```bash
-   cd cav22_artifact
-   bash reproduce_results2.sh
-   ```
+      ```bash
+      cd cav22_artifact
+      bash reproduce_results2.sh
+      ```
 
 ## Run experiments
 ### Demo
@@ -119,10 +119,10 @@ It also includes the computation of its exact unsafe input space that leads to s
 The neural network consists of 3 inputs, 2 outputs, and 8 layers with each having 7 neurons.
 Results will be saved in /images.
 
-```bash
-cd examples/Demo
-python main_demo.py
-```
+   ```bash
+   cd examples/Demo
+   python main_demo.py
+   ```
 
 <p align="center">
     <img src="examples/Demo/reach_demo.gif" style="width:70%">
@@ -133,48 +133,48 @@ python main_demo.py
 
 ### Verify ACASXu Networks
 
- ```bash
- cd examples/ACASXu/verify
- python verify_all_instances.py
- ```
+   ```bash
+   cd examples/ACASXu/verify
+   python verify_all_instances.py
+   ```
 
 ### Repair Unsafe ACASXu Networks
 
- ```bash
- cd examples/ACASXu/repair
- python repair_nnets.py
- ```
+   ```bash
+   cd examples/ACASXu/repair
+   python repair_nnets.py
+   ```
 
 ### Visualize Reachable Domains of ACASXu Networks
 
 Visualize the output reachable domain
 
-```bash
-cd examples/ACASXu/repair
+   ```bash
+   cd examples/ACASXu/repair
 
-python ../../../veritex/methods/reachplot.py \
---property 'path_to_property1'...'path_to_propertyn' \
---network_path 'path_to_model' \
---dims x x \
---savename 'xxx'
-```
+   python ../../../veritex/methods/reachplot.py \
+   --property 'path_to_property1'...'path_to_propertyn' \
+   --network_path 'path_to_model' \
+   --dims x x \
+   --savename 'xxx'
+   ```
 
 Example:
 
-```bash
-python ../../../veritex/methods/reachplot.py \
---property '../nets/prop_3.vnnlib' '../nets/prop_4.vnnlib' \
---network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx' \
---dims 0 1 \
---savename 'figures/reachable_domain_property_3,4_dims0_1'
+   ```bash
+   python ../../../veritex/methods/reachplot.py \
+   --property '../nets/prop_3.vnnlib' '../nets/prop_4.vnnlib' \
+   --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx' \
+   --dims 0 1 \
+   --savename 'figures/reachable_domain_property_3,4_dims0_1'
 
 
-python ../../../veritex/methods/reachplot.py \
---property '../nets/prop_3.vnnlib' '../nets/prop_4.vnnlib' \
---network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx' \
---dims 0 2 \
---savename 'figures/reachable_domain_property_3,4_dims0_2'
-```
+   python ../../../veritex/methods/reachplot.py \
+   --property '../nets/prop_3.vnnlib' '../nets/prop_4.vnnlib' \
+   --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx' \
+   --dims 0 2 \
+   --savename 'figures/reachable_domain_property_3,4_dims0_2'
+   ```
 
 <p align="center">
     <img src="examples/ACASXu/repair/figures/reachable_domain_property_3,4_dims0_1.png" style="width:20%">
@@ -185,10 +185,10 @@ python ../../../veritex/methods/reachplot.py \
 
 ### Over Approximate Reachable Domains with Vzono
 Over approximate reachable domains of networks 
-```bash
-cd examples/Demo
-python demo_vzono.py
-```
+   ```bash
+   cd examples/Demo
+   python demo_vzono.py
+   ```
 <p align="center">
     <img src="examples/Demo/relu_vzono.png" style="width:33%">
     <img src="examples/Demo/tanh_vzono.png" style="width:33%">
