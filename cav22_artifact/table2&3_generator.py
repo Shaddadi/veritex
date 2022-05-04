@@ -256,7 +256,7 @@ if __name__ == "__main__":
 
         tables += 'Table 2: Repair of ACAS Xu neural network controllers. Veritex successfully \n repairs all 35 unsafe networks with little accuracy degradation.\n'
         tables += '--------------------------------------------------------------------------\n'
-        tables += 'Methods        Repair Successe      Min Accu.    Mean Accu.     Max Accu.\n'
+        tables += 'Methods        Repair Success      Min Accu.    Mean Accu.     Max Accu.\n'
         tables += '--------------------------------------------------------------------------\n'
         tables += f'Veritex            {len(np.nonzero(results_veritex[3])[0])}/33             {min(results_veritex[1]):.2f}%       {np.mean(results_veritex[1]):.2f}%         {max(results_veritex[1]):.2f}%\n'
         tables += f'ART                {len(np.nonzero(results_no_refine_art[3])[0])}/33             {min(results_no_refine_art[1])*100:.2f}%       {np.mean(results_no_refine_art[1])*100:.2f}%         {max(results_no_refine_art[1])*100:.2f}%\n'
@@ -276,7 +276,7 @@ if __name__ == "__main__":
     elif len(results_veritex[0]) == 35: # all cases
         tables += 'Table 2: Repair of ACAS Xu neural network controllers. Veritex successfully \n repairs all 35 unsafe networks with little accuracy degradation.\n'
         tables += '--------------------------------------------------------------------------\n'
-        tables += 'Methods        Repair Successe      Min Accu.    Mean Accu.     Max Accu.\n'
+        tables += 'Methods        Repair Success      Min Accu.    Mean Accu.     Max Accu.\n'
         tables += '--------------------------------------------------------------------------\n'
         tables += f'Veritex            {len(np.nonzero(results_veritex[3])[0])}/33             {min(results_veritex[1]):.2f}%       {np.mean(results_veritex[1]):.2f}%         {max(results_veritex[1]):.2f}%\n'
         tables += f'ART                {len(np.nonzero(results_no_refine_art[3])[0])}/33             {min(results_no_refine_art[1])*100:.2f}%       {np.mean(results_no_refine_art[1])*100:.2f}%         {max(results_no_refine_art[1])*100:.2f}%\n'
