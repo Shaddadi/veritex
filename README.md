@@ -128,13 +128,13 @@ python main_demo.py
  ```bash
  cd examples/ACASXu/verify
  python verify_all_instances.py
-    ```
+ ```
 
 ### Repair Unsafe ACASXu Networks
 
-    ```bash
-    cd examples/ACASXu/repair
-    python repair_nnets.py
+ ```bash
+ cd examples/ACASXu/repair
+ python repair_nnets.py
     ```
 
 ### Visualize Reachable Domains of ACASXu Networks
