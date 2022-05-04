@@ -51,7 +51,7 @@ if __name__ == "__main__":
     plt.xlabel('Number of instances verified', fontsize=13)
     plt.ylabel('Time (sec)', fontsize=13)
     plt.xlim([-1, 186])
-    plt.ylim([1e-05, 116])
+    plt.ylim([5e-04, 116])
     plt.xticks(fontsize=10)
     plt.yticks(fontsize=10)
     plt.legend(ncol=3, fontsize=11)
