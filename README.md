@@ -176,7 +176,7 @@ python ../../../veritex/methods/reachplot.py \
 
 ### Over Approximate Reachable Domains with Vzono
 Over approximate reachable domains of networks 
-```
+```bash
 cd examples/Demo
 python demo_vzono.py
 ```
