@@ -176,9 +176,9 @@ Reuse: compute the exact output rachable domain and the unsafe input subspace of
    ```
    
    Reuse: repair a neural network on multiple safety properties
-   1. Build a repair object using ['veritex/methods/repair'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py)
+   1. Build a repair object using [REPAIR](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py)
    2. Select parameters for the retraining process 
-   3. Execute the repair function ['repair_model_classification'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py#L322) or ['repair_model_regular'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py#L247)
+   3. Execute the repair function [repair_model_classification](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py#L322) or [repair_model_regular](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py#L247)
 
 
 ### Visualize Reachable Domains of Neural Networks
