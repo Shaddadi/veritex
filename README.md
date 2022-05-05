@@ -149,6 +149,11 @@ Results will be saved in /images.
    --network_path 'path_to_model' \
    --network_name 'model_name'
    ```
+   
+   #### Example
+   ```bash
+   cd xxx
+   ```
 
 ### Repair Unsafe ACASXu Networks
 
@@ -162,9 +167,7 @@ Results will be saved in /images.
 Visualize the output reachable domain
 
    ```bash
-   cd examples/ACASXu/repair
-
-   python ../../../veritex/methods/reachplot.py \
+   python veritex/methods/reachplot.py \
    --property 'path_to_property1'...'path_to_propertyn' \
    --network_path 'path_to_model' \
    --dims x x \
@@ -174,6 +177,7 @@ Visualize the output reachable domain
 Example:
 
    ```bash
+   cd examples/ACASXu/repair
    python ../../../veritex/methods/reachplot.py \
    --property '../nets/prop_3.vnnlib' '../nets/prop_4.vnnlib' \
    --network_path '../nets/ACASXU_run2a_2_1_batch_2000.onnx' \
