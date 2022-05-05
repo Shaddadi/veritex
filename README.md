@@ -141,6 +141,14 @@ Results will be saved in /images.
    cd examples/ACASXu/verify
    python verify_all_instances.py
    ```
+   #### Reuse: verify a neural network on multiple safety properties
+   ```bash
+   python veritex/methods/verify.py \
+   --property 'path_to_property1' ... 'path_to_propertyn' \
+   --property_name 'name1' ... 'namen' \ 
+   --network_path 'path_to_model' \
+   --network_name 'model_name'
+   ```
 
 ### Repair Unsafe ACASXu Networks
 
