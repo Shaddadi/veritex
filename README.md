@@ -129,7 +129,7 @@ Results will be saved in /images.
    ```
 
 <p align="center">
-    <img src="examples/Demo/reach_demo.gif" style="width:70%">
+    <img src="examples/Demo/figures/reach_demo.gif" style="width:70%">
 </p>
 <p align="center">
    Figure: Demo for our reachability analysis algorithms. Given an input domain (the blue box), our algorithms compute the exact output reachable domain and also the exact unsafe input subspace that leads to safety violation in the output domain.
@@ -194,9 +194,9 @@ Over approximate reachable domains of networks
    python demo_vzono.py
    ```
 <p align="center">
-    <img src="examples/Demo/relu_vzono.png" style="width:32%">
-    <img src="examples/Demo/tanh_vzono.png" style="width:32%">
-   <img src="examples/Demo/sigmoid_vzono.png" style="width:32%">
+    <img src="examples/Demo/figures/relu_vzono.png" style="width:32%">
+    <img src="examples/Demo/figures/tanh_vzono.png" style="width:32%">
+   <img src="examples/Demo/figures/sigmoid_vzono.png" style="width:32%">
 </p>
 <p align="center">Figure: Over approximated reachable domains of networks with ReLU, Tanh, Sigmoid, respectively.
 </p>
