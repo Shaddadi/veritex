@@ -137,7 +137,7 @@ Results will be saved in /images.
 
 Reuse: compute the exact output rachable domain and the unsafe input subspace of a DNN
 1. Create a DNN object using [FFNN](https://github.com/Shaddadi/veritex/blob/master/veritex/networks/ffnn.py) and enable  ['exact_outputd'](https://github.com/Shaddadi/veritex/blob/master/veritex/networks/ffnn.py#L62) and ['unsafe_inputd'](https://github.com/Shaddadi/veritex/blob/master/veritex/networks/ffnn.py#L61)
-2. Create a [safety property](https://github.com/Shaddadi/veritex/blob/master/veritex/utils/sfproperty.py) by specifying the lower and upper bounds of the input domain and the [set representation](https://github.com/Shaddadi/veritex/blob/master/veritex/utils/sfproperty.py) 'FVIM' or 'Flattice'
+2. Create a [safety property](https://github.com/Shaddadi/veritex/blob/master/veritex/utils/sfproperty.py) by specifying the lower and upper bounds of the input domain and the set representation'FVIM' or 'Flattice'
 3. Set up and run the parallel framework using [SharedState](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/shared.py) and [Worker](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/worker.py)
 4. Collect results and plot using [reachplot](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/reachplot.py)
 
