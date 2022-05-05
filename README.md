@@ -205,7 +205,7 @@ Over approximate reachable domains of networks
 ### Fast Reachability Analysis (Under-approximation) of CIFAR10 CNNs
 
 <p align="center">
-    <img src="examples/CIFAR10/figures/fast_reach_cifar10.png" style="width:32%">
+    <img src="examples/CIFAR10/figures/fast_reach_cifar10.png" style="width:40%">
 </p>
-<p align="center">Figure: Fast Reachability analysis of CNNs with input pixels under perturbation. \nBlue area represents the reachable domain. \nBlack dots represent simultations.
+<p align="center">Figure: Fast Reachability analysis of CNNs with input pixels under perturbation. Blue area represents the reachable domain. Black dots represent simultations.
 </p>
