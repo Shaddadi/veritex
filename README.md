@@ -207,5 +207,5 @@ Over approximate reachable domains of networks
 <p align="center">
     <img src="examples/CIFAR10/figures/fast_reach_cifar10.png" style="width:32%">
 </p>
-<p align="center">Figure: Over approximated reachable domains of networks with ReLU, Tanh, Sigmoid, respectively.
+<p align="center">Figure: Fast Reachability analysis of CNNs with input pixels under perturbation. \nBlue area represents the reachable domain. \nBlack dots represent simultations.
 </p>
