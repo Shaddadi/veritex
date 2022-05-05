@@ -142,7 +142,7 @@ Reuse: compute the exact output rachable domain and the unsafe input subspace of
 4. Collect results and plot using ['reachplot'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/reachplot.py)
 
 
-### Verify ACASXu Networks
+### Verify Neural Networks
 
    ```bash
    cd examples/ACASXu/verify
@@ -168,7 +168,7 @@ Reuse: compute the exact output rachable domain and the unsafe input subspace of
    
    ```
 
-### Repair Unsafe ACASXu Networks
+### Repair Unsafe Neural Networks
 
    ```bash
    cd examples/ACASXu/repair
@@ -179,6 +179,7 @@ Reuse: compute the exact output rachable domain and the unsafe input subspace of
    1. Build a repair object using ['veritex/methods/repair'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py)
    2. Select parameters for the retraining process 
    3. Execute the repair function ['repair_model_classification'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py#L322) or ['repair_model_regular'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py#L247)
+
 
 ### Visualize Reachable Domains of Neural Networks
 
@@ -217,7 +218,7 @@ Example:
 <p align="center">Figure: Output reachable domains of Network21 on Properties 3 and 4. They are projected on (y0,y1) and (y0, y2).
 </p>
 
-### Over Approximate Reachable Domains with Vzono
+### Over Approximate Output Reachable Domain of A DNN with Vzono
 Over approximate reachable domains of networks [Demo](https://github.com/Shaddadi/veritex/blob/master/examples/Demo/demo_vzono.py)
    ```bash
    cd examples/Demo
@@ -238,7 +239,7 @@ Reuse: over approximate output reachable domain of a DNN with Vzono
 4. Collect results and plot using ['reachplot'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/reachplot.py)
 
 
-### Fast Reachability Analysis (Under-approximation) of CNNs
+### Fast Reachability Analysis (Under-approximation) of A CNN
 Fast reachability analysis of pixelwise perturbation of CNNs using [Method](https://github.com/Shaddadi/veritex/blob/master/veritex/networks/cnn.py#L787)
    ```bash
    examples/CIFAR10
