@@ -141,7 +141,7 @@ Results will be saved in /images.
    cd examples/ACASXu/verify
    python verify_all_instances.py
    ```
-   #### Reuse: verify a neural network on multiple safety properties
+   Reuse: verify a neural network on multiple safety properties
    ```bash
    python veritex/methods/verify.py \
    --property 'path_to_property1' ... 'path_to_propertyn' \
@@ -150,9 +150,15 @@ Results will be saved in /images.
    --network_name 'model_name'
    ```
    
-   #### Example
+   ACASXu Example
    ```bash
-   cd xxx
+   cd examples/ACASXu/verify
+   python ../../veritex/methods/verify.py \
+   --property '../nets/prop_1.vnnlib' '../nets/prop_2.vnnlib' '../nets/prop_3.vnnlib' '../nets/prop_4.vnnlib' \
+   --property_name 'prop_1' 'prop_2' 'prop_3' 'prop_4' \
+   --network_path '../nets/ACASXU_run2a_1_1_batch_2000.onnx' \
+   --network_name 'N11'
+   
    ```
 
 ### Repair Unsafe ACASXu Networks
@@ -162,7 +168,7 @@ Results will be saved in /images.
    python repair_nnets.py
    ```
 
-### Visualize Reachable Domains of ACASXu Networks
+### Visualize Reachable Domains of Neural Networks
 
 Visualize the output reachable domain
 
