@@ -226,7 +226,7 @@ Over approximate reachable domains of networks [link](https://github.com/Shaddad
 
 Reuse: over approximate output reachable domain of a DNN with Vzono
 1. Create a DNN object using ['FFNN'](https://github.com/Shaddadi/veritex/blob/master/veritex/networks/ffnn.py)
-2. Create a ['safety property'](https://github.com/Shaddadi/veritex/blob/master/veritex/utils/sfproperty.py) by specifying the lower and upper bounds of the input domain 
+2. Create a ['safety property'](https://github.com/Shaddadi/veritex/blob/master/veritex/utils/sfproperty.py) by specifying the lower and upper bounds of the input domain and the set representation Vzono
 3. Set up and run the parallel framework using ['SharedState'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/shared.py) and ['Worker'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/worker.py)
 4. Collect results and plot using ['reachplot'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/reachplot.py)
 
