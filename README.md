@@ -217,12 +217,18 @@ Over approximate reachable domains of networks [link](https://github.com/Shaddad
    python demo_vzono.py
    ```
 <p align="center">
-    <img src="examples/Demo/figures/relu_vzono.png" style="width:35%">
-    <img src="examples/Demo/figures/tanh_vzono.png" style="width:35%">
-   <img src="examples/Demo/figures/sigmoid_vzono.png" style="width:35%">
+    <img src="examples/Demo/figures/relu_vzono.png" style="width:32%">
+    <img src="examples/Demo/figures/tanh_vzono.png" style="width:32%">
+   <img src="examples/Demo/figures/sigmoid_vzono.png" style="width:32%">
 </p>
 <p align="center">Figure: Over approximated reachable domains of networks with ReLU, Tanh, Sigmoid, respectively.
 </p>
+
+Reuse: over approximate output reachable domain of a DNN with Vzono
+1. Create a DNN object using ['FFNN'](https://github.com/Shaddadi/veritex/blob/master/veritex/networks/ffnn.py)
+2. Create a ['safety property'](https://github.com/Shaddadi/veritex/blob/master/veritex/utils/sfproperty.py) by specifying the lower and upper bounds of the input domain 
+3. Set up and run the parallel framework using ['SharedState'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/shared.py) and ['Worker'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/worker.py)
+4. Collect results and plot using ['reachplot'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/reachplot.py)
 
 
 ### Fast Reachability Analysis (Under-approximation) of CIFAR10 CNNs
