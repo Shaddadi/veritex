@@ -211,7 +211,7 @@ Example:
 </p>
 
 ### Over Approximate Reachable Domains with Vzono
-Over approximate reachable domains of networks [link](https://github.com/Shaddadi/veritex/blob/master/examples/Demo/demo_vzono.py)
+Over approximate reachable domains of networks [Demo](https://github.com/Shaddadi/veritex/blob/master/examples/Demo/demo_vzono.py)
    ```bash
    cd examples/Demo
    python demo_vzono.py
@@ -231,7 +231,8 @@ Reuse: over approximate output reachable domain of a DNN with Vzono
 4. Collect results and plot using ['reachplot'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/reachplot.py)
 
 
-### Fast Reachability Analysis (Under-approximation) of CIFAR10 CNNs
+### Fast Reachability Analysis (Under-approximation) of CNNs
+Fast reachability analysis of pixelwise perturbation of CNNs using [Method](https://github.com/Shaddadi/veritex/blob/master/veritex/networks/cnn.py#L787)
    ```bash
    examples/CIFAR10
    python main_cifar10.py
