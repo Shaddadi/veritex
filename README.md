@@ -141,7 +141,7 @@ Results will be saved in /images.
    cd examples/ACASXu/verify
    python verify_all_instances.py
    ```
-   Reuse: verify a neural network on multiple safety properties
+   Reuse: verify a neural network on multiple safety properties [link](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/verify.py)
    ```bash
    python veritex/methods/verify.py \
    --property 'path_to_property1' ... 'path_to_propertyn' \
@@ -175,7 +175,7 @@ Results will be saved in /images.
 
 ### Visualize Reachable Domains of Neural Networks
 
-Visualize the output reachable domain
+Visualize the output reachable domain [link](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/reachplot.py)
 
    ```bash
    python veritex/methods/reachplot.py \
