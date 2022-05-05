@@ -200,3 +200,12 @@ Over approximate reachable domains of networks
 </p>
 <p align="center">Figure: Over approximated reachable domains of networks with ReLU, Tanh, Sigmoid, respectively.
 </p>
+
+
+### Fast Reachability Analysis (Under-approximation) of CIFAR10 CNNs
+
+<p align="center">
+    <img src="examples/CIFAR10/figures/fast_reach_cifar10.png" style="width:32%">
+</p>
+<p align="center">Figure: Over approximated reachable domains of networks with ReLU, Tanh, Sigmoid, respectively.
+</p>
