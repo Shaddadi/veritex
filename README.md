@@ -175,7 +175,7 @@ Results will be saved in /images.
 
 ### Visualize Reachable Domains of Neural Networks
 
-Visualize the output reachable domain [link](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/reachplot.py)
+Visualize the output reachable domain using [reachplot](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/reachplot.py)
 
    ```bash
    python veritex/methods/reachplot.py \
