@@ -73,7 +73,8 @@ def reach_relu_network():
     ax.set_ylabel(f'$y_{dim1}$', fontsize=16)
     plt.title('Reachable domain of a ReLU network.\nCyan area represents the over-approximated reachable domain. \n Blue area represents the exact reachable domain. \nBlack dots represent simultations')
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig('figures/relu_vzono.png')
     plt.close()
 
 
@@ -115,7 +116,8 @@ def reach_sigmoid_network():
     plt.title(
         'Reachable domain of a Sigmoid network.\nCyan area represents the over-approximated reachable domain.\nBlack dots represent simultations')
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig('figures/sigmoid_vzono.png')
     plt.close()
 
 
@@ -156,7 +158,8 @@ def reach_tanh_network():
     plt.title(
         'Reachable domain of a Tanh network.\nCyan area represents the over-approximated reachable domain.\nBlack dots represent simultations')
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig('figures/tanh_vzono.png')
     plt.close()
 
 
