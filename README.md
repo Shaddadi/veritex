@@ -171,7 +171,7 @@ Results will be saved in /images.
    Reuse: repair a neural network on multiple safety properties
    1. Build a repair object using ['veritex/methods/repair'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py)
    2. Select parameters for the retraining process 
-   3. Execute the repair function 'repair_model_classification' or 'repair_model_regular'
+   3. Execute the repair function ['repair_model_classification'](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py/repair_model_classification) or 'repair_model_regular'
 
 ### Visualize Reachable Domains of Neural Networks
 
