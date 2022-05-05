@@ -202,9 +202,9 @@ Over approximate reachable domains of networks
    python demo_vzono.py
    ```
 <p align="center">
-    <img src="examples/Demo/figures/relu_vzono.png" style="width:32%">
-    <img src="examples/Demo/figures/tanh_vzono.png" style="width:32%">
-   <img src="examples/Demo/figures/sigmoid_vzono.png" style="width:32%">
+    <img src="examples/Demo/figures/relu_vzono.png" style="width:35%">
+    <img src="examples/Demo/figures/tanh_vzono.png" style="width:35%">
+   <img src="examples/Demo/figures/sigmoid_vzono.png" style="width:35%">
 </p>
 <p align="center">Figure: Over approximated reachable domains of networks with ReLU, Tanh, Sigmoid, respectively.
 </p>
