@@ -167,6 +167,12 @@ Results will be saved in /images.
    cd examples/ACASXu/repair
    python repair_nnets.py
    ```
+   
+   Reuse: repair a neural network on multiple safety properties
+   1. Build a repair object using 'veritex/methods/repair'
+   2. Select parameters for the retraining process 
+   3. Execute the repair function 'repair_model_classification' or 'repair_model_regular'
+   ```
 
 ### Visualize Reachable Domains of Neural Networks
 
