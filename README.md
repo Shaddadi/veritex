@@ -153,7 +153,7 @@ Results will be saved in /images.
    ACASXu Example
    ```bash
    cd examples/ACASXu/verify
-   python ../../veritex/methods/verify.py \
+   python ../../../veritex/methods/verify.py \
    --property '../nets/prop_1.vnnlib' '../nets/prop_2.vnnlib' '../nets/prop_3.vnnlib' '../nets/prop_4.vnnlib' \
    --property_name 'prop_1' 'prop_2' 'prop_3' 'prop_4' \
    --network_path '../nets/ACASXU_run2a_1_1_batch_2000.onnx' \
