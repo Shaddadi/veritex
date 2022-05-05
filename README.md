@@ -203,6 +203,10 @@ Over approximate reachable domains of networks
 
 
 ### Fast Reachability Analysis (Under-approximation) of CIFAR10 CNNs
+   ```bash
+   examples/CIFAR10
+   python main_cifar10.py
+   ```
 
 <p align="center">
     <img src="examples/CIFAR10/figures/fast_reach_cifar10.png" style="width:40%">
