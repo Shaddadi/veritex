@@ -40,7 +40,7 @@ This tool is confirmed with only Python3.7.
 1. Install veritex pkg with pip.
 
    ```bash
-   python3.7 -m pip install .
+   python -m pip install .
    ```
 
 2. Set path to /veritex under this repository.
@@ -58,7 +58,7 @@ This tool is confirmed with only Python3.7.
 1. Install required python packages.
 
     ```bash
-    python3.7 -m pip install -e .
+    python -m pip install -e .
     ```
 
 2. Set path to /veritex under this repository.
