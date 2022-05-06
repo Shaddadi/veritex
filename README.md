@@ -121,7 +121,7 @@ Linux systems are suggested. This artifact aims to reproduce results in the CAV'
 This demo includes the computation of the exact output reachable domain of a neural network using our reachability analysis method.
 It also includes the computation of its exact unsafe input space that leads to safety violations in the output using our Backtracking algorithm.
 The neural network consists of 3 inputs, 2 outputs, and 8 layers with each having 7 neurons.
-Results will be saved in /images.
+Results will be saved in '/images'.
 
    ```bash
    cd examples/Demo
@@ -157,7 +157,7 @@ Reuse: compute the exact output rachable domain and the unsafe input subspace of
    --network_name 'model_name'
    ```
    
-   ACASXu Example
+   ACASXu Example. Results will be logged.
    ```bash
    cd examples/ACASXu/verify
    python ../../../veritex/methods/verify.py \
@@ -193,7 +193,7 @@ Visualize the output reachable domain using [reachplot](https://github.com/Shadd
    --savename 'xxx'
    ```
 
-Example:
+Example. Results will be logged into '/figures':
 
    ```bash
    cd examples/ACASXu/repair
@@ -219,7 +219,7 @@ Example:
 </p>
 
 ### Over Approximate Output Reachable Domain of A DNN with Vzono
-Over approximate reachable domains of networks [Demo](https://github.com/Shaddadi/veritex/blob/master/examples/Demo/demo_vzono.py)
+Over approximate reachable domains of networks [Demo](https://github.com/Shaddadi/veritex/blob/master/examples/Demo/demo_vzono.py). Results will be logged into '/figures'.
    ```bash
    cd examples/Demo
    python demo_vzono.py
@@ -240,7 +240,7 @@ Reuse: over approximate output reachable domain of a DNN with Vzono
 
 
 ### Fast Reachability Analysis (Under-approximation) of A CNN
-Fast reachability analysis of pixelwise perturbation of CNNs using [Method](https://github.com/Shaddadi/veritex/blob/master/veritex/networks/cnn.py#L787)
+Fast reachability analysis of pixelwise perturbation of CNNs using [Method](https://github.com/Shaddadi/veritex/blob/master/veritex/networks/cnn.py#L787). Results will be logged into '/figures'.
    ```bash
    examples/CIFAR10
    python main_cifar10.py
