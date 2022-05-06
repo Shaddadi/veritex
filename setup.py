@@ -19,6 +19,7 @@ setup(
     license='BSD',
     python_requires='>=3.7, <3.8',
     install_requires=[
+	'protobuf==3.18.1',
         'torch==1.10.0',
         'numpy',
         'scipy',
