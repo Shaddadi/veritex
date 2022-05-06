@@ -111,7 +111,7 @@ Linux systems are suggested. This artifact aims to reproduce results in the CAV'
    bash reproduce_results2.sh
    ```
 
-3. Export results from docker to host. If there is a 'permission' error, update the docker first. Here are also some potenial [solutions](https://github.com/docker/for-linux/issues/564)
+3. Export results from docker to host. If there is a 'permission' error, update the docker first. Here are also some potential [solutions](https://github.com/docker/for-linux/issues/564)
    ```bash
    sudo docker cp cav_veritex:/veritex/cav22_artifact/results/. <PATH_TO_YOUR_HOST>
    ```
