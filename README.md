@@ -69,7 +69,9 @@ This tool has been confirmed to work and tested with only Python3.7.
     export OMP_NUM_THREADS=1
     ```
 
-## CAV'22 Artifact
+## CAV'22 Artifact Evaluation
+
+This section describes how to easily reproduce the tables and figures that appear in the CAV paper. We recommend using the Dockerized set up described above for installing the artifact.
 
 Linux host systems are suggested, but Windows hosts have also been tested. This artifact aims to reproduce results in the CAV'22 tool paper, including **Figures 2, 3, and 4** and **Tables 2 and 3**. Results are stored in 'veritex/cav22_artifact/results'. There are two versions for the artifact evaluation. The difference between these two versions is that the first one runs faster, as it does not include the repair of two neural networks that consumes a large amount of memory and time.
 
@@ -119,6 +121,8 @@ Linux host systems are suggested, but Windows hosts have also been tested. This 
 ## Run experiments
 ### Demo
 
+This section describes how to run additional demonstrations and experiments beyond those reproduced for the CAV paper.
+
 This demo includes the computation of the exact output reachable domain of a neural network using our reachability analysis method.
 It also includes the computation of its exact unsafe input space that leads to safety violations in the output using our Backtracking algorithm.
 The neural network consists of 3 inputs, 2 outputs, and 8 layers with each having 7 neurons.
@@ -144,6 +148,8 @@ Reuse: compute the exact output rachable domain and the unsafe input subspace of
 
 
 ### Verify Neural Networks
+
+This section describes how to verify a new neural network not already analyzed within the Veritex examples, illustrated as well for an ACASXu example.
 
    ```bash
    cd examples/ACASXu/verify
@@ -171,12 +177,14 @@ Reuse: compute the exact output rachable domain and the unsafe input subspace of
 
 ### Repair Unsafe Neural Networks
 
+This section describes how to repair a new neural network not already analyzed within the Veritex examples.
+
    ```bash
    cd examples/ACASXu/repair
    python repair_nnets.py
    ```
    
-   Reuse: repair a neural network on multiple safety properties
+Reuse: repair a neural network on multiple safety properties
    1. Build a repair object using [REPAIR](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py)
    2. Select parameters for the retraining process 
    3. Execute the repair function [repair_model_classification](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py#L322) or [repair_model_regular](https://github.com/Shaddadi/veritex/blob/master/veritex/methods/repair.py#L247)
