@@ -1,6 +1,6 @@
-# Tool for Reachability Analysis and Repair of Neural Networks
+# Veritex: Tool for Reachability Analysis and Repair of Neural Networks
 
-Veritex is an object-oriented software programmed in Python. It takes in two inputs, the network model and safety properties. Veritex supports the standardized format ONNX and PyTorch for the network and the unified format Vnnnlib for the safety property. With the network model and its safety properties, Veritex can  
+Veritex is an object-oriented software tool programmed in Python for verifying and repairing neural networks. It takes in two inputs, the network model and safety properties. Veritex supports the standardized format ONNX and PyTorch for the network and the unified format Vnnnlib for the safety property. With the network model and its safety properties, Veritex can:  
 * compute the exact or over-approximated output reachable domain and also the entire unsafe input space if exists,
 * plot 2 or 3-dimensional reachable domains,
 * produce a provable safe network in ONNX or PyTorch format when the repair option is enabled.
@@ -10,24 +10,24 @@ Veritex is an object-oriented software programmed in Python. It takes in two inp
 </p>
 <p align="center"> Figure: An overview of Veritex architecture.</p>
 
-## Install
+## Installation and System Requirements
 
-Clone this repository to your local machine.
+Clone this repository to your local machine, which we assume has 32GB RAM or more, and where the artifact is executable through Docker on most common host operating systems (Linux/Ubuntu and Windows 11 have been tested).
 
 ```bash
 git clone https://github.com/Shaddadi/veritex.git
 cd veritex
 ```
 
-### Option 1: docker installing as a User (recommend for CAV'22 artifact)
+### Option 1: docker installing as a User (recommended for CAV'22 artifact evaluation)
 
-1. Build the image from the dockerfile.
+1. Assuming Docker is installed, build the Docker image from the dockerfile (ignore sudo if using a Windows host in these steps).
 
     ```bash
     sudo docker build . -t veritex_image
     ```
 
-1. Create and start the docker container.
+2. Create and start the docker container.
 
     ```bash
     sudo docker run --name cav_veritex --rm -it veritex_image bash
@@ -35,7 +35,7 @@ cd veritex
 
 ### Option 2: installing as a User
 
-This tool is confirmed with only Python3.7.
+This tool has been confirmed to work and tested with only Python3.7.
 
 1. Install veritex pkg with pip.
 
@@ -53,7 +53,7 @@ This tool is confirmed with only Python3.7.
 
 ### Option 3: installing as a Developer
 
-This tool is confirmed with only Python3.7.
+This tool has been confirmed to work and tested with only Python3.7.
 
 1. Install required python packages.
 
@@ -71,11 +71,11 @@ This tool is confirmed with only Python3.7.
 
 ## CAV'22 Artifact
 
-Linux systems are suggested. This artifact aims to reproduce results in the CAV'22 tool paper, including **Figure 2&3&4** and **Table 2&3**. Results are stored in 'veritex/cav22_artifact/results'. There are two versions for the artifact evaluation. The difference between these two versions is that the first one does not include the repair of two neural networks which consumes a large amount of memory and time. 
+Linux host systems are suggested, but Windows hosts have also been tested. This artifact aims to reproduce results in the CAV'22 tool paper, including **Figures 2, 3, and 4** and **Tables 2 and 3**. Results are stored in 'veritex/cav22_artifact/results'. There are two versions for the artifact evaluation. The difference between these two versions is that the first one runs faster, as it does not include the repair of two neural networks that consumes a large amount of memory and time.
 
-**Caution**: Reachable domains of networks in **Figure 3&4** may be slightly different from the ones in the paper because each run of the repair method can not guarantee to produce the exact same safe network. 
+**Caution**: Reachable domains of networks in **Figures 3 and 4** may be slightly different from the ones in the paper because each run of the repair method cannot be guaranteed to produce the exact same safe network. 
 
-**Caution**: For *Windows* users who encounter the error '\r command not found' when implementing the artifact, please run the following commands before the shell script.
+**Caution**: On *Windows* hosts, users who encounter the error '\r command not found' when executing the artifact, please run the following commands before the shell script. The update may not be required, but the dos2unix tool can be used to address the line endings if this error arises. Note this should be done in the cav22_artifact directory, where these reproduce_resultsX.sh scripts reside.
    ```bash
    apt-get update
    apt-get install dos2unix
@@ -83,7 +83,7 @@ Linux systems are suggested. This artifact aims to reproduce results in the CAV'
    dos2unix reproduce_results2.sh
    ```
 
-1. The first version reproduces the results in the paper except for two hard instances (~170 mins), including
+1. The first fast version reproduces the results in the paper except for two hard instances (taking a total of ~170 mins), including
    * safety verification of all instances (data generation for Figure 2) (~2 mins),
    * repair of 33/35 unsafe instances (data generation for Figure 3 and most of results in Table 2&3) (~40 mins),
    * repair of an unsafe DNN agent (data generation for Figure 4) (~6 mins),
@@ -104,17 +104,18 @@ Linux systems are suggested. This artifact aims to reproduce results in the CAV'
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables (~40 mins, majority of the time is spent on the plot of reachable domains).
 
-   The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
+   The hardware requirements for second version are comparable to what we tested on: AWS r5.12xlarge instance, 48vCPUs, 384 GB memory, no GPU.
 
    ```bash
    cd cav22_artifact
    bash reproduce_results2.sh
    ```
 
-3. Export results from docker to host. If there is a 'permission' error, update the docker first. Here are also some potential [solutions](https://github.com/docker/for-linux/issues/564)
+3. Export results from docker to host. If there is a 'permission' error, update the docker installation first. Here are also some potential [solutions](https://github.com/docker/for-linux/issues/564). For PATH_TO_YOUR_HOST, replace e.g. with a . for the current working directory.
    ```bash
    sudo docker cp cav_veritex:/veritex/cav22_artifact/results/. <PATH_TO_YOUR_HOST>
    ```
+   
 ## Run experiments
 ### Demo
 
