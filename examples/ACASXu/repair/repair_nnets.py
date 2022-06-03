@@ -45,7 +45,7 @@ if __name__ == '__main__':
             output_limit = 10
             lr = 0.01
         else:
-            output_limit = 1000
+            output_limit = 100
         logging.info(f'Neural Network {i} {j}')
         properties_repair = item[1]
         nn_path = "../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
