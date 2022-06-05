@@ -27,7 +27,7 @@ def collect_veritex(filepath):
                     veritex_times.append(t)
 
     our_times = np.sort(np.array(veritex_times))
-    our_times = our_times - min(our_times)*0.5 # overhead
+    our_times = our_times - min(our_times)*0.99 # overhead
     return our_times
 
 
