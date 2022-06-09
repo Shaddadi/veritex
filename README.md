@@ -71,7 +71,7 @@ This tool has been confirmed to work and tested with only Python3.7.
 
 ## CAV'22 Artifact Evaluation
 
-This section describes how to easily reproduce the tables and figures that appear in the CAV paper. We recommend using the Dockerized set up described above for installing the artifact.
+This section describes how to easily reproduce the tables and figures that appear in the [paper](https://github.com/Shaddadi/veritex/blob/master/tool_paper.pdf). We recommend using the Dockerized set up described above for installing the artifact.
 
 Linux host systems are suggested, but Windows hosts have also been tested. This artifact aims to reproduce results in the CAV'22 tool paper, including **Figures 2, 3, and 4** and **Tables 2 and 3**. Results are stored in 'veritex/cav22_artifact/results'. There are two versions for the artifact evaluation. The difference between these two versions is that the first one runs faster, as it does not include the repair of two neural networks that consumes a large amount of memory and time.
 
