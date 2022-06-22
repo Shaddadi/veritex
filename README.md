@@ -19,7 +19,7 @@ git clone https://github.com/Shaddadi/veritex.git
 cd veritex
 ```
 
-### Option 1: docker installing as a User (recommended for CAV'22 artifact evaluation)
+### Option 1: docker installing as a User (recommended for SEFM'22 artifact evaluation)
 
 1. Assuming Docker is installed, build the Docker image from the dockerfile (ignore sudo if using a Windows host in these steps).
 
@@ -30,7 +30,7 @@ cd veritex
 2. Create and start the docker container.
 
     ```bash
-    sudo docker run --name cav_veritex --rm -it veritex_image bash
+    sudo docker run --name sefm_veritex --rm -it veritex_image bash
     ```
 
 ### Option 2: installing as a User
@@ -73,11 +73,11 @@ This tool has been confirmed to work and tested with only Python3.7.
 
 This section describes how to easily reproduce the tables and figures that appear in the [paper](https://github.com/Shaddadi/veritex/blob/master/tool_paper.pdf). We recommend using the Dockerized set up described above for installing the artifact.
 
-Linux host systems are suggested, but Windows hosts have also been tested. This artifact aims to reproduce results in the CAV'22 tool paper, including **Figures 2, 3, and 4** and **Tables 2 and 3**. Results are stored in 'veritex/cav22_artifact/results'. There are two versions for the artifact evaluation. The difference between these two versions is that the first one runs faster, as it does not include the repair of two neural networks that consumes a large amount of memory and time.
+Linux host systems are suggested, but Windows hosts have also been tested. This artifact aims to reproduce results in the SEFM'22 tool paper, including **Figures 2, 3, and 4** and **Tables 2 and 3**. Results are stored in 'veritex/sefm22_artifact/results'. There are two versions for the artifact evaluation. The difference between these two versions is that the first one runs faster, as it does not include the repair of two neural networks that consumes a large amount of memory and time.
 
 **Caution**: Reachable domains of networks in **Figures 3 and 4** may be slightly different from the ones in the paper because each run of the repair method cannot be guaranteed to produce the exact same safe network. 
 
-**Caution**: On *Windows* hosts, users who encounter the error '\r command not found' when executing the artifact, please run the following commands before the shell script. The update may not be required, but the dos2unix tool can be used to address the line endings if this error arises. Note this should be done in the cav22_artifact directory, where these reproduce_resultsX.sh scripts reside.
+**Caution**: On *Windows* hosts, users who encounter the error '\r command not found' when executing the artifact, please run the following commands before the shell script. The update may not be required, but the dos2unix tool can be used to address the line endings if this error arises. Note this should be done in the sefm22_artifact directory, where these reproduce_resultsX.sh scripts reside.
    ```bash
    apt-get update
    apt-get install dos2unix
@@ -95,7 +95,7 @@ Linux host systems are suggested, but Windows hosts have also been tested. This 
    This version requires at least 32 GB memory.
 
    ```bash
-   cd cav22_artifact
+   cd sefm22_artifact
    bash reproduce_results1.sh
       ```
 
@@ -109,19 +109,19 @@ Linux host systems are suggested, but Windows hosts have also been tested. This 
    The hardware requirements for second version are comparable to what we tested on: AWS r5.12xlarge instance, 48vCPUs, 384 GB memory, no GPU.
 
    ```bash
-   cd cav22_artifact
+   cd sefm22_artifact
    bash reproduce_results2.sh
    ```
 
 3. Export results from docker to host. If there is a 'permission' error, update the docker installation first. Here are also some potential [solutions](https://github.com/docker/for-linux/issues/564). For PATH_TO_YOUR_HOST, replace e.g. with a . for the current working directory.
    ```bash
-   sudo docker cp cav_veritex:/veritex/cav22_artifact/results/. <PATH_TO_YOUR_HOST>
+   sudo docker cp sefm_veritex:/veritex/sefm22_artifact/results/. <PATH_TO_YOUR_HOST>
    ```
    
 ## Run experiments
 ### Demo
 
-This section describes how to run additional demonstrations and experiments beyond those reproduced for the CAV paper.
+This section describes how to run additional demonstrations and experiments beyond those reproduced for the SEFM paper.
 
 This demo includes the computation of the exact output reachable domain of a neural network using our reachability analysis method.
 It also includes the computation of its exact unsafe input space that leads to safety violations in the output using our Backtracking algorithm.
