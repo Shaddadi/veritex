@@ -69,7 +69,7 @@ This tool has been confirmed to work and tested with only Python3.7.
     export OMP_NUM_THREADS=1
     ```
 
-## CAV'22 Artifact Evaluation
+## Artifact Evaluation
 
 This section describes how to easily reproduce the tables and figures that appear in the [paper](https://github.com/Shaddadi/veritex/blob/master/tool_paper.pdf). We recommend using the Dockerized set up described above for installing the artifact.
 
