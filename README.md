@@ -19,7 +19,7 @@ git clone https://github.com/Shaddadi/veritex.git
 cd veritex
 ```
 
-### Option 1: docker installing as a User (recommended for SEFM'22 artifact evaluation)
+### Option 1: docker installing as a User (recommended for SEFM'22 and FORMATS'22 artifact evaluation)
 
 1. Assuming Docker is installed, build the Docker image from the dockerfile (ignore sudo if using a Windows host in these steps).
 
