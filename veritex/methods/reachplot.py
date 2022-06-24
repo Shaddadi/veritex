@@ -25,7 +25,7 @@ from veritex.utils.vnnlib import vnnlib_to_properties
 import torch
 
 
-def run(prop_list, network_path, dims, savename):
+def run(prop_list, network_path, dims, savename, figsize=(2.0, 2.67)):
     """
     Plot reachable domains of the network model on the safety properties
 
@@ -62,7 +62,7 @@ def run(prop_list, network_path, dims, savename):
             temp = vnnlib_to_properties(prop, input_num, output_num)
             properties.extend(temp)
 
-    fig = plt.figure(figsize=(2.0, 2.67))
+    fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111)
     dnn0 = FFNN(torch_model, unsafe_inputd=True, exact_outputd=True)
 
@@ -105,8 +105,8 @@ def run(prop_list, network_path, dims, savename):
                             linewidth=0.0)
 
     ax.autoscale()
-    ax.set_xlabel('$y_' + str(dim0) + '$', fontsize=16)
-    ax.set_ylabel('$y_' + str(dim1) + '$', fontsize=16)
+    ax.set_xlabel('$y_' + str(dim0+1) + '$', fontsize=16)
+    ax.set_ylabel('$y_' + str(dim1+1) + '$', fontsize=16)
     # plt.title('Exact output reachable domain (blue) & Unsafe domain (red) on'+' Property '+args.property, fontsize=18, pad=20)
 
     plt.savefig(savename + '.png', bbox_inches='tight')
