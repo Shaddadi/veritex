@@ -110,7 +110,7 @@ Linux host systems are suggested, but Windows hosts have also been tested.  Ther
 
 3. Export results from docker to host. If there is a 'permission' error, update the docker installation first. Here are also some potential [solutions](https://github.com/docker/for-linux/issues/564). For PATH_TO_YOUR_HOST, replace e.g. with a . for the current working directory.
    ```bash
-   sudo docker cp veritex:/veritex/sefm22_artifact/results/. <PATH_TO_YOUR_HOST>
+   sudo docker cp veritex:/veritex/artifact/FORMATS22/results/. <PATH_TO_YOUR_HOST>
    ```
    
 ## Run experiments
