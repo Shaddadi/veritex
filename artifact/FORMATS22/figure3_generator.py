@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import glob
+import os
 
 
 def collect_veritex_accuracy_runtime():
@@ -103,6 +104,8 @@ def get_log_info_art(log_path):
         return [net_IDs, accurcys, run_times, safety]
 
 
+if not os.path.isdir('./results'):
+    os.mkdir('./results')
 results_refine_art, _ = collect_art_accuracy_runtime()
 results_veritex = collect_veritex_accuracy_runtime()
 

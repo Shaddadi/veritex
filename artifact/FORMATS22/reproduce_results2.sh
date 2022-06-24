@@ -3,6 +3,7 @@
 # repair of acasxu using veritex
 cd ../../examples/ACASXu/repair
 python3 repair_nnets.py --all
+python3 repair_nnets_minimal.py --all
 
 
 # repair of acasxu using art
