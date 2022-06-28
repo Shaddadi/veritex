@@ -84,8 +84,9 @@ Linux host systems are suggested, but Windows hosts have also been tested.  Ther
    dos2unix reproduce_results2.sh
    ```
 
-1. The first fast version reproduces the results in the paper except for two hard instances (taking a total of ~170 mins), including
+1. The first fast version reproduces the results in the paper except for two hard instances (taking a total of ~230 mins), including
    * repair of 33/35 unsafe instances (data generation for Figure 3 and most of results in Table 2&3) (~40 mins),
+   * the minimal repair of 33/35 unsafe instances (data generation for Figure 3 and most of results in Table 2&3) (~60 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables (~40 mins, majority of the time is spent on the plot of reachable domains).
 
@@ -96,8 +97,9 @@ Linux host systems are suggested, but Windows hosts have also been tested.  Ther
    bash reproduce_results1.sh
       ```
 
-2. The second version reproduces all the results in the paper (~410 mins), including
+2. The second version reproduces all the results in the paper (~760 mins), including
    * repair of all 35/35 unsafe instances (data generation for Figure 3 and Table 2&3) (~280 mins),
+   * the minimal repair of all 35/35 unsafe instances (data generation for Figure 3 and Table 2&3) (~350 mins),
    * implementation of the related work ART for the repair comparison (~90 mins),
    * generation of figures and tables (~40 mins, majority of the time is spent on the plot of reachable domains).
 
