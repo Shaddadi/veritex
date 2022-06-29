@@ -158,7 +158,7 @@ Linux systems are suggested. This artifact aims to reproduce results in the SEFM
 
 3. Export results from docker to host.
    ```bash
-   sudo docker cp cav_veritex:/veritex/artifact/artifact/SEFM22/results/. <PATH_TO_YOUR_HOST>
+   sudo docker cp veritex:/veritex/artifact/artifact/SEFM22/results/. <PATH_TO_YOUR_HOST>
    
 ## Run experiments
 ### Demo
