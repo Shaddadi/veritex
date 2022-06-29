@@ -304,7 +304,7 @@ if __name__ == "__main__":
     else:
         sys.exit("The number of repaired instances is not correct!")
 
-    with open('results/Table2&3.txt', 'w') as f:
+    with open('results/Table1&2.txt', 'w') as f:
         f.write(tables)
     print(tables)
 
