@@ -120,7 +120,7 @@ Linux systems are suggested. This artifact aims to reproduce results in the SEFM
 
 **Caution**: Reachable domains of networks in **Figure 3&4** may be slightly different from the ones in the paper because each run of the repair method can not guarantee to produce the exact same safe network. 
 
-**Caution**: For *Windows* users who encounter the error '\r command not found' when implementing the artifact, please run the following commands before the shell script.
+**Caution**: On *Windows* hosts, users who encounter the error '\r command not found' when executing the artifact, please run the following commands before the shell script. The update may not be required, but the dos2unix tool can be used to address the line endings if this error arises. Note this should be done in the SEFM22 directory, where these reproduce_resultsX.sh scripts reside.
    ```bash
    apt-get update
    apt-get install dos2unix
