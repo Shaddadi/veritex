@@ -112,15 +112,15 @@ def get_log_info_veritex(log_path):
 
 
 def collect_art_accuracy_runtime():
-    art_log_path_refine = glob.glob("ART/results/acas/art_test_goal_safety/*.log")[-1]
-    art_log_path_no_refine = glob.glob("ART/results/acas/art_test_goal_safety_no_refine/*.log")[-1]
+    art_log_path_refine = sorted(glob.glob("ART/results/acas/art_test_goal_safety/*.log"))[-1]
+    art_log_path_no_refine = sorted(glob.glob("ART/results/acas/art_test_goal_safety_no_refine/*.log"))[-1]
 
     results_refine = get_log_info_art(art_log_path_refine)
     results_no_refine = get_log_info_art(art_log_path_no_refine)
     return results_refine, results_no_refine
 
 def collect_veritex_accuracy_runtime():
-    log_path = glob.glob("../examples/ACASXu/repair/logs/*.log")[-1]
+    log_path = sorted(glob.glob("../../examples/ACASXu/repair/logs/*.log"))[-1]
     results = get_log_info_veritex(log_path)
     return results
 
@@ -162,7 +162,7 @@ def compute_expressibility():
         print('Neural Network',i,j)
         properties_repair = item[1]
 
-        nn_original_path = "../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
+        nn_original_path = "../../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
         original_model = load_ffnn_onnx(nn_original_path)
         ori_lregion = compute_linear_regions(original_model, properties_repair)
 
@@ -264,7 +264,7 @@ if __name__ == "__main__":
         tables += '--------------------------------------------------------------------------\n'
         tables += '\n'
         tables += '\n'
-        tables += 'Table 3: Running time (sec) of Veritex and ART. Veritex shows a higher efficiency \n than ART-refinement in most of the instances.\n'
+        tables += 'Table 2: Running time (sec) of Veritex and ART. \n'
         tables += '--------------------------------------------------------------------------\n'
         tables += 'Methods          Min     Mean Time     Max      Time (N19)     Time (N29)\n'
         tables += '--------------------------------------------------------------------------\n'

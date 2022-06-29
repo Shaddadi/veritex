@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # verification of acasxu
-cd ../examples/ACASXu/verify
+cd ../../examples/ACASXu/verify
 python3 verify_all_instances.py
 
 # repair of acasxu using veritex

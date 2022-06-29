@@ -36,7 +36,7 @@ if __name__ == "__main__":
     all_vnncomp_times = process_results()
     if not os.path.isdir('./results'):
         os.mkdir('./results')
-    filepath = '../examples/ACASXu/verify/'
+    filepath = '../../examples/ACASXu/verify/'
     veritex_times = collect_veritex(filepath)
     veritex_times_sum = np.sum(veritex_times)
     # print('Veritex: ', veritex_times_sum)
