@@ -69,7 +69,7 @@ This tool has been confirmed to work and tested with only Python3.7.
     export OMP_NUM_THREADS=1
     ```
 
-## FORMATS'22 Artifact Evaluation
+## FORMATS'22 Artifact Evaluation for DNN Repair
 
 This artifact aims to reproduce results in the FORMATS'22 paper, including **Figures 3, 4, and 5** and **Tables 1 and 2**. Results are stored in 'veritex/FORMATS22/results'.. We recommend using the Dockerized set up described above for installing the artifact.
 Linux host systems are suggested, but Windows hosts have also been tested.  There are two versions for the artifact evaluation. The difference between these two versions is that the first one runs faster, as it does not include the repair of two neural networks that consumes a large amount of memory and time.
