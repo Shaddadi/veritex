@@ -264,7 +264,7 @@ if __name__ == "__main__":
         tables += '--------------------------------------------------------------------------\n'
         tables += '\n'
         tables += '\n'
-        tables += 'Table 2: Running time (sec) of Veritex and ART. \n'
+        tables += 'Table 3: Running time (sec) of Veritex and ART. \n'
         tables += '--------------------------------------------------------------------------\n'
         tables += 'Methods          Min     Mean Time     Max      Time (N19)     Time (N29)\n'
         tables += '--------------------------------------------------------------------------\n'
@@ -296,7 +296,7 @@ if __name__ == "__main__":
     else:
         sys.exit("The number of repaired instances is not correct!")
 
-    with open('results/Table2.txt', 'w') as f:
+    with open('results/Table2&3.txt', 'w') as f:
         f.write(tables)
     print(tables)
 
