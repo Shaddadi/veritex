@@ -19,7 +19,7 @@ git clone https://github.com/Shaddadi/veritex.git
 cd veritex
 ```
 
-### Option 1: docker installing as a User (recommended for SEFM'22 and FORMATS'22 artifact evaluation)
+### Option 1: docker installing as a User (recommended for HSCC'23 artifact evaluation)
 
 1. Assuming Docker is installed, build the Docker image from the dockerfile (ignore sudo if using a Windows host in these steps).
 
@@ -117,13 +117,13 @@ Linux host systems are suggested, but Windows hosts have also been tested.  Ther
    ```
 --->
 
-## SEFM'22 Artifact Evaluation
+## HSCC'23 Artifact Evaluation
 
-Linux systems are suggested. This artifact aims to reproduce results in the SEFM'22 tool paper, including **Figure 2&3&4** and **Table 2**. Results are stored in 'veritex/artifact/SEFM22/results'. There are two versions for the artifact evaluation. The difference between these two versions is that the first one does not include the repair of two neural networks which consumes a large amount of memory and time. 
+Linux systems are suggested. This artifact aims to reproduce results in the HSCC'23 tool paper, including **Figure 2&3&4** and **Table 2&3**. Results are stored in 'veritex/artifact/HSCC23/results'. There are two versions for the artifact evaluation. The difference between these two versions is that the first one does not include the repair of two neural networks which consumes a large amount of memory and time. 
 
 **Caution**: Reachable domains of networks in **Figure 3&4** may be slightly different from the ones in the paper because each run of the repair method can not guarantee to produce the exact same safe network. 
 
-**Caution**: On *Windows* hosts, users who encounter the error '\r command not found' when executing the artifact, please run the following commands before the shell script. The update may not be required, but the dos2unix tool can be used to address the line endings if this error arises. Note this should be done in the SEFM22 directory, where these reproduce_resultsX.sh scripts reside.
+**Caution**: On *Windows* hosts, users who encounter the error '\r command not found' when executing the artifact, please run the following commands before the shell script. The update may not be required, but the dos2unix tool can be used to address the line endings if this error arises. Note this should be done in the HSCC23 directory, where these reproduce_resultsX.sh scripts reside.
    ```bash
    apt-get update
    apt-get install dos2unix
@@ -141,7 +141,7 @@ Linux systems are suggested. This artifact aims to reproduce results in the SEFM
    This version requires at least 32 GB memory.
 
    ```bash
-   cd artifact/SEFM22
+   cd artifact/HSCC23
    bash reproduce_results1.sh
       ```
 
@@ -155,13 +155,13 @@ Linux systems are suggested. This artifact aims to reproduce results in the SEFM
    The hardware requirement for second version is AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.
 
    ```bash
-   cd artifact/SEFM22
+   cd artifact/HSCC23
    bash reproduce_results2.sh
    ```
 
 3. Export results from docker to host.
    ```bash
-   sudo docker cp veritex:/veritex/artifact/SEFM22/results/. <PATH_TO_YOUR_HOST>
+   sudo docker cp veritex:/veritex/artifact/HSCC23/results/. <PATH_TO_YOUR_HOST>
    ```
 ## Run experiments
 ### Demo
