@@ -36,7 +36,7 @@ prop_path_list = ['../../examples/ACASXu/nets/prop_3.vnnlib', '../../examples/AC
 dims = (0,1)
 
 try:
-    network_path = '../examples/ACASXu/nets/ACASXU_run2a_2_1_batch_2000.onnx'
+    network_path = '../../examples/ACASXu/nets/ACASXU_run2a_2_1_batch_2000.onnx'
     savename = 'results/figure3(d)_original_reach_property_3_4_dims_0_1'
     run(prop_path_list, network_path, dims, savename)
 except:
@@ -44,7 +44,7 @@ except:
     pass
 
 try:
-    network_path = '../examples/ACASXu/repair/logs/nnet21_lr0.001_epochs200_alpha1.0_beta0.0/repaired_model.pt'
+    network_path = '../../examples/ACASXu/repair/logs/nnet21_lr0.001_epochs200_alpha1.0_beta0.0/repaired_model.pt'
     savename = 'results/figure3(e)_veritex_reach_property_3_4_dims_0_1'
     run(prop_path_list, network_path, dims, savename)
 except:
