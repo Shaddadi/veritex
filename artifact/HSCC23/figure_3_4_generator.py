@@ -32,7 +32,7 @@ except:
     pass
 
 # Figure 3 (d)(e)(f)
-prop_path_list = ['../examples/ACASXu/nets/prop_3.vnnlib', '../examples/ACASXu/nets/prop_4.vnnlib']
+prop_path_list = ['../../examples/ACASXu/nets/prop_3.vnnlib', '../../examples/ACASXu/nets/prop_4.vnnlib']
 dims = (0,1)
 
 try:
