@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  veritex:
+
+    build:
+      context: ../
+      dockerfile: .devcontainer/Dockerfile
+    stdin_open: true
+    tty: true
+    volumes:
+      - ../../veritex:/home/veritex
