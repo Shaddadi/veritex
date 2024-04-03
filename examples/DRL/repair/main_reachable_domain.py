@@ -15,7 +15,8 @@ import multiprocessing
 import argparse
 import torch
 
-
+# get current directory
+currdir = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Verification Settings')
@@ -31,7 +32,7 @@ if __name__ == "__main__":
         assert prop_name in all_properties
         props.append(all_properties[prop_name])
     assert props
-    network_path = '../nets/unsafe_agent0.pt' #args.network_path
+    network_path = f'{currdir}/../nets/unsafe_agent0.pt' #args.network_path
     # network_path = 'logs/agent2_lr1e-06_epochs50_alpha1.0_beta0.0/repaired_model.pt'
     dim0, dim1 = (0,1) #tuple(args.dims)
 
@@ -44,15 +45,17 @@ if __name__ == "__main__":
 
     fig = plt.figure(figsize=(2, 2.67))
     ax = fig.add_subplot(111)
-    dnn0 = FFNN(torch_model, unsafe_in_dom=True, exact_out_dom=True)
+    dnn0 = FFNN(torch_model, unsafe_inputd=True, exact_outputd=True)
     for prop in props:
-        vfl_input = cp.deepcopy(prop.input_set)
+        # vfl_input = cp.deepcopy(prop.input_set)
+        vfl = cp.deepcopy(prop)
         dnn0.unsafe_domains = prop.unsafe_domains
 
         processes = []
         results = []
         num_processors = multiprocessing.cpu_count()
-        shared_state = SharedState([vfl_input], num_processors)
+        # shared_state = SharedState(vfl_input, num_processors)
+        shared_state = SharedState(vfl, num_processors)
         one_worker = Worker(dnn0)
         for index in range(num_processors):
             p = mp.Process(target=one_worker.main_func, args=(index, shared_state))
@@ -83,10 +86,10 @@ if __name__ == "__main__":
     ax.set_xlabel('$y_'+str(dim0)+'$', fontsize=16)
     ax.set_ylabel('$y_'+str(dim1)+'$', fontsize=16)
     # plt.title('Exact output reachable domain (blue) & Unsafe domain (red) on'+' Property '+args.property, fontsize=18, pad=20)
-    if not os.path.exists('images'):
-        os.mkdir('images')
+    if not os.path.exists(f'{currdir}/images'):
+        os.mkdir(f'{currdir}/images')
 
-    plt.savefig('images/reachable_domain_'+'property_'+args.property+'_dims'+str(dim0)+'_'+str(dim1)+'.png',bbox_inches='tight')
+    plt.savefig(f'{currdir}/images/reachable_domain_'+'property_'+args.property+'_dims'+str(dim0)+'_'+str(dim1)+'.png',bbox_inches='tight')
     plt.close()
 
 

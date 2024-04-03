@@ -12,6 +12,9 @@ from veritex.methods.shared import SharedState
 from veritex.utils.sfproperty import Property
 from veritex.utils.plot_poly import *
 
+# get current directory
+currdir = os.path.dirname(os.path.abspath(__file__))
+
 # plot function
 def plot_sets(input_unsafe_sets, output_sets, unsafe_domain, savepath='', image_id=0):
     fig = plt.figure(figsize=(11, 5))
@@ -58,7 +61,7 @@ if __name__ == "__main__":
         logger.removeHandler(hdlr)
     Log_Format = logging.Formatter('%(levelname)s %(asctime)s - %(message)s')
     logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler('demo.log','w+')
+    file_handler = logging.FileHandler(f'{currdir}/demo.log','w+')
     file_handler.setFormatter(Log_Format)
     logger.addHandler(file_handler)
     console_handler = logging.StreamHandler()
@@ -67,7 +70,7 @@ if __name__ == "__main__":
 
     # init FFNN
     logging.info('Start the demo...')
-    model = torch.load('models/model_relu.pt')
+    model = torch.load(f'{currdir}/models/model_relu.pt')
     dnn0 = FFNN(model, unsafe_inputd=True, exact_outputd=True)
 
     all_unsafe_domain = []
@@ -112,8 +115,8 @@ if __name__ == "__main__":
         unsafe_domain = np.array([[y1_lbs, -15], [y1_lbs, 25], [y1_ubs, -15], [y1_ubs, 25]])
 
         # plot
-        if not os.path.exists('images'):
-            os.makedirs('images')
-        plot_sets(input_unsafe_sets, output_sets, unsafe_domain, savepath='images/', image_id=n)
+        if not os.path.exists(f'{currdir}/images'):
+            os.makedirs(f'{currdir}/images')
+        plot_sets(input_unsafe_sets, output_sets, unsafe_domain, savepath=f'{currdir}/images/', image_id=n)
 
     logging.info('The input-output reachable domain of each instance is printed in /images')

@@ -5,11 +5,13 @@ from veritex.networks.cnn import Method
 import data.cifar_torch_net as cifar10
 from veritex.utils.plot_poly import plot_polytope2d
 import logging
-
+import os
 
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
+# get current directory
+currdir = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
     torch.multiprocessing.set_start_method('spawn',force=True)
@@ -19,7 +21,7 @@ if __name__ == '__main__':
         logger.removeHandler(hdlr)
     Log_Format = logging.Formatter('%(levelname)s %(asctime)s - %(message)s')
     logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler(f'cifar10.log', 'w+')
+    file_handler = logging.FileHandler(f'{currdir}/cifar10.log', 'w+')
     file_handler.setFormatter(Log_Format)
     logger.addHandler(file_handler)
     console_handler = logging.StreamHandler()
@@ -28,11 +30,11 @@ if __name__ == '__main__':
 
     # Load cifar10 model
     model = cifar10.Net()
-    model.load_state_dict(torch.load('data/cifar_torch_net.pth', map_location=torch.device('cpu')))
+    model.load_state_dict(torch.load(f'{currdir}/data/cifar_torch_net.pth', map_location=torch.device('cpu')))
     model.eval()
 
     # Load target image
-    [image, label, target_label, _] = torch.load('data/images/1.pt')
+    [image, label, target_label, _] = torch.load(f'{currdir}/data/images/1.pt')
 
     attack_block = (1,1)
     epsilon = 0.02

@@ -10,15 +10,17 @@ import argparse
 
 
 if __name__ == '__main__':
-    savepath = './logs'
+    savepath = f'{currdir}/logs'
     if not os.path.isdir(savepath):
         os.mkdir(savepath)
+
+    currdir = os.path.dirname(os.path.abspath(__file__))
 
     # Creating and Configuring Logger
     logger = logging.getLogger()
     Log_Format = logging.Formatter('%(levelname)s %(asctime)s - %(message)s')
     logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler('logs/neural_network_repair.log', 'w+')
+    file_handler = logging.FileHandler(f'{currdir}/logs/neural_network_repair.log', 'w+')
     file_handler.setFormatter(Log_Format)
     logger.addHandler(file_handler)
     console_handler = logging.StreamHandler()
@@ -48,7 +50,7 @@ if __name__ == '__main__':
             output_limit = 100
         logging.info(f'Neural Network {i} {j}')
         properties_repair = item[1]
-        nn_path = "../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
+        nn_path = f"{currdir}/../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
         torch_model = load_ffnn_onnx(nn_path)
 
         rp = REPAIR(torch_model, properties_repair, output_limit=output_limit)

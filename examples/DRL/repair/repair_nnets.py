@@ -8,7 +8,8 @@ import torch.nn as nn
 import torch
 import os
 
-
+# get current directory
+currdir = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
     # Creating and Configuring Logger
@@ -31,13 +32,13 @@ if __name__ == '__main__':
         alpha, beta = 1.0, 0.0
         nnet_id = repair_list[n][0]
         properties_repair = repair_list[n][1]
-        nn_path = "../nets/unsafe_agent"+str(nnet_id)+".pt"
+        nn_path = f"{currdir}/../nets/unsafe_agent"+str(nnet_id)+".pt"
         torch_model = torch.load(nn_path).to(torch.float32)
 
         rp = REPAIR(torch_model, properties_repair, output_limit=1000)
         optimizer = optim.SGD(torch_model.parameters(), lr=lr, momentum=0.9)
         criterion = nn.MSELoss()
-        savepath = './logs'
+        savepath = f'{currdir}/logs'
         if not os.path.isdir(savepath):
             os.mkdir(savepath)
         savepath += '/agent'+'_lr'+str(lr)+'_epochs'+str(epochs)+'_alpha'+str(alpha)+'_beta'+str(beta)

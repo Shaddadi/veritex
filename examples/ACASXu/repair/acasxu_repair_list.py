@@ -1,5 +1,9 @@
+import os
 import torch
 from veritex.utils.vnnlib import vnnlib_to_properties
+
+# get current directory
+currdir = os.path.dirname(os.path.abspath(__file__))
 
 # the list of neural networks that does not violate any of properties 1-10
 safe_nnet_list = [[1,1],[1,2],[1,3],[1,4],[1,5],[1,6], [3,3], [4,2], [1,7], [1,8]]
@@ -216,12 +220,12 @@ def repair_property8(unsafe_data):
     return original_Xs, corrected_Ys
 
 # extract properties from vnnlib
-property1 = vnnlib_to_properties('../nets/prop_1.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
-property2 = vnnlib_to_properties('../nets/prop_2.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
-property3 = vnnlib_to_properties('../nets/prop_3.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
-property4 = vnnlib_to_properties('../nets/prop_4.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
-property7 = vnnlib_to_properties('../nets/prop_7.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
-property8 = vnnlib_to_properties('../nets/prop_8.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
+property1 = vnnlib_to_properties(f'{currdir}/../nets/prop_1.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
+property2 = vnnlib_to_properties(f'{currdir}/../nets/prop_2.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
+property3 = vnnlib_to_properties(f'{currdir}/../nets/prop_3.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
+property4 = vnnlib_to_properties(f'{currdir}/../nets/prop_4.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
+property7 = vnnlib_to_properties(f'{currdir}/../nets/prop_7.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
+property8 = vnnlib_to_properties(f'{currdir}/../nets/prop_8.vnnlib', num_inputs=5, num_outputs=5, input_ranges=input_ranges)[0]
 
 # create neural networks that need to be repaired and their properties
 repair_list = []

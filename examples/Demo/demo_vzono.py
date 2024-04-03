@@ -12,11 +12,14 @@ from veritex.methods.shared import SharedState
 from veritex.utils.sfproperty import Property
 from veritex.utils.plot_poly import *
 
+# get current directory
+currdir = os.path.dirname(os.path.abspath(__file__))
+
 def reach_relu_network():
     """
     Load ReLU network and conduct reachability analysis of the network based on FVIM set representation.
     """
-    model = torch.load('models/model_relu.pt')
+    model = torch.load(f'{currdir}/models/model_relu.pt')
     dnn0 = FFNN(model, exact_outputd=True)
 
     # Set property
@@ -74,7 +77,7 @@ def reach_relu_network():
     plt.title('Reachable domain of a ReLU network.\nCyan area represents the over-approximated reachable domain. \n Blue area represents the exact reachable domain. \nBlack dots represent simultations')
     plt.tight_layout()
     # plt.show()
-    plt.savefig('figures/relu_vzono.png')
+    plt.savefig(f'{currdir}/figures/relu_vzono.png')
     plt.close()
 
 
@@ -84,7 +87,7 @@ def reach_sigmoid_network():
     Load Sigmoid network and conduct exact reachability analysis based on Vzono set representation
     """
 
-    model = torch.load('models/model_sigmoid.pt')
+    model = torch.load(f'{currdir}/models/model_sigmoid.pt')
     dnn0 = FFNN(model)
 
     # Set property
@@ -117,7 +120,7 @@ def reach_sigmoid_network():
         'Reachable domain of a Sigmoid network.\nCyan area represents the over-approximated reachable domain.\nBlack dots represent simultations')
     plt.tight_layout()
     # plt.show()
-    plt.savefig('figures/sigmoid_vzono.png')
+    plt.savefig(f'{currdir}/figures/sigmoid_vzono.png')
     plt.close()
 
 
@@ -127,7 +130,7 @@ def reach_tanh_network():
     Load Tanh network and conduct exact reachability analysis based on Vzono set representation
     """
 
-    model = torch.load('models/model_tanh.pt')
+    model = torch.load(f'{currdir}/models/model_tanh.pt')
     dnn0 = FFNN(model)
     # Set property
     lbs, ubs = [-1.0, -1.0, -1.0], [1.0, 1.0, 1.0]
@@ -159,7 +162,7 @@ def reach_tanh_network():
         'Reachable domain of a Tanh network.\nCyan area represents the over-approximated reachable domain.\nBlack dots represent simultations')
     plt.tight_layout()
     # plt.show()
-    plt.savefig('figures/tanh_vzono.png')
+    plt.savefig(f'{currdir}/figures/tanh_vzono.png')
     plt.close()
 
 
