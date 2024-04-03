@@ -1,25 +1,21 @@
 #!/bin/bash
 
-# verification of acasxu
-cd ../../examples/ACASXu/verify
-python3 verify_all_instances.py
+# Path to the script's directory, regardless of where it's called from
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-# repair of acasxu using veritex
-cd ../repair
-python3 repair_nnets.py --all
+# Verification of ACASXu
+python3 "$SCRIPT_DIR/../../examples/ACASXu/verify/verify_all_instances.py"
 
-# repair of DNN agent in DRL using veritex
-cd ../../DRL/repair
-python3 repair_nnets.py
+# Repair of ACASXu using veritex
+python3 "$SCRIPT_DIR/../../examples/ACASXu/repair/repair_nnets.py" --all
 
-# repair of acasxu using art
-cd ../../../artifact/HSCC23/ART/art
-python3 exp_acas.py
+# Repair of DNN agent in DRL using veritex
+python3 "$SCRIPT_DIR/../../examples/DRL/repair/repair_nnets.py"
 
-# display results
-cd ../../
-python3 figure2_generator.py
-python3 figure_3_4_generator.py
-python3 table_2_3_generator.py
+# Repair of ACASXu using ART
+python3 "$SCRIPT_DIR/../../artifact/HSCC23/ART/art/exp_acas.py"
 
-
+# Display results
+python3 "$SCRIPT_DIR/../../artifact/HSCC23/figure2_generator.py"
+python3 "$SCRIPT_DIR/../../artifact/HSCC23/figure_3_4_generator.py"
+python3 "$SCRIPT_DIR/../../artifact/HSCC23/table_2_3_generator.py"

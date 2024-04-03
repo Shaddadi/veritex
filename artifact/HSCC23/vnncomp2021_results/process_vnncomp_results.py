@@ -13,6 +13,7 @@ import csv
 from pathlib import Path
 from collections import defaultdict
 import numpy as np
+import os.path
 
 class ToolResult:
     """Tool's result"""
@@ -400,8 +401,11 @@ def process_results():
     resolve_conflicts = "odd_one_out"
     # print(f"using resolve_conflicts={resolve_conflicts}")
 
+    # get current directory
+    currdir = os.path.dirname(os.path.abspath(__file__))
+
     #####################################3
-    csv_list = glob.glob("vnncomp2021_results/results_csv/*.csv")
+    csv_list = glob.glob(f"{currdir}/results_csv/*.csv")
     tool_list = [Path(c).stem for c in csv_list]
     result_list = []
 

@@ -18,7 +18,8 @@ repaired_nets = [[1,9],[2,1],[2,2],[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],[2,9],
                  [4,4],[4,5],[4,6],[4,7],[4,8],[4,9],[5,1],[5,2],[5,3],[5,4],
                  [5,5],[5,6],[5,7],[5,8],[5,9]]
 
-
+# get current directory
+currdir = os.path.dirname(os.path.abspath(__file__))
 
 def extract_weights(torch_model):
     weights = []
@@ -112,15 +113,15 @@ def get_log_info_veritex(log_path):
 
 
 def collect_art_accuracy_runtime():
-    art_log_path_refine = sorted(glob.glob("ART/results/acas/art_test_goal_safety/*.log"))[-1]
-    art_log_path_no_refine = sorted(glob.glob("ART/results/acas/art_test_goal_safety_no_refine/*.log"))[-1]
+    art_log_path_refine = sorted(glob.glob(f"{currdir}/ART/results/acas/art_test_goal_safety/*.log"))[-1]
+    art_log_path_no_refine = sorted(glob.glob(f"{currdir}/ART/results/acas/art_test_goal_safety_no_refine/*.log"))[-1]
 
     results_refine = get_log_info_art(art_log_path_refine)
     results_no_refine = get_log_info_art(art_log_path_no_refine)
     return results_refine, results_no_refine
 
 def collect_veritex_accuracy_runtime():
-    log_path = sorted(glob.glob("../../examples/ACASXu/repair/logs/*.log"))[-1]
+    log_path = sorted(glob.glob(f"{currdir}/../../examples/ACASXu/repair/logs/*.log"))[-1]
     results = get_log_info_veritex(log_path)
     return results
 
@@ -162,27 +163,27 @@ def compute_expressibility():
         print('Neural Network',i,j)
         properties_repair = item[1]
 
-        nn_original_path = "../../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
+        nn_original_path = f"{currdir}/../../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
         original_model = load_ffnn_onnx(nn_original_path)
         ori_lregion = compute_linear_regions(original_model, properties_repair)
 
-        nn_our_path = "logs_lr0.001_epochs200/nnet" + str(i) + str(j) + "_lr0.001_epochs200"
+        nn_our_path = f"{currdir}/logs_lr0.001_epochs200/nnet" + str(i) + str(j) + "_lr0.001_epochs200"
         list_of_files_path = glob.glob(nn_our_path + '/*')
         safe_net_path = max(list_of_files_path, key=os.path.getctime)
         assert safe_net_path[-7:-3] == 'safe'
         our_safe_model = torch.load(safe_net_path)
         our_lregion = compute_linear_regions(our_safe_model, properties_repair)
 
-        nn_art_path_refine = "art_test_goal_safety/repaired_network_"+str(i)+str(j)+"_safe.nnet"
+        nn_art_path_refine = f"{currdir}/art_test_goal_safety/repaired_network_"+str(i)+str(j)+"_safe.nnet"
         art_safe_model_refine = NNet(nn_art_path_refine)
         art_lregion_refine = compute_linear_regions(art_safe_model_refine, properties_repair)
 
 
         try:
-            nn_art_path_refine = "art_test_goal_safety_no_refine/repaired_network_" + str(i) + str(j) + "_safe.nnet"
+            nn_art_path_refine = f"{currdir}/art_test_goal_safety_no_refine/repaired_network_" + str(i) + str(j) + "_safe.nnet"
             art_safe_model_no_refine = NNet(nn_art_path_refine)
         except:
-            nn_art_path_refine = "art_test_goal_safety_no_refine/repaired_network_" + str(i) + str(j) + "_unsafe.nnet"
+            nn_art_path_refine = f"{currdir}/art_test_goal_safety_no_refine/repaired_network_" + str(i) + str(j) + "_unsafe.nnet"
             art_safe_model_no_refine = NNet(nn_art_path_refine)
 
         art_lregion_no_refine = compute_linear_regions(art_safe_model_no_refine, properties_repair)
@@ -191,7 +192,7 @@ def compute_expressibility():
 def compute_weights_ratio():
     for anet in repaired_nets:
         i, j = anet[0],anet[1]
-        nn_our_path = "logs_lr0.001_epochs200/nnet" + str(i) + str(j) + "_lr0.001_epochs200"
+        nn_our_path = f"{currdir}/logs_lr0.001_epochs200/nnet" + str(i) + str(j) + "_lr0.001_epochs200"
         list_of_files_path = glob.glob(nn_our_path+'/*')
         safe_net_path = max(list_of_files_path, key=os.path.getctime)
         assert safe_net_path[-7:-3] == 'safe'
@@ -199,18 +200,18 @@ def compute_weights_ratio():
         our_weights, our_bias = extract_weights(our_safe_model)
 
 
-        nn_original_path = "../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
+        nn_original_path = f"{currdir}/../nets/ACASXU_run2a_" + str(i) + "_" + str(j) + "_batch_2000.onnx"
         original_model = load_ffnn_onnx(nn_original_path)
         original_weights, original_bias = extract_weights(original_model)
 
-        nn_art_path_refine = "art_test_goal_safety/repaired_network_"+str(i)+str(j)+"_safe.nnet"
+        nn_art_path_refine = f"{currdir}/art_test_goal_safety/repaired_network_"+str(i)+str(j)+"_safe.nnet"
         art_safe_model_refine = NNet(nn_art_path_refine)
 
         try:
-            nn_art_path_refine = "art_test_goal_safety_no_refine/repaired_network_" + str(i) + str(j) + "_safe.nnet"
+            nn_art_path_refine = f"{currdir}/art_test_goal_safety_no_refine/repaired_network_" + str(i) + str(j) + "_safe.nnet"
             art_safe_model_no_refine = NNet(nn_art_path_refine)
         except:
-            nn_art_path_refine = "art_test_goal_safety_no_refine/repaired_network_" + str(i) + str(j) + "_unsafe.nnet"
+            nn_art_path_refine = f"{currdir}/art_test_goal_safety_no_refine/repaired_network_" + str(i) + str(j) + "_unsafe.nnet"
             art_safe_model_no_refine = NNet(nn_art_path_refine)
 
         square_sum_ours = 0
@@ -243,8 +244,8 @@ def compute_weights_ratio():
 if __name__ == "__main__":
     results_refine_art, results_no_refine_art = collect_art_accuracy_runtime()
     results_veritex = collect_veritex_accuracy_runtime()
-    if not os.path.isdir('./results'):
-        os.mkdir('./results')
+    if not os.path.isdir(f'{currdir}/results'):
+        os.mkdir(f'{currdir}/results')
     tables = ''
     if len(results_veritex[0]) == 33: # only simple cases
         for ls in results_refine_art:
@@ -296,7 +297,7 @@ if __name__ == "__main__":
     else:
         sys.exit("The number of repaired instances is not correct!")
 
-    with open('results/Table2&3.txt', 'w') as f:
+    with open(f'{currdir}/results/Table2&3.txt', 'w') as f:
         f.write(tables)
     print(tables)
 

@@ -4,10 +4,12 @@ import numpy as np
 from vnncomp2021_results.process_vnncomp_results import process_results
 from textwrap import wrap
 
+# get current directory
+currdir = os.path.dirname(os.path.abspath(__file__))
 
 def collect_veritex(filepath):
     veritex_times = []
-    log_paths = [f for f in os.listdir(filepath) if f.endswith('.log')]
+    log_paths = [f for f in os.listdir(filepath) if f.endswith('.log') and f.startswith('verify')]
     assert len(log_paths) == 51
     for indx, log_path in enumerate(log_paths):
         with open(filepath+log_path) as file:
@@ -34,9 +36,10 @@ def collect_veritex(filepath):
 
 if __name__ == "__main__":
     all_vnncomp_times = process_results()
-    if not os.path.isdir('./results'):
-        os.mkdir('./results')
-    filepath = '../../examples/ACASXu/verify/'
+    if not os.path.isdir(f'{currdir}/results'):
+        os.mkdir(f'{currdir}/results')
+    # filepath = f'{currdir}/../../examples/ACASXu/verify/'
+    filepath = f'{currdir}/'
     veritex_times = collect_veritex(filepath)
     veritex_times_sum = np.sum(veritex_times)
     # print('Veritex: ', veritex_times_sum)
@@ -60,4 +63,4 @@ if __name__ == "__main__":
                              'on AWS, CPU: r5.12xlarge, 48vCPUs, 384 GB memory, no GPU.')
     plt.tight_layout()
     # plt.show()
-    plt.savefig('results/Figure2.png')
+    plt.savefig(f'{currdir}/results/Figure2.png')
