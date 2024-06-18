@@ -8,15 +8,12 @@
 
 FROM python:3.7
 
-# # set user
-# USER root
-
 ARG PYTHON_VERSION=3.7
 
-# set working directory
+# Set working directory
 WORKDIR /veritex
 
-# install pip
+# Install pip
 RUN set -xe \
     && apt-get update -y \
     && apt-get install -y \
@@ -24,12 +21,17 @@ RUN set -xe \
     python3-dev
 RUN pip install --upgrade pip
 
-# set environment variables
-# ENV PYTHONPATH="/veritex:${PYTHONPATH}"
+# Set environment variables
 ENV OPENBLAS_NUM_THREADS=1
 ENV OMP_NUM_THREADS=1
 
-#COPY ../requirements.txt /tmp/
+# Copy pyproject.toml and other project files
+COPY pyproject.toml /veritex/
+COPY . /veritex/
 
-#RUN pip install --no-cache-dir -r /tmp/requirements.txt && \
-#    rm /tmp/requirements.txt
+# Install the package
+RUN python3.7 -m pip install -e .
+
+# Optionally, you can uncomment these lines if you have a requirements.txt
+# COPY requirements.txt /veritex/
+# RUN pip install --no-cache-dir -r requirements.txt

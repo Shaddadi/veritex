@@ -2,7 +2,7 @@
   "name": "veritex Dev Container",
   "dockerComposeFile": "docker-compose.yml",
   "service": "veritex",
-  "workspaceFolder": "/home/veritex",
+  "workspaceFolder": "/veritex",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -33,9 +33,11 @@
           },
           "python.formatting.blackArgs": ["--line-length", "88", "--skip-magic-trailing-comma"]
         },
-        "isort.args": ["--profile", "black"]
+        "isort.args": ["--profile", "black"],
+        "python.pythonPath": "/usr/local/bin/python3.7", // Ensure this path points to the Python 3.7 interpreter in your container
+        "python.defaultInterpreterPath": "/usr/local/bin/python3.7"
       }
     }
   },
-  "postCreateCommand": {"veritex": "pip install -e ."} // This will install the package in editable mode
+  // "postCreateCommand": {"veritex": "pip install -e ."} // This will install the package in editable mode
 }

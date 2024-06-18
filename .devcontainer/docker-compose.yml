@@ -2,11 +2,12 @@ version: '3.8'
 
 services:
   veritex:
-
     build:
       context: ../
       dockerfile: .devcontainer/Dockerfile
     stdin_open: true
     tty: true
     volumes:
-      - ../../veritex:/home/veritex
+      - ../../veritex:/veritex
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ~/.ssh:/root/.ssh:ro
